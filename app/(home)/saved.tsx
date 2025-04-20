@@ -1,13 +1,10 @@
-import { StyleSheet } from 'react-native';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function SavedScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Saved</ThemedText>
-    </ThemedView>
+    <View style={styles.container}>
+      <Text>Saved</Text>
+    </View>
   );
 }
 
