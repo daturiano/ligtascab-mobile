@@ -1,6 +1,5 @@
-import { HapticTab } from '@/components/HapticTab';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { NAV_THEME } from '@/lib/constants';
+import BlurTabBarBackground from '@/src/components/ui/TabBarBackground.ios';
+import { NAV_THEME } from '@/src/lib/constants';
 import { Tabs } from 'expo-router';
 import { Bike, CircleUser, Heart, Search } from 'lucide-react-native';
 import React from 'react';
@@ -13,8 +12,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: NAV_THEME[colorScheme ?? 'light'].primary,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
+        tabBarBackground: BlurTabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -25,7 +23,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(index)"
         options={{
           title: 'Search',
           tabBarIcon: ({ color, size, focused }) => (

@@ -1,4 +1,4 @@
-import { useColorScheme } from '@/lib/useColorScheme';
+import { useColorScheme } from '@/src/lib/useColorScheme';
 import {
   DarkTheme,
   DefaultTheme,
@@ -9,8 +9,8 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import 'react-native-reanimated';
-import { NAV_THEME } from '~/lib/constants';
-import './global.css';
+import { NAV_THEME } from '@/src/lib/constants';
+import '@/global.css';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,

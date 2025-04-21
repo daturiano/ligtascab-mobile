@@ -1,7 +1,6 @@
 import { Stack, usePathname } from 'expo-router';
 import { Text, TouchableOpacity, View } from 'react-native';
-
-import { NAV_THEME } from '@/lib/constants';
+import { NAV_THEME } from '@/src/lib/constants';
 import { Link } from 'expo-router';
 import { ClipboardMinus, HandCoins, TextSearch } from 'lucide-react-native';
 
