@@ -1,4 +1,4 @@
-import { Theme } from '@/theme';
+import { Theme } from '@/theme/theme';
 import {
   backgroundColor,
   BackgroundColorProps,
@@ -9,7 +9,7 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import React from 'react';
-import { PressableProps, TouchableOpacity } from 'react-native';
+import { Pressable, PressableProps } from 'react-native';
 
 type ButtonProps = SpacingProps<Theme> &
   BackgroundColorProps<Theme> &
@@ -18,10 +18,18 @@ type ButtonProps = SpacingProps<Theme> &
     children: React.ReactNode;
   };
 
-const Button = createRestyleComponent<ButtonProps, Theme>(
+const BaseButton = createRestyleComponent<ButtonProps, Theme>(
   [spacing, backgroundColor, createVariant({ themeKey: 'buttonVariants' })],
-  TouchableOpacity
+  Pressable
 );
+
+const Button = ({ style, children, ...rest }: ButtonProps) => {
+  return (
+    <BaseButton {...rest} style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+      {children}
+    </BaseButton>
+  );
+};
 
 export default Button;
 

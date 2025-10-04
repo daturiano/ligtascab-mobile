@@ -7,7 +7,7 @@ const palette = {
   yellowDark: '#dbaa14',
 
   greenLight: '#44b393',
-  greenPrimary: '#3F7D58',
+  greenPrimary: '#1daa88',
   greenDark: '#189375',
 
   grayLighter: '#ececec',
@@ -40,6 +40,7 @@ const theme = createTheme({
     muted: palette.mutedPrimary,
     description: '#5e5e5e',
     transparent: 'transparent',
+    input: '#e2e8f0',
   },
   spacing: {
     xs: 4,

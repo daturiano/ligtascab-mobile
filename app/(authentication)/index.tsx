@@ -1,16 +1,17 @@
 import Box from '@/components/ui/Box';
 import BrandName from '@/components/ui/BrandName';
+import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import Text from '@/components/ui/Text';
 import { Theme } from '@/theme/theme';
 import { useTheme } from '@shopify/restyle';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default function Index() {
   const theme = useTheme<Theme>();
-  const { primary, mainBackground, muted } = theme.colors;
+  const { mainBackground } = theme.colors;
   const router = useRouter();
 
   return (
@@ -38,26 +39,14 @@ export default function Index() {
         </Text>
       </Box>
       <Box width={'100%'} gap="s">
-        <Pressable
-          onPress={() => router.push('/login')}
-          style={({ pressed }) => [
-            styles.link,
-            pressed && styles.pressed,
-            { backgroundColor: primary },
-          ]}>
+        <Button onPress={() => router.push('/(authentication)/login')}>
           <Text variant="body" style={{ color: mainBackground }}>
             Get Started
           </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => router.push('/login')}
-          style={({ pressed }) => [
-            styles.link,
-            pressed && styles.pressed,
-            { borderColor: muted, borderWidth: 1 },
-          ]}>
+        </Button>
+        <Button onPress={() => router.push('/(authentication)/login')} variant="outline">
           <Text variant="body">I already have an account</Text>
-        </Pressable>
+        </Button>
       </Box>
     </Container>
   );
