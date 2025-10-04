@@ -1,67 +1,87 @@
-import { createTheme, useTheme as useRestyleTheme } from '@shopify/restyle';
-import { ImageStyle, TextStyle, ViewStyle } from 'react-native';
-
-type NamedStyles<T> = {
-  [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
-};
+import { buttonVariants } from '@/components/ui/Button';
+import { createTheme } from '@shopify/restyle';
 
 const palette = {
-  gray: '#808080',
-  blue: '#007AFF',
-  darkGray: '#38434D',
-  white: '#FFFFFF',
-  black: '#000000',
-  purple: '#6366F1',
+  yellowLight: '#fdca48',
+  yellowPrimary: '#EF9651',
+  yellowDark: '#dbaa14',
+
+  greenLight: '#44b393',
+  greenPrimary: '#3F7D58',
+  greenDark: '#189375',
+
+  grayLighter: '#ececec',
+  grayLight: '#f3f3f3',
+
+  mutedLighter: '#d3d3d3',
+  mutedLight: '#c5c5c5',
+  mutedPrimary: '#737373',
+  mutedDark: '#636363',
+
+  description: '#5e5e5e',
+
+  black: '#0a0a0a',
+  white: '#EFEFEF',
 };
 
 const theme = createTheme({
   colors: {
-    ...palette,
+    mainBackground: palette.white,
+    mainForeground: palette.black,
+    cardBackground: '#ffffff',
+    cardForeground: '#000000',
+    primary: palette.greenPrimary,
+    primaryLight: palette.greenLight,
+    secondary: palette.yellowPrimary,
+    grayLighter: palette.grayLighter,
+    grayLight: palette.grayLight,
+    mutedLighter: palette.mutedLighter,
+    mutedLight: palette.mutedLight,
+    muted: palette.mutedPrimary,
+    description: '#5e5e5e',
+    transparent: 'transparent',
   },
   spacing: {
-    xs_4: 4,
-    s_8: 8,
-    sm_12: 12,
-    m_16: 16,
-    ml_24: 24,
-    l_32: 32,
-    xl_64: 64,
+    xs: 4,
+    s: 8,
+    m: 12,
+    l: 16,
+    xl: 24,
+    xxl: 32,
   },
   borderRadii: {
-    s_3: 3,
-    m_6: 6,
-    l_12: 12,
-    xl_24: 24,
+    s: 4,
+    m: 8,
+    l: 12,
   },
   textVariants: {
+    header: {
+      fontWeight: 'bold',
+      fontFamily: 'Roboto_600SemiBold',
+      fontSize: 42,
+      lineHeight: 42,
+    },
+    subheader: {
+      fontWeight: 'bold',
+      fontFamily: 'Roboto_600SemiBold',
+      fontSize: 28,
+      lineHeight: 28,
+    },
     body: {
       fontSize: 16,
+      lineHeight: 24,
     },
-    title: { fontSize: 20, fontWeight: 'bold' },
-    large: {
-      fontSize: 36,
-    },
-    extra_large: {
-      fontSize: 64,
-      fontWeight: 'bold',
+    description: {
+      color: 'description',
+      fontSize: 16,
+      lineHeight: 24,
     },
     defaults: {
-      // We can define a default text variant here.
+      fontFamily: ' Nunito_300Light',
     },
   },
+  buttonVariants: buttonVariants,
 });
-
-export const useTheme = () => {
-  return useRestyleTheme<Theme>();
-};
-
-export const makeStyles = <T extends NamedStyles<T> | NamedStyles<unknown>>(
-  styles: (theme: Theme) => T
-) => {
-  return () => {
-    return styles(theme);
-  };
-};
 
 export type Theme = typeof theme;
 export default theme;
