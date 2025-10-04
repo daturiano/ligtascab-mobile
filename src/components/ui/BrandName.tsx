@@ -10,7 +10,7 @@ type BrandNameProps = {
 export default function BrandName({ style }: BrandNameProps) {
   return (
     <Box style={[{ width: '100%' }, style]} flexDirection="row" alignItems="center" gap="s">
-      <Image style={styles.image} source={require('@/assets/logo.svg')} />
+      <Image style={styles.image} source={require('@/src/assets/logo.svg')} />
       <Text
         style={[styles.brandName, { fontFamily: 'Nunito_800ExtraBold' }]}
         fontSize={28}

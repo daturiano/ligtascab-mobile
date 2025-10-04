@@ -1,5 +1,5 @@
-import { buttonVariants } from '@/components/ui/Button';
 import { createTheme } from '@shopify/restyle';
+import { buttonVariants } from '../components/ui/Button';
 
 const palette = {
   yellowLight: '#fdca48',

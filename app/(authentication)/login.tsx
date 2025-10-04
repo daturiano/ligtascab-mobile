@@ -1,9 +1,9 @@
-import Box from '@/components/ui/Box';
-import BrandName from '@/components/ui/BrandName';
-import Button from '@/components/ui/Button';
-import Container from '@/components/ui/Container';
-import Input from '@/components/ui/Input';
-import Text from '@/components/ui/Text';
+import Box from '@/src/components/ui/Box';
+import BrandName from '@/src/components/ui/BrandName';
+import Button from '@/src/components/ui/Button';
+import Container from '@/src/components/ui/Container';
+import Input from '@/src/components/ui/Input';
+import Text from '@/src/components/ui/Text';
 import { Link } from 'expo-router';
 import { LockIcon, PhoneIcon } from 'lucide-react-native';
 import { useState } from 'react';

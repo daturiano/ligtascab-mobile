@@ -1,4 +1,4 @@
-import theme from '@/theme/theme';
+import theme from '@/src/theme/theme';
 import { Nunito_300Light, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
 import { Roboto_600SemiBold, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
 import { ThemeProvider } from '@shopify/restyle';

@@ -1,4 +1,4 @@
-import { Theme } from '@/theme/theme';
+import { Theme } from '@/src/theme/theme';
 import { createText } from '@shopify/restyle';
 
 const Text = createText<Theme>();

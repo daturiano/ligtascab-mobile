@@ -1,9 +1,9 @@
-import Box from '@/components/ui/Box';
-import BrandName from '@/components/ui/BrandName';
-import Button from '@/components/ui/Button';
-import Container from '@/components/ui/Container';
-import Text from '@/components/ui/Text';
-import { Theme } from '@/theme/theme';
+import Box from '@/src/components/ui/Box';
+import BrandName from '@/src/components/ui/BrandName';
+import Button from '@/src/components/ui/Button';
+import Container from '@/src/components/ui/Container';
+import Text from '@/src/components/ui/Text';
+import { Theme } from '@/src/theme/theme';
 import { useTheme } from '@shopify/restyle';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
@@ -17,7 +17,7 @@ export default function Index() {
   return (
     <Container>
       <BrandName />
-      <Image style={styles.image} source={require('@/assets/welcome.svg')} />
+      <Image style={styles.image} source={require('@/src/assets/welcome.svg')} />
       <Box flexDirection="column" gap="l" alignItems="center">
         <Box
           style={styles.badge}
@@ -25,7 +25,7 @@ export default function Index() {
           alignItems="center"
           gap="s"
           backgroundColor="secondary">
-          <Image style={styles.logo} source={require('@/assets/logo-white.svg')} />
+          <Image style={styles.logo} source={require('@/src/assets/logo-white.svg')} />
           <Text variant="body" style={{ color: mainBackground, fontWeight: '500' }}>
             Welcome to LigtasCab!
           </Text>

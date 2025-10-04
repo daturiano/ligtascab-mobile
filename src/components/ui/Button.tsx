@@ -1,4 +1,4 @@
-import { Theme } from '@/theme/theme';
+import { Theme } from '@/src/theme/theme';
 import {
   backgroundColor,
   BackgroundColorProps,

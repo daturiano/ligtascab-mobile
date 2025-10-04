@@ -1,5 +1,5 @@
-import { Theme } from '@/theme/theme';
-import { supabase } from '@/utils/supabase';
+import { Theme } from '@/src/theme/theme';
+import { supabase } from '@/src/utils/supabase';
 import { useTheme } from '@shopify/restyle';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
