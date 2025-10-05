@@ -19,6 +19,7 @@ const palette = {
   mutedDark: '#636363',
 
   description: '#5e5e5e',
+  warning: '#ff6467',
 
   black: '#0a0a0a',
   white: '#EFEFEF',
@@ -41,6 +42,7 @@ const theme = createTheme({
     description: '#5e5e5e',
     transparent: 'transparent',
     input: '#e2e8f0',
+    warning: palette.warning,
   },
   spacing: {
     xs: 4,

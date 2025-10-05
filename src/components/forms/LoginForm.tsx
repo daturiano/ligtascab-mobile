@@ -1,0 +1,77 @@
+import Box from '@/src/components/ui/Box';
+import Button from '@/src/components/ui/Button';
+import ErrorMessage from '@/src/components/ui/ErrorMessage';
+import Input from '@/src/components/ui/Input';
+import Text from '@/src/components/ui/Text';
+import { useAuth } from '@/src/context/AuthenticationContext';
+import { LoginSchema } from '@/src/schemas';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'expo-router';
+import { LockIcon, PhoneIcon } from 'lucide-react-native';
+import { Controller, useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+export default function LoginForm() {
+  const router = useRouter();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: { phoneNumber: '', password: '' },
+    mode: 'onBlur',
+  });
+
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {};
+  return (
+    <Box width="100%" gap="l">
+      <Box gap="m">
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Phone Number"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="number-pad"
+              autoCapitalize="none"
+              icon={PhoneIcon}
+              errorMessage={errors.phoneNumber?.message}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              secureTextEntry
+              autoCapitalize="none"
+              icon={LockIcon}
+              errorMessage={errors.password?.message}
+            />
+          )}
+        />
+        {errors.root?.message && <ErrorMessage message={errors.root.message} />}
+      </Box>
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        isLoading={isSubmitting}
+        disabled={isSubmitting}
+        variant="primary">
+        <Text color="mainBackground" variant="body">
+          Sign In
+        </Text>
+      </Button>
+    </Box>
+  );
+}

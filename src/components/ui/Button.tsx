@@ -9,13 +9,14 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import React from 'react';
-import { Pressable, PressableProps } from 'react-native';
+import { ActivityIndicator, Pressable, PressableProps } from 'react-native';
 
 type ButtonProps = SpacingProps<Theme> &
   BackgroundColorProps<Theme> &
   VariantProps<Theme, 'buttonVariants'> &
   PressableProps & {
     children: React.ReactNode;
+    isLoading?: boolean;
   };
 
 const BaseButton = createRestyleComponent<ButtonProps, Theme>(
@@ -23,10 +24,10 @@ const BaseButton = createRestyleComponent<ButtonProps, Theme>(
   Pressable
 );
 
-const Button = ({ style, children, ...rest }: ButtonProps) => {
+const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) => {
   return (
     <BaseButton {...rest} style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
-      {children}
+      {isLoading ? <ActivityIndicator color="#737373" /> : children}
     </BaseButton>
   );
 };
