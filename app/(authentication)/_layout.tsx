@@ -1,3 +1,4 @@
+import GuestViewOnly from '@/src/components/wrapper/GuestViewOnly';
 import { Theme } from '@/src/theme/theme';
 import { supabase } from '@/src/utils/supabase';
 import { useTheme } from '@shopify/restyle';
@@ -20,7 +21,7 @@ export default function AuthLayout() {
   const { mainBackground, primary } = theme.colors;
   const router = useRouter();
   return (
-    <>
+    <GuestViewOnly>
       <StatusBar />
       <Stack
         screenOptions={{
@@ -48,6 +49,6 @@ export default function AuthLayout() {
           }}
         />
       </Stack>
-    </>
+    </GuestViewOnly>
   );
 }

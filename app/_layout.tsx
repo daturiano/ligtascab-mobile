@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/src/context/AuthenticationContext';
 import theme from '@/src/theme/theme';
 import { Nunito_300Light, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
 import { Roboto_600SemiBold, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
@@ -29,14 +30,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar />
-      <Stack
-        screenOptions={{
-          headerTintColor: '#1daa88',
-          headerShown: false,
-        }}
-      />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <StatusBar />
+        <Stack
+          screenOptions={{
+            headerTintColor: '#1daa88',
+            headerShown: false,
+          }}
+        />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

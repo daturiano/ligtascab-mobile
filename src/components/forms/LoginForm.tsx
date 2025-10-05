@@ -13,6 +13,7 @@ import * as z from 'zod';
 
 export default function LoginForm() {
   const router = useRouter();
+  const { signInWithPhoneNumber } = useAuth();
 
   const {
     control,
@@ -25,7 +26,25 @@ export default function LoginForm() {
     mode: 'onBlur',
   });
 
-  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {};
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    try {
+      const { success } = await signInWithPhoneNumber(data.phoneNumber.trim(), data.password);
+      if (!success) {
+        setError('root', {
+          type: 'manual',
+          message: 'Make sure the credentials are correct.',
+        });
+        return;
+      }
+      router.replace('/(private)/home');
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      setError('root', {
+        type: 'manual',
+        message: err.message ?? 'An unexpected error occurred. Please try again.',
+      });
+    }
+  };
   return (
     <Box width="100%" gap="l">
       <Box gap="m">
