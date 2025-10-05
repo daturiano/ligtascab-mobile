@@ -1,14 +1,14 @@
 import { useTheme } from '@shopify/restyle';
 import { LucideIcon } from 'lucide-react-native';
-import { StyleProp, StyleSheet, TextInput, TextInputProps } from 'react-native';
+import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle } from 'react-native';
 import { Theme } from '../../theme/theme';
 import Box from './Box';
 import ErrorMessage from './ErrorMessage';
 
 type ThemedInputProps = {
-  style?: StyleProp<TextInput>;
+  style?: StyleProp<TextStyle>;
   icon?: LucideIcon;
-  errorMessage?: string;
+  errorMessage?: string | null;
 } & TextInputProps;
 
 export default function Input({ style, errorMessage, icon: Icon, ...props }: ThemedInputProps) {

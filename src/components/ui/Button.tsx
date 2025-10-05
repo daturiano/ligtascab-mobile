@@ -36,7 +36,6 @@ export default Button;
 
 export const buttonVariants = {
   defaults: {
-    width: '100%',
     paddingVertical: 'm',
     paddingHorizontal: 'l',
     borderRadius: 'm',

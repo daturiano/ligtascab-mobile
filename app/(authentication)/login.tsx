@@ -36,9 +36,7 @@ export default function Login() {
             }}>
             <BrandName style={{ alignSelf: 'center', justifyContent: 'center' }} />
             <Box alignItems="center" width="100%">
-              <Text variant="header" color="secondary">
-                Welcome Back!
-              </Text>
+              <Text variant="header">Welcome Back!</Text>
               <Text variant="description">Sign in to start your LigtasCab journey.</Text>
             </Box>
             <LoginForm />
