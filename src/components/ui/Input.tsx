@@ -4,19 +4,28 @@ import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle } from 'rea
 import { Theme } from '../../theme/theme';
 import Box from './Box';
 import ErrorMessage from './ErrorMessage';
+import Text from './Text';
 
 type ThemedInputProps = {
   style?: StyleProp<TextStyle>;
   icon?: LucideIcon;
   errorMessage?: string | null;
+  title?: string;
 } & TextInputProps;
 
-export default function Input({ style, errorMessage, icon: Icon, ...props }: ThemedInputProps) {
+export default function Input({
+  style,
+  errorMessage,
+  title,
+  icon: Icon,
+  ...props
+}: ThemedInputProps) {
   const theme = useTheme<Theme>();
   const { description, muted } = theme.colors;
 
   return (
     <Box width={'100%'} flexDirection="column" gap="s">
+      {title && <Text fontSize={16}>{title}</Text>}
       <Box
         backgroundColor="input"
         paddingHorizontal="l"

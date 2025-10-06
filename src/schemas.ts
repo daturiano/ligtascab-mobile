@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { z } from 'zod';
 
 export const LoginSchema = z.object({
   phoneNumber: z
@@ -20,3 +20,32 @@ export const MobileSchema = z.object({
 export const otpSchema = z.object({
   otp: z.string().length(6, 'OTP must be 6 digits').regex(/^\d+$/, 'Only digits are allowed'),
 });
+
+export const AccountSetupSchema = z.object({
+  fullName: z.string().max(100).min(4),
+  email: z.email(),
+  phone: z.string().min(12).max(12),
+  address: z.string().max(120),
+  password: z
+    .string()
+    .min(6, {
+      message: 'password must be at least 6 characters',
+    })
+    .max(30),
+  confirm_password: z
+    .string()
+    .min(6, {
+      message: 'password must be at least 6 characters',
+    })
+    .max(30),
+});
+
+export const CreateAccountSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  phone_number: z.string(),
+  email: z.email(),
+  address: z.string(),
+});
+
+export type CreateAccount = z.infer<typeof CreateAccountSchema>;

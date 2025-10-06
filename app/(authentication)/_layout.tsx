@@ -67,6 +67,12 @@ export default function AuthLayout() {
               ),
             }}
           />
+          <Stack.Screen
+            name="account-setup"
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack>
       </QueryClientProvider>
     </GuestViewOnly>

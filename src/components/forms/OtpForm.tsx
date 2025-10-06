@@ -63,7 +63,10 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
 
   const onSubmit = (otp: z.infer<typeof otpSchema>) => {
     if (code === otp.otp) {
-      router.replace({ pathname: '/(authentication)/account-setup', params: { mobileNumber } });
+      router.replace({
+        pathname: '/(authentication)/account-setup',
+        params: { mobileNumber: `63${mobileNumber}` },
+      });
     } else {
       setError('root', {
         type: 'manual',
