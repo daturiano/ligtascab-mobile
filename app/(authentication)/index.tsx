@@ -53,13 +53,6 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  link: {
-    width: '100%',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    textAlign: 'center',
-  },
   image: {
     width: 304,
     height: 239,
@@ -67,9 +60,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 18,
     height: 18,
-  },
-  pressed: {
-    opacity: 0.5,
   },
   badge: {
     borderRadius: 12,
