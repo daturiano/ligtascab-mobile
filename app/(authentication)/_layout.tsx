@@ -33,45 +33,38 @@ export default function AuthLayout() {
             headerStyle: { backgroundColor: mainBackground },
             headerShadowVisible: false,
             headerTitle: '',
+            animation: Platform.OS === 'ios' ? 'none' : 'none',
           }}>
           <Stack.Screen
             name="index"
             options={{
               headerShown: false,
-              animation: Platform.OS === 'ios' ? 'ios_from_left' : 'slide_from_left',
             }}
           />
           <Stack.Screen
             name="login"
             options={{
-              headerLeft: () => (
-                <TouchableOpacity onPress={() => router.push('/')}>
-                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} />
-                </TouchableOpacity>
-              ),
-              animation: Platform.OS === 'ios' ? 'ios_from_right' : 'slide_from_right',
+              headerShown: false,
             }}
           />
           <Stack.Screen
             name="sign-up"
             options={{
               headerLeft: () => (
-                <TouchableOpacity onPress={() => router.push('/login')}>
-                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} />
+                <TouchableOpacity onPress={() => router.replace('/(authentication)/login')}>
+                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} color={primary} />
                 </TouchableOpacity>
               ),
-              animation: Platform.OS === 'ios' ? 'ios_from_right' : 'slide_from_right',
             }}
           />
           <Stack.Screen
             name="verify-otp"
             options={{
               headerLeft: () => (
-                <TouchableOpacity onPress={() => router.push('/login')}>
-                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} />
+                <TouchableOpacity onPress={() => router.back()}>
+                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} color={primary} />
                 </TouchableOpacity>
               ),
-              animation: Platform.OS === 'ios' ? 'ios_from_right' : 'slide_from_right',
             }}
           />
         </Stack>

@@ -19,6 +19,7 @@ export default function LoginForm() {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    getValues,
     setError,
   } = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -27,8 +28,9 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    const phoneNumber = `63${data.phoneNumber.trim()}`;
     try {
-      const { success } = await signInWithPhoneNumber(data.phoneNumber.trim(), data.password);
+      const { success } = await signInWithPhoneNumber(phoneNumber, data.password);
       if (!success) {
         setError('root', {
           type: 'manual',
@@ -59,6 +61,7 @@ export default function LoginForm() {
               onBlur={onBlur}
               keyboardType="number-pad"
               autoCapitalize="none"
+              maxLength={12}
               icon={PhoneIcon}
               errorMessage={errors.phoneNumber?.message}
             />
@@ -85,8 +88,14 @@ export default function LoginForm() {
       <Button
         onPress={handleSubmit(onSubmit)}
         isLoading={isSubmitting}
-        disabled={isSubmitting}
-        variant="primary">
+        disabled={
+          isSubmitting || getValues('phoneNumber').length < 12 || getValues('password').length < 6
+        }
+        variant={
+          getValues('phoneNumber').length < 12 || getValues('password').length < 6
+            ? 'disabled'
+            : 'primary'
+        }>
         <Text color="mainBackground" variant="body">
           Sign In
         </Text>

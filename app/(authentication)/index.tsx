@@ -39,7 +39,7 @@ export default function Index() {
         </Text>
       </Box>
       <Box width={'100%'} gap="s">
-        <Button onPress={() => router.push('/(authentication)/login')}>
+        <Button onPress={() => router.push('/(authentication)/sign-up')}>
           <Text variant="body" style={{ color: mainBackground }}>
             Get Started
           </Text>

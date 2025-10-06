@@ -17,8 +17,7 @@ export default function Login() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <ScrollView
           contentContainerStyle={{
@@ -32,26 +31,27 @@ export default function Login() {
               justifyContent: 'center',
               alignItems: 'flex-start',
               gap: 24,
-              marginBottom: 50,
             }}>
-            <BrandName style={{ alignSelf: 'center', justifyContent: 'center' }} />
-            <Box alignItems="center" width="100%">
-              <Text variant="header">Welcome Back!</Text>
-              <Text variant="description">Sign in to start your LigtasCab journey.</Text>
-            </Box>
-            <LoginForm />
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="center"
-              width="100%"
-              gap="s">
-              <Text variant="description">Don’t have an account?</Text>
-              <Link href="/(authentication)/sign-up" asChild>
-                <Text color="primary" fontWeight={500} fontSize={16}>
-                  Sign Up
-                </Text>
-              </Link>
+            <BrandName />
+            <Box width={'100%'} flex={1} justifyContent="center" gap="xl">
+              <Box width="100%">
+                <Text variant="header">Welcome Back!</Text>
+                <Text variant="description">Sign in to start your ligtascab journey.</Text>
+              </Box>
+              <LoginForm />
+              <Box
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
+                gap="s">
+                <Text variant="description">Don’t have an account?</Text>
+                <Link href="/(authentication)/sign-up" asChild>
+                  <Text color="primary" fontWeight={500} fontSize={16}>
+                    Sign Up
+                  </Text>
+                </Link>
+              </Box>
             </Box>
           </Container>
         </ScrollView>

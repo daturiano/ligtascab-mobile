@@ -51,12 +51,12 @@ export default function MobileForm() {
               style={{ fontSize: 18 }}
               placeholder="9391234567"
               value={mobileNumber}
+              maxLength={10}
               onChangeText={setMobileNumber}
               onKeyPress={() => setError(null)}
               keyboardType="phone-pad"
               onFocus={() => setError(null)}
               autoCapitalize="none"
-              autoFocus={true}
             />
           </Box>
         </Box>
