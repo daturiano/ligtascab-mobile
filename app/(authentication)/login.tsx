@@ -17,7 +17,7 @@ export default function Login() {
         <LoginForm />
         <Box flexDirection="row" alignItems="center" justifyContent="center" width="100%" gap="s">
           <Text variant="description">Don’t have an account?</Text>
-          <Link href="/(authentication)/account-setup" asChild>
+          <Link href="/(authentication)/sign-up" asChild>
             <Text color="primary" fontWeight={500} fontSize={16}>
               Sign Up
             </Text>

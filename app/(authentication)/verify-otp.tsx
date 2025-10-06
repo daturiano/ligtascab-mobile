@@ -7,7 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 export default function VerifyOtpPage() {
   const { mobileNumber, code } = useLocalSearchParams();
   return (
-    <KeyboardAvoidingContainer>
+    <KeyboardAvoidingContainer scrollable={false}>
       <Box gap="m" flexDirection="column">
         <Text variant="header">Enter OTP</Text>
         <Text variant="description">

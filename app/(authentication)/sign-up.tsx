@@ -5,7 +5,7 @@ import Text from '@/src/components/ui/Text';
 
 export default function SignUpPage() {
   return (
-    <KeyboardAvoidingContainer>
+    <KeyboardAvoidingContainer scrollable={false}>
       <Box gap="m" flexDirection="column">
         <Text variant="header">Hi! What&apos;s your mobile number?</Text>
         <Text variant="description">

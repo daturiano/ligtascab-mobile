@@ -10,7 +10,7 @@ export default function AuthenticatedViewOnly({ children }: { children: React.Re
 
   useEffect(() => {
     if (authChecked && session === null) {
-      router.replace('/(authentication)/login');
+      router.replace('/');
     }
   }, [authChecked, router, session]);
 

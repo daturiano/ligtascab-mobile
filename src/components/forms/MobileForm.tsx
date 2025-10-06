@@ -35,7 +35,13 @@ export default function MobileForm() {
   };
 
   return (
-    <Box width="100%" gap="l" flexGrow={1} flexDirection="column" justifyContent="space-between">
+    <Box
+      width="100%"
+      gap="l"
+      flexGrow={1}
+      flexDirection="column"
+      justifyContent="space-between"
+      style={{ marginBottom: 80 }}>
       <Box flexDirection="column" gap="m">
         <Box gap="m" flexDirection="row" alignItems="center">
           <Box
@@ -57,6 +63,7 @@ export default function MobileForm() {
               keyboardType="phone-pad"
               onFocus={() => setError(null)}
               autoCapitalize="none"
+              autoFocus={true}
             />
           </Box>
         </Box>

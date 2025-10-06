@@ -6,7 +6,7 @@ import Text from '@/src/components/ui/Text';
 
 export default function AccountSetupPage() {
   return (
-    <KeyboardAvoidingContainer scrollable>
+    <KeyboardAvoidingContainer>
       <BrandName />
       <Box width={'100%'} flex={1} flexDirection="column" gap="xl">
         <Box width="100%">

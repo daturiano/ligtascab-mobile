@@ -30,7 +30,7 @@ export default function AccountSetupForm() {
       password: '',
       confirm_password: '',
     },
-    mode: 'onBlur',
+    mode: 'onTouched',
   });
 
   const onSubmit = async (data: z.infer<typeof AccountSetupSchema>) => {

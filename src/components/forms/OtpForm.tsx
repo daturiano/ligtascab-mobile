@@ -76,7 +76,13 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
   };
 
   return (
-    <Box width="100%" gap="l" flexGrow={1} flexDirection="column" justifyContent="space-between">
+    <Box
+      width="100%"
+      gap="l"
+      flexGrow={1}
+      flexDirection="column"
+      justifyContent="space-between"
+      style={{ marginBottom: 80 }}>
       <Box flexDirection="column" gap="s" alignItems="flex-start">
         <Controller
           control={control}
@@ -95,6 +101,7 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
                     onKeyPress={(e) => handleKeyPress(e, index)}
                     keyboardType="number-pad"
                     maxLength={1}
+                    autoFocus={true}
                     style={styles.textBox}
                   />
                 ))}
