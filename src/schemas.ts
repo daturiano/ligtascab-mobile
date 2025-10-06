@@ -16,3 +16,7 @@ export const MobileSchema = z.object({
     .max(10, 'Phone number must be 10 digits.')
     .regex(/^[0-9]+$/, 'Phone number must contain only digits.'),
 });
+
+export const otpSchema = z.object({
+  otp: z.string().length(6, 'OTP must be 6 digits').regex(/^\d+$/, 'Only digits are allowed'),
+});

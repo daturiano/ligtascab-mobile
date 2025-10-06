@@ -63,6 +63,17 @@ export default function AuthLayout() {
               animation: Platform.OS === 'ios' ? 'ios_from_right' : 'slide_from_right',
             }}
           />
+          <Stack.Screen
+            name="verify-otp"
+            options={{
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => router.push('/login')}>
+                  <ArrowLeft style={{ paddingHorizontal: theme.spacing.l }} />
+                </TouchableOpacity>
+              ),
+              animation: Platform.OS === 'ios' ? 'ios_from_right' : 'slide_from_right',
+            }}
+          />
         </Stack>
       </QueryClientProvider>
     </GuestViewOnly>
