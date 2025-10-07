@@ -6,10 +6,10 @@ const palette = {
   yellowPrimary: '#EF9651',
   yellowDark: '#dbaa14',
 
-  greenLight: '#44b393',
-  greenPrimary: '#1daa88',
+  greenLight: '#a0d5c2',
+  greenPrimary: '#1FAB89',
   greenDark: '#189375',
-
+  // #6EC7B1
   grayLighter: '#ececec',
   grayLight: '#f3f3f3',
 
@@ -23,6 +23,7 @@ const palette = {
 
   black: '#0a0a0a',
   white: '#EFEFEF',
+  whiter: '#ffffff',
 };
 
 const theme = createTheme({
@@ -33,6 +34,7 @@ const theme = createTheme({
     cardForeground: '#000000',
     primary: palette.greenPrimary,
     primaryLight: palette.greenLight,
+    primaryDark: palette.greenDark,
     secondary: palette.yellowPrimary,
     grayLighter: palette.grayLighter,
     grayLight: palette.grayLight,
@@ -43,6 +45,7 @@ const theme = createTheme({
     transparent: 'transparent',
     input: '#e2e8f0',
     warning: palette.warning,
+    white: palette.whiter,
   },
   spacing: {
     xs: 4,
@@ -51,11 +54,14 @@ const theme = createTheme({
     l: 16,
     xl: 24,
     xxl: 32,
+    _3xl: 42,
+    _4xl: 48,
   },
   borderRadii: {
     s: 4,
     m: 8,
     l: 12,
+    xl: 16,
   },
   textVariants: {
     header: {

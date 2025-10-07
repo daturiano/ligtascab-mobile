@@ -5,16 +5,21 @@ import Text from './Text';
 
 type BrandNameProps = {
   style?: StyleProp<ViewStyle>;
+  variant?: 'light' | 'default';
 };
 
-export default function BrandName({ style }: BrandNameProps) {
+export default function BrandName({ style, variant = 'default' }: BrandNameProps) {
   return (
     <Box style={[{ width: '100%' }, style]} flexDirection="row" alignItems="center" gap="s">
-      <Image style={styles.image} source={require('@/src/assets/logo.svg')} />
+      {variant === 'light' ? (
+        <Image style={styles.image} source={require('@/src/assets/logo-white.svg')} />
+      ) : (
+        <Image style={styles.image} source={require('@/src/assets/logo.svg')} />
+      )}
       <Text
         style={[styles.brandName, { fontFamily: 'Nunito_800ExtraBold' }]}
         fontSize={28}
-        color="primary">
+        color={variant === 'light' ? 'white' : 'primary'}>
         ligtascab.
       </Text>
     </Box>
