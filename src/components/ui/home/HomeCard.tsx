@@ -47,7 +47,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
         <Box
           position="absolute"
           bottom={-50}
-          left={-60}
+          left={-50}
           right={0}
           alignItems="center"
           overflow="hidden">
@@ -55,7 +55,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
             source={source}
             style={{
               width: '100%',
-              height: 125,
+              height: 110,
               resizeMode: 'contain',
             }}
           />

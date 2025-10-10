@@ -41,6 +41,7 @@ const theme = createTheme({
     mutedLighter: palette.mutedLighter,
     mutedLight: palette.mutedLight,
     muted: palette.mutedPrimary,
+    mutedDark: palette.mutedDark,
     description: '#5e5e5e',
     transparent: 'transparent',
     input: '#e2e8f0',
@@ -84,6 +85,11 @@ const theme = createTheme({
       color: 'description',
       fontSize: 16,
       lineHeight: 24,
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: 'mutedDark',
     },
     defaults: {
       fontFamily: ' Nunito_300Light',
