@@ -2,7 +2,12 @@ import Box from '../Box';
 import BrandName from '../BrandName';
 import Text from '../Text';
 
-export default function HomeHeader() {
+type HomeHeaderProps = {
+  title?: string;
+  description?: string;
+};
+
+export default function HomeHeader({ title, description }: HomeHeaderProps) {
   return (
     <Box
       width={'100%'}
@@ -16,14 +21,16 @@ export default function HomeHeader() {
       position="absolute"
       borderBottomStartRadius="m">
       <BrandName variant="light" />
-      <Box flex={1} justifyContent="center" marginBottom="l">
-        <Text variant="subheader" color="white">
-          Hello, Daniel Joshua! 👋
-        </Text>
-        <Text variant="description" color="white" fontSize={16}>
-          Ready for your next safe ride?
-        </Text>
-      </Box>
+      {title && (
+        <Box flex={1} justifyContent="center" marginBottom="l">
+          <Text variant="subheader" color="white">
+            {title}
+          </Text>
+          <Text variant="description" color="white" fontSize={16}>
+            {description}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 }

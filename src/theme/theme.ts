@@ -21,6 +21,7 @@ const palette = {
   description: '#5e5e5e',
   warning: '#ff6467',
 
+  overlay: 'rgba(0,0,0,0.4)',
   black: '#0a0a0a',
   white: '#EFEFEF',
   whiter: '#ffffff',
@@ -47,6 +48,7 @@ const theme = createTheme({
     input: '#e2e8f0',
     warning: palette.warning,
     white: palette.whiter,
+    overlay: palette.overlay,
   },
   spacing: {
     xs: 4,

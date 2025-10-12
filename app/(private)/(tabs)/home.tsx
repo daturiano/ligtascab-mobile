@@ -9,7 +9,7 @@ import { MapIcon, QrCode } from 'lucide-react-native';
 export default function Home() {
   return (
     <Container style={{ paddingHorizontal: 0, paddingTop: 0 }}>
-      <HomeHeader />
+      <HomeHeader title="Hello, Daniel Joshua! 👋" description="Ready for your next safe ride?" />
       <Box
         flex={1}
         width="100%"
