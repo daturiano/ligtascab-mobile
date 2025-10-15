@@ -1,5 +1,6 @@
 import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
+import DriverDetails from '@/src/components/ui/in-ride/DriverDetails';
 import Text from '@/src/components/ui/Text';
 import { useRide } from '@/src/context/RideContext';
 import { INITIAL_REGION } from '@/src/utils/constants';
@@ -36,7 +37,17 @@ export default function InRide() {
         backgroundStyle={styles.sheetBackground}
         handleIndicatorStyle={styles.handleIndicator}>
         <BottomSheetView>
-          <Text>Sheet</Text>
+          <Box
+            width={'100%'}
+            flexDirection="column"
+            gap="s"
+            paddingHorizontal="xl"
+            paddingVertical="s">
+            <DriverDetails
+              tricycle_details={rideDetails.tricycle_details}
+              driver_details={rideDetails.driver_details}
+            />
+          </Box>
         </BottomSheetView>
       </BottomSheet>
       <Box paddingHorizontal="xl" paddingVertical="xxl" backgroundColor="white">

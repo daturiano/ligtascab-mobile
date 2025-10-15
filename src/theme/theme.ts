@@ -89,9 +89,9 @@ const theme = createTheme({
       lineHeight: 24,
     },
     title: {
-      fontSize: 16,
+      fontSize: 21,
       fontWeight: 600,
-      color: 'mutedDark',
+      color: 'mainForeground',
     },
     defaults: {
       fontFamily: ' Nunito_300Light',
