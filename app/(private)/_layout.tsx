@@ -22,6 +22,12 @@ export default function PrivateLayout() {
         <QueryClientProvider client={queryClient}>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="in-ride"
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack>
         </QueryClientProvider>
       </RideProvider>
