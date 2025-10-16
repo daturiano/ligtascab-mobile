@@ -37,7 +37,7 @@ export default function AccountSetupForm() {
     try {
       const user = await registerWithCredentials(data);
       if (user) {
-        return router.replace('/(private)/home');
+        return router.replace('/(private)/(tabs)/home');
       }
     } catch (err: any) {
       console.error('Login failed:', err);

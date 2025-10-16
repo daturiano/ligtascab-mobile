@@ -36,7 +36,7 @@ export default function LoginForm() {
         });
         return;
       }
-      router.replace('/(private)/home');
+      router.replace('/(private)/(tabs)/home');
     } catch (err: any) {
       console.error('Login failed:', err);
       setError('root', {
