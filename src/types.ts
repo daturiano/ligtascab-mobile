@@ -84,3 +84,12 @@ export type Commuter = {
   birth_date: Date | null;
   created_at: Date;
 };
+
+export type Report = {
+  id: string;
+  ride_id: string;
+  type: string;
+  description: string;
+  commuter_id: string;
+  created_at: Date;
+};

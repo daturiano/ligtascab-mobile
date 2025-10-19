@@ -1,7 +1,32 @@
-import { Ride, Tricycle } from '../types';
+import { Report, Ride, Tricycle } from '../types';
 import { supabase } from '../utils/supabase';
 import { getErrorMessage } from '../utils/utils';
 import { fetchDriverDetails, fetchOperatorDetails } from './supabase';
+
+export async function submitReport(reportDetails: Partial<Report>): Promise<Report> {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) throw new Error('User not authenticated');
+
+    const reportData = {
+      ...reportDetails,
+      commuter_id: user.id,
+    };
+
+    const { data, error } = await supabase.from('reports').insert(reportData).select().single();
+
+    if (error || !data) {
+      throw new Error(error?.message || 'Unable to create new ride');
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
 
 export async function createNewRide(tricycleDetails: Tricycle): Promise<Ride> {
   try {

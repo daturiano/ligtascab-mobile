@@ -6,9 +6,10 @@ const palette = {
   yellowPrimary: '#EF9651',
   yellowDark: '#dbaa14',
 
+  greenLighter: '#f0fdfa',
   greenLight: '#a0d5c2',
   greenPrimary: '#1FAB89',
-  greenDark: '#189375',
+  greenDark: '#0f766e',
   // #6EC7B1
   grayLighter: '#ececec',
   grayLight: '#f3f3f3',
@@ -34,6 +35,7 @@ const theme = createTheme({
     cardBackground: '#ffffff',
     cardForeground: '#000000',
     primary: palette.greenPrimary,
+    primaryLighter: palette.greenLighter,
     primaryLight: palette.greenLight,
     primaryDark: palette.greenDark,
     secondary: palette.yellowPrimary,

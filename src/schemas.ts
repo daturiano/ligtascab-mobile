@@ -48,4 +48,10 @@ export const CreateAccountSchema = z.object({
   address: z.string(),
 });
 
+export const ReportSchema = z.object({
+  type: z.string(),
+  description: z.string().min(3).max(300),
+  ride_id: z.string(),
+});
+
 export type CreateAccount = z.infer<typeof CreateAccountSchema>;
