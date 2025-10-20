@@ -9,6 +9,8 @@ import {
 import ReportForm from '../../forms/ReportForm';
 import Box from '../Box';
 import Text from '../Text';
+import { useRide } from '@/src/context/RideContext';
+import ReportTicketNumber from './ReportTicketNumber';
 
 type ReportModalProps = {
   isModalVisible: boolean;
@@ -16,6 +18,7 @@ type ReportModalProps = {
 };
 
 export default function ReportModal({ isModalVisible, setIsModalVisible }: ReportModalProps) {
+  const { reportDetails } = useRide();
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -27,12 +30,12 @@ export default function ReportModal({ isModalVisible, setIsModalVisible }: Repor
             gap="l"
             padding="xl">
             <Box flexDirection="row" justifyContent="space-between">
-              <Text variant="title">Report Issue</Text>
+              <Text variant="title">{reportDetails ? 'Report Submitted' : 'Report Issue'}</Text>
               <TouchableOpacity onPress={() => setIsModalVisible(false)}>
                 <XIcon />
               </TouchableOpacity>
             </Box>
-            <ReportForm />
+            {reportDetails ? <ReportTicketNumber /> : <ReportForm />}
           </Box>
         </Box>
       </TouchableWithoutFeedback>

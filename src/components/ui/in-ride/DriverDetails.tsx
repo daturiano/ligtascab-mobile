@@ -32,7 +32,7 @@ export default function DriverDetails({ tricycle_details, driver_details }: Driv
             {`${driver_details.first_name} ${driver_details.last_name}`}
           </Text>
           <Text variant="description" fontSize={14} fontWeight={500}>
-            {`${tricycle_details.tricycle_details.model} - ${tricycle_details.plate_number}`}
+            {`Plate Number: ${tricycle_details.plate_number}`}
           </Text>
         </Box>
         <Box flexDirection="row" position="relative">

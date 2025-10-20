@@ -1,11 +1,13 @@
 import { createContext, useContext, useState } from 'react';
-import { Ride, Tricycle } from '../types';
+import { Report, Ride, Tricycle } from '../types';
 
 type RideContextType = {
   tricycleDetails: Tricycle | null;
-  setTricycleDetails: (args: Tricycle) => void;
+  setTricycleDetails: (args: Tricycle | null) => void;
   rideDetails: Ride | null;
-  setRideDetails: (args: Ride) => void;
+  setRideDetails: (args: Ride | null) => void;
+  reportDetails: Report | null;
+  setReportDetails: (args: Report | null) => void;
 };
 
 export const RideContext = createContext<RideContextType | undefined>(undefined);
@@ -13,6 +15,7 @@ export const RideContext = createContext<RideContextType | undefined>(undefined)
 export function RideProvider({ children }: { children: React.ReactNode }) {
   const [tricycleDetails, setTricycleDetails] = useState<Tricycle | null>(null);
   const [rideDetails, setRideDetails] = useState<Ride | null>(null);
+  const [reportDetails, setReportDetails] = useState<Report | null>(null);
 
   return (
     <RideContext.Provider
@@ -21,6 +24,8 @@ export function RideProvider({ children }: { children: React.ReactNode }) {
         setTricycleDetails,
         rideDetails,
         setRideDetails,
+        reportDetails,
+        setReportDetails,
       }}>
       {children}
     </RideContext.Provider>

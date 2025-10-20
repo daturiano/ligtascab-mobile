@@ -51,6 +51,7 @@ export const CreateAccountSchema = z.object({
 export const ReportSchema = z.object({
   type: z.string(),
   description: z.string().min(3).max(300),
+  ticket_number: z.string(),
   ride_id: z.string(),
 });
 

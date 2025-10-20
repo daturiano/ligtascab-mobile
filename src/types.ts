@@ -92,4 +92,5 @@ export type Report = {
   description: string;
   commuter_id: string;
   created_at: Date;
+  ticket_number: string;
 };

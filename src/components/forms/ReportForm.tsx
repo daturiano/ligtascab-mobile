@@ -2,6 +2,7 @@ import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
 import ErrorMessage from '@/src/components/ui/ErrorMessage';
 import Text from '@/src/components/ui/Text';
+import { useRide } from '@/src/context/RideContext';
 import { ReportSchema } from '@/src/schemas';
 import { Theme } from '@/src/theme/theme';
 import { violationOptions } from '@/src/utils/constants';
@@ -14,13 +15,20 @@ import { ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import * as z from 'zod';
 import ReportMsg from '../ui/in-ride/ReportMsg';
 import { submitReport } from '@/src/services/rides';
-import { useRide } from '@/src/context/RideContext';
 
 export default function ReportForm() {
-  const { rideDetails } = useRide();
+  const { rideDetails, setReportDetails } = useRide();
   const theme = useTheme<Theme>();
   const { mutedLighter } = theme.colors;
   const [showDropdown, setShowDropdown] = useState(false);
+
+  const generateTicketNumber = () => {
+    const firstId = rideDetails?.id.slice(0, 5).toUpperCase();
+    const secondId = rideDetails?.id.slice(6, 9).toUpperCase();
+    return `TRC-${firstId}-${secondId}`;
+  };
+
+  const ticketNumber = generateTicketNumber();
 
   const {
     control,
@@ -32,6 +40,7 @@ export default function ReportForm() {
     defaultValues: {
       type: '',
       description: '',
+      ticket_number: ticketNumber,
       ride_id: rideDetails!.id,
     },
     mode: 'onTouched',
@@ -40,6 +49,9 @@ export default function ReportForm() {
   const onSubmit = async (data: z.infer<typeof ReportSchema>) => {
     try {
       const report = await submitReport(data);
+      if (report) {
+        setReportDetails(report);
+      }
     } catch (err: any) {
       console.error('Login failed:', err);
       setError('root', {
