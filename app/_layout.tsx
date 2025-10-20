@@ -1,11 +1,13 @@
 import { AuthProvider } from '@/src/context/AuthenticationContext';
+import { useRideStore } from '@/src/store/useRideStore';
 import theme from '@/src/theme/theme';
 import { Nunito_300Light, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
 import { Roboto_600SemiBold, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
 import { ThemeProvider } from '@shopify/restyle';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import 'react-native-reanimated';
 export { ErrorBoundary } from 'expo-router';
 
@@ -19,14 +21,26 @@ export default function RootLayout() {
     Nunito_800ExtraBold,
   });
 
+  const [hydrated, setHydrated] = useState(false);
+
   useEffect(() => {
-    if (loaded || error) {
+    const unsub = useRideStore.persist.onFinishHydration(() => setHydrated(true));
+    if (useRideStore.persist.hasHydrated()) setHydrated(true);
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if ((loaded || error) && hydrated) {
       SplashScreen.hideAsync();
     }
-  }, [loaded, error]);
+  }, [loaded, error, hydrated]);
 
-  if (!loaded && !error) {
-    return null;
+  if (!loaded || !hydrated) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
