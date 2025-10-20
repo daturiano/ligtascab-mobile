@@ -60,3 +60,14 @@ export async function createNewRide(tricycleDetails: Tricycle): Promise<Ride> {
     throw new Error(getErrorMessage(err));
   }
 }
+
+export const updateRide = async (ride_id: string) => {
+  const endTime = new Date().toISOString();
+  const { data, error } = await supabase
+    .from('rides')
+    .update({ end_time: endTime })
+    .eq('id', ride_id)
+    .single();
+
+  return { data, error };
+};

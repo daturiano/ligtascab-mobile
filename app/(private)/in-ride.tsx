@@ -1,21 +1,43 @@
 import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
 import DriverDetails from '@/src/components/ui/in-ride/DriverDetails';
+import FareBreakdown from '@/src/components/ui/in-ride/FareBreakdown';
+import Report from '@/src/components/ui/in-ride/Report';
 import Text from '@/src/components/ui/Text';
 import { useRide } from '@/src/context/RideContext';
+import { updateRide } from '@/src/services/rides';
 import { INITIAL_REGION } from '@/src/utils/constants';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import { useMemo, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function InRide() {
-  const { rideDetails } = useRide();
+  const { rideDetails, setTricycleDetails, setReportDetails, setRideDetails } = useRide();
+  const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['45%', '66%'], []);
 
+  const endRideMutation = useMutation({
+    mutationFn: async (ride_id: string) => {
+      await updateRide(ride_id);
+    },
+  });
+
   if (!rideDetails) return null;
+
+  const handleEndRide = async () => {
+    endRideMutation.mutate(rideDetails.id);
+    setTricycleDetails(null);
+    setReportDetails(null);
+    setRideDetails(null);
+    router.push({
+      pathname: '/(private)/(tabs)/home',
+    });
+  };
 
   return (
     <GestureHandlerRootView>
@@ -47,11 +69,13 @@ export default function InRide() {
               tricycle_details={rideDetails.tricycle_details}
               driver_details={rideDetails.driver_details}
             />
+            <FareBreakdown />
+            <Report />
           </Box>
         </BottomSheetView>
       </BottomSheet>
       <Box paddingHorizontal="xl" paddingVertical="xxl" backgroundColor="white">
-        <Button paddingVertical="l">
+        <Button paddingVertical="l" onPress={handleEndRide}>
           <Text fontSize={18} fontWeight={600} color="white">
             Finish Ride
           </Text>
