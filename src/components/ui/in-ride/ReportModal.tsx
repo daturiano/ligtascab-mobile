@@ -1,3 +1,4 @@
+import { useRideStore } from '@/src/store/useRideStore';
 import { XIcon } from 'lucide-react-native';
 import {
   Keyboard,
@@ -9,7 +10,6 @@ import {
 import ReportForm from '../../forms/ReportForm';
 import Box from '../Box';
 import Text from '../Text';
-import { useRide } from '@/src/context/RideContext';
 import ReportTicketNumber from './ReportTicketNumber';
 
 type ReportModalProps = {
@@ -18,7 +18,10 @@ type ReportModalProps = {
 };
 
 export default function ReportModal({ isModalVisible, setIsModalVisible }: ReportModalProps) {
-  const { reportDetails } = useRide();
+  const { rideDetails, setReportDetails, reportDetails } = useRideStore();
+
+  if (!rideDetails) return null;
+
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -35,7 +38,11 @@ export default function ReportModal({ isModalVisible, setIsModalVisible }: Repor
                 <XIcon />
               </TouchableOpacity>
             </Box>
-            {reportDetails ? <ReportTicketNumber /> : <ReportForm />}
+            {reportDetails ? (
+              <ReportTicketNumber reportDetails={reportDetails} />
+            ) : (
+              <ReportForm rideDetails={rideDetails} setReportDetails={setReportDetails} />
+            )}
           </Box>
         </Box>
       </TouchableWithoutFeedback>

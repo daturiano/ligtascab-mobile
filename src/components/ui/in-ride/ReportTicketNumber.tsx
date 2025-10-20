@@ -3,12 +3,13 @@ import { BellIcon, ClockIcon } from 'lucide-react-native';
 import Box from '../Box';
 import Text from '../Text';
 import CopyButton from './CopyButton';
-import { useRide } from '@/src/context/RideContext';
+import { Report } from '@/src/types';
 
-export default function ReportTicketNumber() {
-  const { reportDetails } = useRide();
-  if (!reportDetails) return null;
+type ReportTicketNumberProps = {
+  reportDetails: Report;
+};
 
+export default function ReportTicketNumber({ reportDetails }: ReportTicketNumberProps) {
   return (
     <Box flexDirection="column" justifyContent="space-between" flex={1}>
       <Box flexDirection="column" alignItems="center" gap="m" marginTop="l">

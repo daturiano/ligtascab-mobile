@@ -6,13 +6,11 @@ import { SwitchCamera } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Box from '../Box';
-import Text from '../Text';
-import { useRide } from '@/src/context/RideContext';
 import Card from '../Card';
+import Text from '../Text';
 import OnScanModal from './OnScanModal';
 
 export default function QRScanner() {
-  const { setTricycleDetails } = useRide();
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraDisabled, setCameraDisabled] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -41,11 +39,10 @@ export default function QRScanner() {
 
   useEffect(() => {
     if (tricycle_details) {
-      setTricycleDetails(tricycle_details);
       setCameraDisabled(true);
       setVisible(true);
     }
-  }, [tricycle_details, setTricycleDetails]);
+  }, [tricycle_details]);
 
   if (!permission) {
     return <View />;
@@ -86,7 +83,11 @@ export default function QRScanner() {
         <Overlay />
       </Box>
       {tricycle_details && (
-        <OnScanModal visible={visible} isLoading={false} exitModalHandler={exitModalHandler} />
+        <OnScanModal
+          tricycle_details={tricycle_details}
+          visible={visible}
+          exitModalHandler={exitModalHandler}
+        />
       )}
     </Card>
   );

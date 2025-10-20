@@ -2,9 +2,10 @@ import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
 import ErrorMessage from '@/src/components/ui/ErrorMessage';
 import Text from '@/src/components/ui/Text';
-import { useRide } from '@/src/context/RideContext';
 import { ReportSchema } from '@/src/schemas';
+import { submitReport } from '@/src/services/rides';
 import { Theme } from '@/src/theme/theme';
+import { Report, Ride } from '@/src/types';
 import { violationOptions } from '@/src/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTheme } from '@shopify/restyle';
@@ -14,17 +15,20 @@ import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import * as z from 'zod';
 import ReportMsg from '../ui/in-ride/ReportMsg';
-import { submitReport } from '@/src/services/rides';
 
-export default function ReportForm() {
-  const { rideDetails, setReportDetails } = useRide();
+type ReportFormProps = {
+  rideDetails: Ride;
+  setReportDetails: (args: Report | null) => void;
+};
+
+export default function ReportForm({ rideDetails, setReportDetails }: ReportFormProps) {
   const theme = useTheme<Theme>();
   const { mutedLighter } = theme.colors;
   const [showDropdown, setShowDropdown] = useState(false);
 
   const generateTicketNumber = () => {
     const firstId = rideDetails?.id.slice(0, 5).toUpperCase();
-    const secondId = rideDetails?.id.slice(6, 9).toUpperCase();
+    const secondId = rideDetails?.id.slice(9, 12).toUpperCase();
     return `TRC-${firstId}-${secondId}`;
   };
 

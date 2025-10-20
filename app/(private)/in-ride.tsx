@@ -4,8 +4,8 @@ import DriverDetails from '@/src/components/ui/in-ride/DriverDetails';
 import FareBreakdown from '@/src/components/ui/in-ride/FareBreakdown';
 import Report from '@/src/components/ui/in-ride/Report';
 import Text from '@/src/components/ui/Text';
-import { useRide } from '@/src/context/RideContext';
 import { updateRide } from '@/src/services/rides';
+import { useRideStore } from '@/src/store/useRideStore';
 import { INITIAL_REGION } from '@/src/utils/constants';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +16,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 export default function InRide() {
-  const { rideDetails, setTricycleDetails, setReportDetails, setRideDetails } = useRide();
+  const { rideDetails, clearAll } = useRideStore();
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['45%', '66%'], []);
@@ -31,9 +31,7 @@ export default function InRide() {
 
   const handleEndRide = async () => {
     endRideMutation.mutate(rideDetails.id);
-    setTricycleDetails(null);
-    setReportDetails(null);
-    setRideDetails(null);
+    clearAll();
     router.push({
       pathname: '/(private)/(tabs)/home',
     });
