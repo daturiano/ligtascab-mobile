@@ -1,9 +1,18 @@
-import { Ellipsis } from 'lucide-react-native';
+import { fetchRecentRides } from '@/src/services/rides';
+import { Ride } from '@/src/types';
+import { useQuery } from '@tanstack/react-query';
+import { Image } from 'expo-image';
+import { Pressable } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
-import { Image } from 'expo-image';
+import RideDetailsCard from './RideDetailsCard';
 
 export default function RecentRides() {
+  const { data: recent_rides } = useQuery<Ride[] | null>({
+    queryKey: ['recent_rides'],
+    queryFn: fetchRecentRides,
+  });
+
   return (
     <Box
       flex={1}
@@ -11,7 +20,8 @@ export default function RecentRides() {
       borderRadius="m"
       backgroundColor="white"
       flexDirection="column"
-      padding="l"
+      paddingVertical="xl"
+      paddingHorizontal="l"
       style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
@@ -20,17 +30,29 @@ export default function RecentRides() {
         elevation: 2,
       }}>
       <Box justifyContent="space-between" flexDirection="row" alignItems="center">
-        <Box>
-          <Text fontWeight={500} fontSize={14}>
+        <Box alignItems="center" flexDirection="row" gap="s">
+          <Text fontWeight={500} fontSize={16}>
             Recent Rides
           </Text>
         </Box>
-        <Ellipsis />
+        <Pressable>
+          <Text color="muted" fontWeight={400} fontSize={15}>
+            See all
+          </Text>
+        </Pressable>
       </Box>
-      <Box flexGrow={1} alignItems="center" justifyContent="center">
-        <Image style={{ width: 140, height: 140 }} source={require('@/src/assets/empty.png')} />
-        <Text>You have no recent rides.</Text>
-      </Box>
+      {!recent_rides ? (
+        <Box flexGrow={1} alignItems="center" justifyContent="center">
+          <Image style={{ width: 140, height: 140 }} source={require('@/src/assets/empty.png')} />
+          <Text>You have no recent rides.</Text>
+        </Box>
+      ) : (
+        <Box flexGrow={1} gap="l" paddingTop="l">
+          {recent_rides.map((ride) => (
+            <RideDetailsCard ride={ride} key={ride.id} />
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }

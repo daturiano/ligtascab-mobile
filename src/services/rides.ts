@@ -71,3 +71,13 @@ export const updateRide = async (ride_id: string) => {
 
   return { data, error };
 };
+
+export const fetchRecentRides = async (): Promise<Ride[]> => {
+  const { data } = await supabase
+    .from('rides')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  return data ?? [];
+};
