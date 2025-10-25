@@ -2,7 +2,8 @@ import { createTheme } from '@shopify/restyle';
 import { buttonVariants } from '../components/ui/Button';
 
 const palette = {
-  yellowLight: '#fdca48',
+  yellowLighter: '#fdf5ee',
+  yellowLight: '#f2ab74',
   yellowPrimary: '#EF9651',
   yellowDark: '#dbaa14',
 
@@ -38,6 +39,8 @@ const theme = createTheme({
     primaryLighter: palette.greenLighter,
     primaryLight: palette.greenLight,
     primaryDark: palette.greenDark,
+    secondaryLighter: palette.yellowLighter,
+    secondaryLight: palette.yellowLight,
     secondary: palette.yellowPrimary,
     grayLighter: palette.grayLighter,
     grayLight: palette.grayLight,
