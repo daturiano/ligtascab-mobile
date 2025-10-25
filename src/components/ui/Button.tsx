@@ -9,7 +9,7 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import React from 'react';
-import { ActivityIndicator, Pressable, PressableProps } from 'react-native';
+import { ActivityIndicator, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
 
 type ButtonProps = SpacingProps<Theme> &
   BackgroundColorProps<Theme> &
@@ -17,6 +17,7 @@ type ButtonProps = SpacingProps<Theme> &
   PressableProps & {
     children: React.ReactNode;
     isLoading?: boolean;
+    style?: StyleProp<ViewStyle>;
   };
 
 const BaseButton = createRestyleComponent<ButtonProps, Theme>(
@@ -26,7 +27,7 @@ const BaseButton = createRestyleComponent<ButtonProps, Theme>(
 
 const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) => {
   return (
-    <BaseButton {...rest} style={({ pressed }) => [pressed && { opacity: 0.5 }]}>
+    <BaseButton {...rest} style={({ pressed }) => [pressed && { opacity: 0.5 }, style]}>
       {isLoading ? <ActivityIndicator color="#737373" /> : children}
     </BaseButton>
   );
@@ -48,6 +49,9 @@ export const buttonVariants = {
   },
   secondary: {
     backgroundColor: 'secondary',
+  },
+  destructive: {
+    backgroundColor: 'warning',
   },
   outline: {
     backgroundColor: 'transparent',

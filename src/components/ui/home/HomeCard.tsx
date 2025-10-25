@@ -24,6 +24,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
       overflow="hidden"
       padding="l"
       justifyContent="space-between"
+      height={160}
       style={{
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
@@ -39,8 +40,8 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
           alignItems="center"
           width={'100%'}
           style={{ zIndex: 2, marginBottom: 60 }}>
-          <Icon size={18} />
-          <Text fontWeight={500} fontSize={14}>
+          <Icon size={20} />
+          <Text fontWeight={500} fontSize={16}>
             {title}
           </Text>
         </Box>
@@ -60,7 +61,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
             }}
           />
         </Box>
-        <ArrowRight color={'#737373'} style={{ left: 120, top: 5 }} />
+        <ArrowRight color={'#737373'} style={{ left: 120, top: 25 }} />
       </Pressable>
     </Box>
   );

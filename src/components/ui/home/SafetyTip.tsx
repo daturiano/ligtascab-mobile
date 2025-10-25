@@ -9,6 +9,7 @@ export default function SafetyTip() {
       alignItems="center"
       backgroundColor="primaryLight"
       borderRadius="m"
+      marginBottom="l"
       paddingHorizontal="xl"
       gap="m"
       paddingVertical="xl">
