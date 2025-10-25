@@ -1,7 +1,7 @@
 import { Report, Ride, Tricycle } from '../types';
 import { supabase } from '../utils/supabase';
 import { getErrorMessage } from '../utils/utils';
-import { fetchDriverDetails, fetchOperatorDetails } from './supabase';
+import { fetchDriverDetails, fetchOperatorDetails } from './db';
 
 export async function submitReport(reportDetails: Partial<Report>): Promise<Report> {
   try {
@@ -80,4 +80,40 @@ export const fetchRecentRides = async (): Promise<Ride[]> => {
     .limit(3);
 
   return data ?? [];
+};
+
+export const fetchRecentRidesInfiniteQuery = async (offset = 0, limit = 3): Promise<Ride[]> => {
+  const { data, error } = await supabase
+    .from('rides')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error('Error fetching recent rides:', error);
+    return [];
+  }
+
+  return data ?? [];
+};
+
+export const searchRides = async (query: string, page: number = 0): Promise<Ride[]> => {
+  if (!query.trim()) return [];
+
+  const limit = 3;
+  const offset = page * limit;
+
+  const { data, error } = await supabase
+    .from('rides')
+    .select('*')
+    .filter('tricycle_details->>plate_number', 'ilike', `%${query}%`)
+    .range(offset, offset + limit - 1)
+    .limit(limit);
+
+  if (error) {
+    console.error('Error searching tricycles:', error);
+    return [];
+  }
+
+  return data || [];
 };

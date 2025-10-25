@@ -21,18 +21,18 @@ export default function RideDetailsCard({ ride }: { ride: Ride }) {
         paddingHorizontal="l"
         borderRadius="l">
         <Box flexDirection="column" gap="s">
-          <Text fontSize={16} color="white" fontWeight={600}>
+          <Text fontSize={16} fontWeight={400}>
             {ride.driver_details.first_name} {ride.driver_details.last_name}
           </Text>
-          <Text variant="description" fontSize={14} color="grayLight" fontWeight={400}>
+          <Text variant="description" fontSize={14} color="muted" fontWeight={400}>
             {ride.tricycle_details.plate_number}
           </Text>
         </Box>
         <Box flexDirection="column" gap="s">
-          <Text fontSize={16} textAlign="right" color="secondary" fontWeight={600}>
+          <Text variant="body" textAlign="right" fontWeight={400}>
             ₱{ride.fare}
           </Text>
-          <Text variant="description" fontSize={14} color="grayLight" fontWeight={400}>
+          <Text variant="description" fontSize={14} color="muted" fontWeight={400}>
             {formatDate(ride.end_time.toLocaleString())}
           </Text>
         </Box>
