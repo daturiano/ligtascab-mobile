@@ -88,6 +88,7 @@ export type Commuter = {
 export type Report = {
   id: string;
   ride_id: string;
+  report_status: string;
   type: string;
   description: string;
   commuter_id: string;

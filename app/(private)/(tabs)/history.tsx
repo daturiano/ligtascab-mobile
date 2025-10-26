@@ -1,6 +1,7 @@
 import Box from '@/src/components/ui/Box';
 import BrandName from '@/src/components/ui/BrandName';
 import Container from '@/src/components/ui/Container';
+import ReportHistoryList from '@/src/components/ui/history/ReportHistoryList';
 import RideHistoryList from '@/src/components/ui/history/RideHistoryList';
 import HomeHeader from '@/src/components/ui/home/HomeHeader';
 import Text from '@/src/components/ui/Text';
@@ -33,7 +34,7 @@ export default function History() {
       key: 'Report',
       label: 'Report History',
       icon: CircleAlert,
-      content: <BrandName />,
+      content: <ReportHistoryList />,
     },
   ];
 
