@@ -1,6 +1,6 @@
 import { AccountSetupSchema } from '../schemas';
 import { supabase } from '../utils/supabase';
-import { createAccount } from './supabase';
+import { createAccount } from './db';
 
 export const fetchCommuterDetails = async (id: string) => {
   const { data, error } = await supabase.from('commuters').select('*').eq('id', id).single();

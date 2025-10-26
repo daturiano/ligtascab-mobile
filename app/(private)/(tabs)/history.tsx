@@ -1,5 +1,4 @@
 import Box from '@/src/components/ui/Box';
-import BrandName from '@/src/components/ui/BrandName';
 import Container from '@/src/components/ui/Container';
 import ReportHistoryList from '@/src/components/ui/history/ReportHistoryList';
 import RideHistoryList from '@/src/components/ui/history/RideHistoryList';

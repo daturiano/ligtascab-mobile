@@ -95,7 +95,7 @@ export default function RideHistoryList() {
         }}>
         {loading ? (
           <Box alignItems="center" justifyContent="center" padding="xl">
-            <Text>Loading rides...</Text>
+            <ActivityIndicator />
           </Box>
         ) : rides.length === 0 ? (
           <Box flexGrow={1} alignItems="center" justifyContent="center">

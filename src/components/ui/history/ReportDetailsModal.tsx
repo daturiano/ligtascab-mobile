@@ -44,13 +44,14 @@ export default function ReportDetailsModal({
               title="Date"
               content={`${formatDate(report.created_at.toLocaleString())}`}
             />
+            <InfoTextBox title="Status" content={`${report.report_status}`} />
             <InfoTextBox title="Ticket Number" content={`${report.ticket_number}`} />
             <InfoTextBox title="Report Reason" content={`${formatReportReason(report.type)}`} />
             <InfoTextBox title="Description" content={`${report.description}`} />
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
           <Text textAlign="center" variant="description">
-            Rides older than 7 days cannot be reported.
+            Reports can be resolved in the PSO Office
           </Text>
         </Box>
       </Box>

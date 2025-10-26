@@ -1,4 +1,5 @@
 import { CreateAccount } from '../schemas';
+import { Report } from '../types';
 import { supabase } from '../utils/supabase';
 
 export const createAccount = async (accountData: CreateAccount, id: string) => {
@@ -36,4 +37,19 @@ export const fetchOperatorDetails = async (operator_id: string) => {
     .single();
 
   return { data, error };
+};
+
+export const fetchReportsInfiniteQuery = async (offset = 0, limit = 3): Promise<Report[]> => {
+  const { data, error } = await supabase
+    .from('reports')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    console.error('Error fetching recent reports:', error);
+    return [];
+  }
+
+  return data ?? [];
 };

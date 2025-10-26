@@ -77,7 +77,7 @@ export const fetchRecentRides = async (): Promise<Ride[]> => {
     .from('rides')
     .select('*')
     .order('created_at', { ascending: false })
-    .limit(3);
+    .limit(2);
 
   return data ?? [];
 };

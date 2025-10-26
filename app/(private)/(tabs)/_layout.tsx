@@ -1,7 +1,7 @@
 import { Theme } from '@/src/theme/theme';
 import { useTheme } from '@shopify/restyle';
 import { Tabs } from 'expo-router';
-import { CircleUser, History, House, MapIcon, ScanQrCode } from 'lucide-react-native';
+import { History, House, MapIcon, ScanQrCode } from 'lucide-react-native';
 import { View } from 'react-native';
 
 export default function TabsLayout() {
@@ -53,15 +53,6 @@ export default function TabsLayout() {
             title: 'History',
             tabBarIcon: ({ color, size, focused }) => (
               <History color={color} size={size} strokeWidth={focused ? 2 : 1.5} />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="profile"
-          options={{
-            title: 'Profile',
-            tabBarIcon: ({ color, size, focused }) => (
-              <CircleUser color={color} size={size} strokeWidth={focused ? 2 : 1.5} />
             ),
           }}
         />

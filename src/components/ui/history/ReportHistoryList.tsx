@@ -53,7 +53,7 @@ export default function ReportHistoryList() {
         }}>
         {isLoading ? (
           <Box alignItems="center" justifyContent="center" padding="xl">
-            <Text>Loading rides...</Text>
+            <ActivityIndicator />
           </Box>
         ) : reports.length === 0 ? (
           <Box flexGrow={1} alignItems="center" justifyContent="center">

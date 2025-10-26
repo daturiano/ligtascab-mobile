@@ -52,13 +52,11 @@ export default function ReportDetailsCard({ report }: { report: Report }) {
             paddingVertical="xs"
             paddingHorizontal="s"
             borderRadius="s"
-            backgroundColor={
-              report.report_status === 'Pending' ? 'secondaryLighter' : 'primaryDark'
-            }>
+            backgroundColor={report.report_status === 'Pending' ? 'secondaryLighter' : 'primary'}>
             <Text
               fontSize={12}
               fontWeight={500}
-              color={report.report_status === 'Pending' ? 'secondary' : 'primary'}>
+              color={report.report_status === 'Pending' ? 'secondary' : 'mainBackground'}>
               {report.report_status}
             </Text>
           </Box>

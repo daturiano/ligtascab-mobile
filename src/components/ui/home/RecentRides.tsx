@@ -6,12 +6,17 @@ import { Pressable } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 import RideDetailsCard from './RideDetailsCard';
+import { useRouter } from 'expo-router';
 
 export default function RecentRides() {
-  const { data: recent_rides } = useQuery<Ride[] | null>({
+  const router = useRouter();
+
+  const { data: recent_rides } = useQuery<Ride[]>({
     queryKey: ['recent_rides'],
     queryFn: fetchRecentRides,
   });
+
+  const rides = recent_rides?.flatMap((p) => p) || [];
 
   return (
     <Box
@@ -35,20 +40,20 @@ export default function RecentRides() {
             Recent Rides
           </Text>
         </Box>
-        <Pressable>
+        <Pressable onPress={() => router.push('/(private)/(tabs)/history')}>
           <Text color="muted" fontWeight={400} fontSize={15}>
             See all
           </Text>
         </Pressable>
       </Box>
-      {!recent_rides ? (
+      {rides.length <= 0 ? (
         <Box flexGrow={1} alignItems="center" justifyContent="center">
           <Image style={{ width: 140, height: 140 }} source={require('@/src/assets/empty.png')} />
           <Text>You have no recent rides.</Text>
         </Box>
       ) : (
         <Box flexGrow={1} gap="l" paddingTop="l">
-          {recent_rides.map((ride) => (
+          {rides.map((ride) => (
             <RideDetailsCard ride={ride} key={ride.id} />
           ))}
         </Box>

@@ -1,4 +1,4 @@
-import { fetchTricycleDetails } from '@/src/services/supabase';
+import { fetchTricycleDetails } from '@/src/services/db';
 import { Tricycle } from '@/src/types';
 import { useQuery } from '@tanstack/react-query';
 import { BarcodeScanningResult, CameraType, CameraView, useCameraPermissions } from 'expo-camera';

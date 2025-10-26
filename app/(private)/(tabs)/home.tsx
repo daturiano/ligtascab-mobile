@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native';
 
 export default function Home() {
   return (
-    <Container style={{ paddingHorizontal: 0, paddingTop: 0 }}>
+    <Container style={{ paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <HomeHeader title="Hello, Daniel Joshua! 👋" description="Ready for your next safe ride?" />
         <Box
