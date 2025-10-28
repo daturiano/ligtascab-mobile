@@ -95,3 +95,12 @@ export type Report = {
   created_at: Date;
   ticket_number: string;
 };
+
+export type Terminal = {
+  direction: string;
+  map: {
+    latitude: number;
+    longitude: number;
+  };
+  landmarks: string[];
+};
