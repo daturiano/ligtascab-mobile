@@ -3,20 +3,23 @@ import { XIcon } from 'lucide-react-native';
 import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
+import Button from '../Button';
 
 type MarkerModalProps = {
   terminal: Terminal;
-  showMarkerModal: boolean;
-  setShowMarkerModal: (args: boolean) => void;
+  isModalVisible: boolean;
+  setIsModalVisible: (args: boolean) => void;
+  handleGetDirections: () => void;
 };
 
 export default function MarkerModal({
   terminal,
-  showMarkerModal,
-  setShowMarkerModal,
+  isModalVisible,
+  setIsModalVisible,
+  handleGetDirections,
 }: MarkerModalProps) {
   return (
-    <Modal visible={showMarkerModal} transparent animationType="none" statusBarTranslucent>
+    <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
       <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
         <Box
           style={styles.card}
@@ -26,7 +29,7 @@ export default function MarkerModal({
           padding="xl">
           <Box flexDirection="row" justifyContent="space-between" width={'100%'}>
             <Text variant="title">Terminal Routes</Text>
-            <TouchableOpacity onPress={() => setShowMarkerModal(false)}>
+            <TouchableOpacity onPress={() => setIsModalVisible(false)}>
               <XIcon />
             </TouchableOpacity>
           </Box>
@@ -37,20 +40,20 @@ export default function MarkerModal({
             ))}
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
+          <Button
+            onPress={() => {
+              handleGetDirections();
+              setIsModalVisible(false);
+            }}>
+            <Text color="white" fontWeight={400}>
+              Get Direction
+            </Text>
+          </Button>
         </Box>
       </Box>
     </Modal>
   );
 }
-
-const InfoTextBox = ({ title, content }: { title: string; content: string }) => (
-  <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-    <Text variant="body" color="muted">
-      {title}
-    </Text>
-    <Text variant="body">{content}</Text>
-  </Box>
-);
 
 const styles = StyleSheet.create({
   card: {
