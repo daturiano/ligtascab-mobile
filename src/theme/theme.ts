@@ -2,7 +2,7 @@ import { createTheme } from '@shopify/restyle';
 import { buttonVariants } from '../components/ui/Button';
 
 const palette = {
-  yellowLighter: '#fdf5ee',
+  yellowLighter: '#f9d5b9',
   yellowLight: '#f2ab74',
   yellowPrimary: '#EF9651',
   yellowDark: '#dbaa14',
@@ -22,6 +22,7 @@ const palette = {
 
   description: '#5e5e5e',
   warning: '#ff6467',
+  warningLight: '#ff8385',
 
   overlay: 'rgba(0,0,0,0.4)',
   black: '#0a0a0a',
@@ -42,6 +43,7 @@ const theme = createTheme({
     secondaryLighter: palette.yellowLighter,
     secondaryLight: palette.yellowLight,
     secondary: palette.yellowPrimary,
+    secondaryDark: palette.yellowDark,
     grayLighter: palette.grayLighter,
     grayLight: palette.grayLight,
     mutedLighter: palette.mutedLighter,
@@ -52,6 +54,7 @@ const theme = createTheme({
     transparent: 'transparent',
     input: '#e2e8f0',
     warning: palette.warning,
+    warningLight: palette.warningLight,
     white: palette.whiter,
     overlay: palette.overlay,
   },
@@ -70,6 +73,7 @@ const theme = createTheme({
     m: 8,
     l: 12,
     xl: 16,
+    rounded: '50%',
   },
   textVariants: {
     header: {
