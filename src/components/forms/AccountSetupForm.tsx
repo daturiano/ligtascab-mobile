@@ -7,7 +7,7 @@ import { AccountSetupSchema } from '@/src/schemas';
 import { registerWithCredentials } from '@/src/services/authentication';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { AtSign, LockIcon, MapPinHouse, User } from 'lucide-react-native';
+import { AtSign, LockIcon, MapPinHouse, Phone, User } from 'lucide-react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -27,6 +27,8 @@ export default function AccountSetupForm() {
       phone: mobileNumber as string,
       address: '',
       email: '',
+      contact_person: '',
+      contact_person_number: '63',
       password: '',
       confirm_password: '',
     },
@@ -97,6 +99,38 @@ export default function AccountSetupForm() {
               icon={AtSign}
               errorMessage={errors.email?.message}
               title="Email"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="contact_person"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="Enter emergency contact name"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              autoCapitalize="words"
+              icon={User}
+              errorMessage={errors.contact_person?.message}
+              title="Emergency Contact Person"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="contact_person_number"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              placeholder="639XXXXXXXXX"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              keyboardType="phone-pad"
+              icon={Phone}
+              errorMessage={errors.contact_person_number?.message}
+              title="Emergency Contact Number"
             />
           )}
         />

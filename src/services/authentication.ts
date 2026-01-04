@@ -68,6 +68,8 @@ export const registerWithCredentials = async (User: unknown) => {
     phone_number: result.data.phone,
     email: result.data.email,
     address: result.data.address,
+    contact_person: result.data.contact_person,
+    contact_person_number: result.data.contact_person_number,
   };
 
   const { data: commuter, error: createAccountError } = await createAccount(

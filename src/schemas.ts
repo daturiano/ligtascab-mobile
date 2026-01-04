@@ -26,6 +26,12 @@ export const AccountSetupSchema = z.object({
   email: z.email(),
   phone: z.string().min(12).max(12),
   address: z.string().max(120),
+  contact_person: z.string().min(2, 'Contact person name is required').max(100),
+  contact_person_number: z
+    .string()
+    .min(12, 'Contact number must be 12 digits')
+    .max(12, 'Contact number must be 12 digits')
+    .regex(/^63[0-9]+$/, 'Contact number must start with 63'),
   password: z
     .string()
     .min(6, {

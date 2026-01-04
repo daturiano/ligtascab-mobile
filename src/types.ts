@@ -82,6 +82,8 @@ export type Commuter = {
   phone_number: string;
   address: string;
   birth_date: Date | null;
+  contact_person: string | null;
+  contact_person_number: string | null;
   created_at: Date;
 };
 

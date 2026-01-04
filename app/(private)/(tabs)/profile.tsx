@@ -23,6 +23,8 @@ export default function Profile() {
     phone_number: '',
     address: '',
     birth_date: '',
+    contact_person: '',
+    contact_person_number: '',
   });
 
   useEffect(() => {
@@ -34,6 +36,8 @@ export default function Profile() {
         phone_number: user.phone_number || '',
         address: user.address || '',
         birth_date: user.birth_date ? new Date(user.birth_date).toISOString().split('T')[0] : '',
+        contact_person: user.contact_person || '',
+        contact_person_number: user.contact_person_number || '',
       });
     }
   }, [user]);
@@ -51,6 +55,8 @@ export default function Profile() {
           email: formData.email,
           address: formData.address,
           birth_date: formData.birth_date || null,
+          contact_person: formData.contact_person || null,
+          contact_person_number: formData.contact_person_number || null,
         })
         .eq('id', user.id);
 
@@ -197,6 +203,31 @@ export default function Profile() {
               onChangeText={(text) => setFormData({ ...formData, birth_date: text })}
               editable={isEditing}
               placeholder="YYYY-MM-DD"
+            />
+          </Box>
+
+          <Box gap="m">
+            <Text fontSize={18} fontWeight={600}>
+              Emergency Contact
+            </Text>
+
+            <Input
+              title="Contact Person"
+              icon={User}
+              value={formData.contact_person}
+              onChangeText={(text) => setFormData({ ...formData, contact_person: text })}
+              editable={isEditing}
+              placeholder="Enter emergency contact name"
+            />
+
+            <Input
+              title="Contact Number"
+              icon={Phone}
+              value={formData.contact_person_number}
+              onChangeText={(text) => setFormData({ ...formData, contact_person_number: text })}
+              editable={isEditing}
+              placeholder="639XXXXXXXXX"
+              keyboardType="phone-pad"
             />
           </Box>
 
