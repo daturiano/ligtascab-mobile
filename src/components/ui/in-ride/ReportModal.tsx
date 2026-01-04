@@ -1,5 +1,7 @@
 import { useRideStore } from '@/src/store/useRideStore';
+import { Report } from '@/src/types';
 import { XIcon } from 'lucide-react-native';
+import { useState } from 'react';
 import {
   Keyboard,
   Modal,
@@ -19,8 +21,20 @@ type ReportModalProps = {
 
 export default function ReportModal({ isModalVisible, setIsModalVisible }: ReportModalProps) {
   const { rideDetails, setReportDetails, reportDetails } = useRideStore();
+  const [localReportDetails, setLocalReportDetails] = useState<Report | null>(null);
+
+  const handleReportSubmitted = (report: Report | null) => {
+    // Set local state first to immediately show success screen
+    setLocalReportDetails(report);
+    // Then persist to store
+    if (report) {
+      setReportDetails(report);
+    }
+  };
 
   if (!rideDetails) return null;
+
+  const submittedReport = localReportDetails || reportDetails;
 
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
@@ -33,15 +47,15 @@ export default function ReportModal({ isModalVisible, setIsModalVisible }: Repor
             gap="l"
             padding="xl">
             <Box flexDirection="row" justifyContent="space-between">
-              <Text variant="title">{reportDetails ? 'Report Submitted' : 'Report Issue'}</Text>
+              <Text variant="title">{submittedReport ? 'Report Submitted' : 'Report Issue'}</Text>
               <TouchableOpacity onPress={() => setIsModalVisible(false)}>
                 <XIcon />
               </TouchableOpacity>
             </Box>
-            {reportDetails ? (
-              <ReportTicketNumber reportDetails={reportDetails} />
+            {submittedReport ? (
+              <ReportTicketNumber reportDetails={submittedReport} />
             ) : (
-              <ReportForm rideDetails={rideDetails} setReportDetails={setReportDetails} />
+              <ReportForm rideDetails={rideDetails} setReportDetails={handleReportSubmitted} />
             )}
           </Box>
         </Box>

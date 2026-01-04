@@ -25,6 +25,7 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
   const theme = useTheme<Theme>();
   const { mutedLighter } = theme.colors;
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const generateTicketNumber = () => {
     const firstId = rideDetails?.id.slice(0, 5).toUpperCase();
@@ -36,8 +37,9 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
 
   const {
     control,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
+    getValues,
+    trigger,
+    formState: { errors, isValid },
     setError,
   } = useForm<z.infer<typeof ReportSchema>>({
     resolver: zodResolver(ReportSchema),
@@ -50,14 +52,21 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
     mode: 'onTouched',
   });
 
-  const onSubmit = async (data: z.infer<typeof ReportSchema>) => {
+  const onSubmit = async () => {
+    const valid = await trigger();
+    if (!valid) return;
+
+    const data = getValues();
+    setIsLoading(true);
     try {
       const report = await submitReport(data);
       if (report) {
         setReportDetails(report);
       }
+      setIsLoading(false);
     } catch (err: any) {
-      console.error('Login failed:', err);
+      setIsLoading(false);
+      console.error('Report submission failed:', err);
       setError('root', {
         type: 'manual',
         message: err.message ?? 'An unexpected error occurred. Please try again.',
@@ -129,9 +138,9 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}
       </Box>
       <Button
-        onPress={handleSubmit(onSubmit)}
-        isLoading={isSubmitting}
-        disabled={!isValid || isSubmitting}
+        onPress={onSubmit}
+        isLoading={isLoading}
+        disabled={!isValid || isLoading}
         variant={!isValid ? 'disabled' : 'primary'}>
         <Text color="mainBackground" variant="body">
           Submit
