@@ -76,7 +76,7 @@ export default function QRScanner() {
           }}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={toggleCameraFacing}>
+          <TouchableOpacity onPress={() => setScanResult('9d6310e7-9852-4008-9721-7459cde6569c')}>
             <SwitchCamera color={'#ffffff'} size={32} />
           </TouchableOpacity>
         </View>

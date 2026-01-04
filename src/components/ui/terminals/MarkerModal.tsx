@@ -6,6 +6,8 @@ import Text from '../Text';
 import Button from '../Button';
 
 type MarkerModalProps = {
+  hasRoute: boolean;
+  setRoute: (args: { latitude: number; longitude: number }[] | null) => void;
   terminal: Terminal;
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
@@ -13,6 +15,8 @@ type MarkerModalProps = {
 };
 
 export default function MarkerModal({
+  hasRoute,
+  setRoute,
   terminal,
   isModalVisible,
   setIsModalVisible,
@@ -40,15 +44,27 @@ export default function MarkerModal({
             ))}
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
-          <Button
-            onPress={() => {
-              handleGetDirections();
-              setIsModalVisible(false);
-            }}>
-            <Text color="white" fontWeight={400}>
-              Get Direction
-            </Text>
-          </Button>
+          {hasRoute ? (
+            <Button
+              onPress={() => {
+                setRoute(null);
+                setIsModalVisible(false);
+              }}>
+              <Text color="white" fontWeight={400}>
+                Cancel Direction
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              onPress={() => {
+                handleGetDirections();
+                setIsModalVisible(false);
+              }}>
+              <Text color="white" fontWeight={400}>
+                Get Direction
+              </Text>
+            </Button>
+          )}
         </Box>
       </Box>
     </Modal>

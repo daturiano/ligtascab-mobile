@@ -22,6 +22,7 @@ export default function MobileForm() {
     setIsLoading(false);
     try {
       const data = await sendOtpMutation.mutateAsync(mobileNumber);
+      console.log(data);
       router.replace({
         pathname: '/(authentication)/verify-otp',
         params: { mobileNumber, code: data[0].code },

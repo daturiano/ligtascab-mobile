@@ -33,7 +33,7 @@ export default function RideDetailsCard({ ride }: { ride: Ride }) {
             ₱{ride.fare}
           </Text>
           <Text variant="description" fontSize={14} color="muted" fontWeight={400}>
-            {formatDate(ride.end_time.toLocaleString())}
+            {ride.end_time ? formatDate(ride.end_time.toLocaleString()) : ''}
           </Text>
         </Box>
       </Box>
