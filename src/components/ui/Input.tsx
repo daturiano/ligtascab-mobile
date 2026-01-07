@@ -1,6 +1,6 @@
 import { useTheme } from '@shopify/restyle';
 import { LucideIcon } from 'lucide-react-native';
-import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle } from 'react-native';
+import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity } from 'react-native';
 import { Theme } from '../../theme/theme';
 import Box from './Box';
 import ErrorMessage from './ErrorMessage';
@@ -9,6 +9,8 @@ import Text from './Text';
 type ThemedInputProps = {
   style?: StyleProp<TextStyle>;
   icon?: LucideIcon;
+  rightIcon?: LucideIcon;
+  onRightIconPress?: () => void;
   errorMessage?: string | null;
   title?: string;
 } & TextInputProps;
@@ -18,6 +20,8 @@ export default function Input({
   errorMessage,
   title,
   icon: Icon,
+  rightIcon: RightIcon,
+  onRightIconPress,
   ...props
 }: ThemedInputProps) {
   const theme = useTheme<Theme>();
@@ -37,6 +41,11 @@ export default function Input({
         gap="s">
         {Icon ? <Icon size={20} color={muted} style={[styles.icon]} /> : null}
         <TextInput placeholderTextColor={description} style={[styles.input, style]} {...props} />
+        {RightIcon ? (
+          <TouchableOpacity onPress={onRightIconPress}>
+            <RightIcon size={20} color={muted} />
+          </TouchableOpacity>
+        ) : null}
       </Box>
       {errorMessage && <ErrorMessage message={errorMessage} />}
     </Box>

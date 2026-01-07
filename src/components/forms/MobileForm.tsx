@@ -21,11 +21,11 @@ export default function MobileForm() {
   const onSubmit = async () => {
     setIsLoading(false);
     try {
-      const data = await sendOtpMutation.mutateAsync(mobileNumber);
+      const data = await sendOtpMutation.mutateAsync(`63${mobileNumber}`);
       console.log(data);
       router.replace({
         pathname: '/(authentication)/verify-otp',
-        params: { mobileNumber, code: data[0].code },
+        params: { mobileNumber: `63${mobileNumber}`, code: data[0].code },
       });
     } catch (error) {
       console.error(error);
@@ -51,17 +51,17 @@ export default function MobileForm() {
             borderRadius="m"
             borderColor="muted"
             borderWidth={1}>
-            <Text fontSize={18}>🇵🇭 +63</Text>
+            <Text fontSize={18} variant="bodyBold">🇵🇭 +63</Text>
           </Box>
           <Box flexGrow={1}>
             <Input
               style={{ fontSize: 18 }}
-              placeholder="9391234567"
+              placeholder="9xxxxxxxxx"
               value={mobileNumber}
               maxLength={10}
               onChangeText={setMobileNumber}
               onKeyPress={() => setError(null)}
-              keyboardType="phone-pad"
+              keyboardType="number-pad"
               onFocus={() => setError(null)}
               autoCapitalize="none"
               autoFocus={true}

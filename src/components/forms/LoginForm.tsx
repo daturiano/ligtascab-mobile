@@ -7,7 +7,8 @@ import { useAuth } from '@/src/context/AuthenticationContext';
 import { LoginSchema } from '@/src/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { LockIcon, PhoneIcon } from 'lucide-react-native';
+import { Eye, EyeOff, LockIcon, PhoneIcon } from 'lucide-react-native';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -25,10 +26,12 @@ export default function LoginForm() {
     defaultValues: { phoneNumber: '', password: '' },
     mode: 'onTouched',
   });
+  
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     try {
-      const { success } = await signInWithPhoneNumber(data.phoneNumber, data.password);
+      const { success } = await signInWithPhoneNumber(`63${data.phoneNumber}`, data.password);
       if (!success) {
         setError('root', {
           type: 'manual',
@@ -52,17 +55,30 @@ export default function LoginForm() {
           control={control}
           name="phoneNumber"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Phone Number"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="number-pad"
-              autoCapitalize="none"
-              maxLength={12}
-              icon={PhoneIcon}
-              errorMessage={errors.phoneNumber?.message}
-            />
+             <Box gap="m" flexDirection="row" alignItems="center">
+              <Box
+                paddingHorizontal="l"
+                paddingVertical="l"
+                borderRadius="m"
+                borderColor="muted"
+                borderWidth={1}>
+                <Text fontSize={18} variant="bodyBold">🇵🇭 +63</Text>
+              </Box>
+              <Box flexGrow={1}>
+                <Input
+                  style={{ fontSize: 18 }}
+                  placeholder="9xxxxxxxxx"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  keyboardType="number-pad"
+                  autoCapitalize="none"
+                  maxLength={10}
+                  icon={PhoneIcon}
+                  errorMessage={errors.phoneNumber?.message}
+                />
+              </Box>
+            </Box>
           )}
         />
         <Controller
@@ -74,10 +90,12 @@ export default function LoginForm() {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              secureTextEntry
+              secureTextEntry={!isPasswordVisible}
               autoCapitalize="none"
               icon={LockIcon}
               errorMessage={errors.password?.message}
+              rightIcon={isPasswordVisible ? EyeOff : Eye}
+              onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
             />
           )}
         />

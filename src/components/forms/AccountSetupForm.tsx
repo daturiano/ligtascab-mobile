@@ -28,7 +28,7 @@ export default function AccountSetupForm() {
       address: '',
       email: '',
       contact_person: '',
-      contact_person_number: '63',
+      contact_person_number: '',
       password: '',
       confirm_password: '',
     },
@@ -122,16 +122,29 @@ export default function AccountSetupForm() {
           control={control}
           name="contact_person_number"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="639XXXXXXXXX"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="phone-pad"
-              icon={Phone}
-              errorMessage={errors.contact_person_number?.message}
-              title="Emergency Contact Number"
-            />
+            <Box gap="m" flexDirection="row" alignItems="center">
+              <Box
+                paddingHorizontal="l"
+                paddingVertical="l"
+                borderRadius="m"
+                borderColor="muted"
+                borderWidth={1}>
+                <Text fontSize={18} variant="bodyBold">🇵🇭 +63</Text>
+              </Box>
+              <Box flexGrow={1}>
+                <Input
+                  placeholder="9xxxxxxxxx"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  maxLength={10}
+                  keyboardType="phone-pad"
+                  icon={Phone}
+                  errorMessage={errors.contact_person_number?.message}
+                  title="Emergency Contact Number"
+                />
+              </Box>
+            </Box>
           )}
         />
         <Controller
