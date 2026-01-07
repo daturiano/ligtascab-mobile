@@ -1,9 +1,10 @@
-import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 import { XIcon } from 'lucide-react-native';
 import { Ride } from '@/src/types';
 import { extractTime, formatDate } from '@/src/utils/utils';
+import Card from '../Card';
 
 type RideDetailsModalProps = {
   ride: Ride;
@@ -19,16 +20,17 @@ export default function RideDetailsModal({
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
       <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
-        <Box
-          style={styles.card}
-          backgroundColor="white"
+        <Card
+          variant="elevated"
+          minHeight={400}
+          width="92%"
+          maxWidth={380}
           flexDirection="column"
-          gap="l"
-          padding="xl">
+          gap="l">
           <Box flexDirection="row" justifyContent="space-between" width={'100%'}>
             <Text variant="title">Ride Details</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-              <XIcon />
+              <XIcon color="#000" />
             </TouchableOpacity>
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
@@ -53,7 +55,7 @@ export default function RideDetailsModal({
           <Text textAlign="center" variant="description">
             Rides older than 7 days cannot be reported.
           </Text>
-        </Box>
+        </Card>
       </Box>
     </Modal>
   );
@@ -67,18 +69,3 @@ const InfoTextBox = ({ title, content }: { title: string; content: string }) => 
     <Text variant="body">{content}</Text>
   </Box>
 );
-
-const styles = StyleSheet.create({
-  card: {
-    minHeight: 400,
-    width: '92%',
-    maxWidth: 380,
-    borderRadius: 10,
-    padding: 20,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-  },
-});
