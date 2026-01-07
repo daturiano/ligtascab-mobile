@@ -25,7 +25,7 @@ export default function Input({
 
   return (
     <Box width={'100%'} flexDirection="column" gap="s">
-      {title && <Text fontSize={16}>{title}</Text>}
+      {title && <Text variant="body">{title}</Text>}
       <Box
         backgroundColor="input"
         paddingHorizontal="l"
@@ -51,5 +51,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Nunito_300Light',
   },
 });

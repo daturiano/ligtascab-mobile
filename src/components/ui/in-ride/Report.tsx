@@ -19,9 +19,11 @@ export default function Report() {
         justifyContent="space-between"
         maxWidth={'100%'}>
         <Button variant="outline" onPress={() => setIsModalVisible(!isModalVisible)}>
-          <Text fontWeight={500}>Report Driver</Text>
+          <Text variant="bodyBold">
+            Report Driver
+          </Text>
         </Button>
-        <Text variant="description" fontSize={14} fontWeight={400} flex={1} ellipsizeMode="tail">
+        <Text variant="description" fontWeight={400} flex={1} ellipsizeMode="tail">
           Once you report a driver, your location and details will also be included on the report
           details.
         </Text>

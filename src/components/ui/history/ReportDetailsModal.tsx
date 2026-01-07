@@ -11,11 +11,14 @@ type ReportDetailsModalProps = {
   setIsModalVisible: (args: boolean) => void;
 };
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export default function ReportDetailsModal({
   report,
   isModalVisible,
   setIsModalVisible,
 }: ReportDetailsModalProps) {
+  const insets = useSafeAreaInsets();
   function formatReportReason(reason: string): string {
     return reason
       .split('_')
@@ -25,7 +28,17 @@ export default function ReportDetailsModal({
 
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
-      <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
+      <Box
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="overlay"
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        }}>
         <Box
           style={styles.card}
           backgroundColor="white"
@@ -64,7 +77,7 @@ const InfoTextBox = ({ title, content }: { title: string; content: string }) => 
     <Text variant="body" color="muted">
       {title}
     </Text>
-    <Text variant="body">{content}</Text>
+    <Text variant="bodyBold">{content}</Text>
   </Box>
 );
 

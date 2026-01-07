@@ -1,7 +1,7 @@
 import { AuthProvider } from '@/src/context/AuthenticationContext';
 import { useRideStore } from '@/src/store/useRideStore';
 import theme from '@/src/theme/theme';
-import { Nunito_300Light, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
+import { Nunito_300Light, Nunito_600SemiBold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
 import {
   PlusJakartaSans_500Medium,
   PlusJakartaSans_600SemiBold,
@@ -24,6 +24,7 @@ export default function RootLayout() {
     PlusJakartaSans_600SemiBold,
     PlusJakartaSans_700Bold,
     Nunito_300Light,
+    Nunito_600SemiBold,
     Nunito_800ExtraBold,
   });
 

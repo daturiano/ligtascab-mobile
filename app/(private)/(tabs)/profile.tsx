@@ -106,155 +106,166 @@ export default function Profile() {
   return (
     <Container style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <Box
-          width="100%"
-          height={200}
-          flexDirection="row"
-          alignItems="center"
-          gap="l"
-          paddingHorizontal="l"
-          backgroundColor="primary">
-          <Box marginTop="xl" padding="xl" borderRadius="rounded" backgroundColor="white">
-            <Text color="primaryDark" fontSize={36} fontWeight={600}>
+        {/* Header Section */}
+        <Box width="100%" alignItems="center" backgroundColor="primary" paddingBottom="l" paddingTop="xl">
+          <Box
+            marginTop="xl"
+            width={100}
+            height={100}
+            borderRadius="rounded"
+            backgroundColor="white"
+            justifyContent="center"
+            alignItems="center"
+            shadowOpacity={0.1}
+            shadowRadius={4}
+            elevation={5}>
+            <Text color="primary" variant="header" fontSize={42}>
               {getInitials()}
             </Text>
           </Box>
-          <Box marginTop="xl" flex={1}>
-            <Text color="white" fontSize={22} fontWeight={600}>
+          <Box marginTop="m" alignItems="center" gap="s">
+            <Text color="white" variant="title" fontSize={24}>
               {formData.first_name} {formData.last_name}
             </Text>
-            <Text color="white" fontSize={14} style={{ opacity: 0.8 }}>
+            <Text color="white" variant="body" opacity={0.9}>
               {formData.phone_number}
             </Text>
           </Box>
         </Box>
 
-        <Box flex={1} width="100%" padding="l" gap="l">
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-            <Text fontSize={18} fontWeight={600}>
-              Personal Information
+        {/* Action Bar */}
+        <Box
+          flexDirection="row"
+          justifyContent="flex-end"
+          paddingHorizontal="l"
+          paddingTop="l"
+          alignItems="center">
+          <Button
+            variant="ghost"
+            onPress={() => setIsEditing(!isEditing)}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Text color="primary" variant="bodyBold">
+              {isEditing ? 'Cancel Edit' : 'Edit Profile'}
             </Text>
-            {!isEditing ? (
-              <Button variant="ghost" onPress={() => setIsEditing(true)}>
-                <Text color="primary" fontWeight={500}>
-                  Edit
-                </Text>
-              </Button>
-            ) : (
-              <Button variant="ghost" onPress={() => setIsEditing(false)}>
-                <Text color="muted" fontWeight={500}>
-                  Cancel
-                </Text>
-              </Button>
-            )}
+          </Button>
+        </Box>
+
+        <Box flex={1} paddingHorizontal="l" gap="l" paddingBottom="xl">
+          {/* Personal Information Card */}
+          <Box backgroundColor="white" borderRadius="l" padding="l" elevation={2} shadowOpacity={0.05}>
+            <Text variant="title" marginBottom="m">Personal Information</Text>
+            <Box gap="m">
+              {isEditing ? (
+                <>
+                  <Input
+                    title="First Name"
+                    icon={User}
+                    value={formData.first_name}
+                    onChangeText={(text) => setFormData({ ...formData, first_name: text })}
+                    placeholder="Enter first name"
+                  />
+                  <Input
+                    title="Last Name"
+                    icon={User}
+                    value={formData.last_name}
+                    onChangeText={(text) => setFormData({ ...formData, last_name: text })}
+                    placeholder="Enter last name"
+                  />
+                  <Input
+                    title="Email"
+                    icon={Mail}
+                    value={formData.email}
+                    onChangeText={(text) => setFormData({ ...formData, email: text })}
+                    placeholder="Enter email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
+                   <Input
+                    title="Address"
+                    icon={MapPin}
+                    value={formData.address}
+                    onChangeText={(text) => setFormData({ ...formData, address: text })}
+                    placeholder="Enter address"
+                  />
+                   <Input
+                    title="Birth Date"
+                    icon={Calendar}
+                    value={formData.birth_date}
+                    onChangeText={(text) => setFormData({ ...formData, birth_date: text })}
+                    placeholder="YYYY-MM-DD"
+                  />
+                </>
+              ) : (
+                <>
+                  <InfoRow icon={Mail} label="Email" value={formData.email || 'Not set'} />
+                  <InfoRow icon={MapPin} label="Address" value={formData.address || 'Not set'} />
+                  <InfoRow icon={Calendar} label="Birth Date" value={formData.birth_date || 'Not set'} />
+                </>
+              )}
+            </Box>
           </Box>
 
-          <Box gap="m">
-            <Input
-              title="First Name"
-              icon={User}
-              value={formData.first_name}
-              onChangeText={(text) => setFormData({ ...formData, first_name: text })}
-              editable={isEditing}
-              placeholder="Enter first name"
-            />
-
-            <Input
-              title="Last Name"
-              icon={User}
-              value={formData.last_name}
-              onChangeText={(text) => setFormData({ ...formData, last_name: text })}
-              editable={isEditing}
-              placeholder="Enter last name"
-            />
-
-            <Input
-              title="Email"
-              icon={Mail}
-              value={formData.email}
-              onChangeText={(text) => setFormData({ ...formData, email: text })}
-              editable={isEditing}
-              placeholder="Enter email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <Input
-              title="Phone Number"
-              icon={Phone}
-              value={formData.phone_number}
-              editable={false}
-              placeholder="Phone number"
-            />
-
-            <Input
-              title="Address"
-              icon={MapPin}
-              value={formData.address}
-              onChangeText={(text) => setFormData({ ...formData, address: text })}
-              editable={isEditing}
-              placeholder="Enter address"
-            />
-
-            <Input
-              title="Birth Date"
-              icon={Calendar}
-              value={formData.birth_date}
-              onChangeText={(text) => setFormData({ ...formData, birth_date: text })}
-              editable={isEditing}
-              placeholder="YYYY-MM-DD"
-            />
+          {/* Emergency Contact Card */}
+          <Box backgroundColor="white" borderRadius="l" padding="l" elevation={2} shadowOpacity={0.05}>
+             <Text variant="title" marginBottom="m">Emergency Contact</Text>
+             <Box gap="m">
+              {isEditing ? (
+                <>
+                  <Input
+                    title="Contact Person"
+                    icon={User}
+                    value={formData.contact_person}
+                    onChangeText={(text) => setFormData({ ...formData, contact_person: text })}
+                    placeholder="Contact name"
+                  />
+                   <Input
+                    title="Contact Number"
+                    icon={Phone}
+                    value={formData.contact_person_number}
+                    onChangeText={(text) => setFormData({ ...formData, contact_person_number: text })}
+                    placeholder="639XXXXXXXXX"
+                    keyboardType="phone-pad"
+                  />
+                </>
+              ) : (
+                <>
+                  <InfoRow icon={User} label="Name" value={formData.contact_person || 'Not set'} />
+                  <InfoRow icon={Phone} label="Number" value={formData.contact_person_number || 'Not set'} />
+                </>
+              )}
+             </Box>
           </Box>
 
-          <Box gap="m">
-            <Text fontSize={18} fontWeight={600}>
-              Emergency Contact
-            </Text>
-
-            <Input
-              title="Contact Person"
-              icon={User}
-              value={formData.contact_person}
-              onChangeText={(text) => setFormData({ ...formData, contact_person: text })}
-              editable={isEditing}
-              placeholder="Enter emergency contact name"
-            />
-
-            <Input
-              title="Contact Number"
-              icon={Phone}
-              value={formData.contact_person_number}
-              onChangeText={(text) => setFormData({ ...formData, contact_person_number: text })}
-              editable={isEditing}
-              placeholder="639XXXXXXXXX"
-              keyboardType="phone-pad"
-            />
-          </Box>
-
+          {/* Save Button */}
           {isEditing && (
             <Button onPress={handleSave} isLoading={isLoading}>
-              <Text color="white" fontWeight={500}>
-                Save Changes
-              </Text>
+              <Text color="white" variant="bodyBold">Save Changes</Text>
             </Button>
           )}
 
-          <Box marginTop="m" borderTopWidth={1} borderColor="mutedLighter" paddingTop="l">
-            <Button
-              variant="outline"
-              onPress={handleLogout}
-              style={{ borderColor: '#ef4444', flexDirection: 'row', gap: 8 }}>
-              <LogOut size={20} color="#ef4444" />
-              <Text color="warning" fontWeight={500}>
-                Logout
-              </Text>
-            </Button>
-          </Box>
+          {/* Logout Button */}
+          <Button
+            variant="outline"
+            onPress={handleLogout}
+            style={{ borderColor: '#ef4444', flexDirection: 'row', gap: 8, marginTop: 8 }}>
+            <LogOut size={20} color="#ef4444" />
+            <Text color="warning" variant="bodyBold">Logout</Text>
+          </Button>
         </Box>
       </ScrollView>
     </Container>
   );
 }
+
+const InfoRow = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
+  <Box flexDirection="row" alignItems="center" gap="m" paddingVertical="s" borderBottomWidth={0.5} borderColor="grayLighter">
+     <Box width={32} alignItems="center"><Icon size={20} color="#737373" /></Box>
+     <Box flex={1}>
+       <Text variant="details" color="muted">{label}</Text>
+       <Text variant="body" color="mainForeground">{value}</Text>
+     </Box>
+  </Box>
+);
 
 const styles = StyleSheet.create({
   container: {

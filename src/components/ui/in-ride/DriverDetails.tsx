@@ -28,10 +28,10 @@ export default function DriverDetails({ tricycle_details, driver_details }: Driv
         paddingBottom="xl"
         borderWidth={1}>
         <Box>
-          <Text fontSize={22} fontWeight={600}>
+          <Text variant="title">
             {`${driver_details.first_name} ${driver_details.last_name}`}
           </Text>
-          <Text variant="description" fontSize={14} fontWeight={500}>
+          <Text variant="bodyBold">
             {`Plate Number: ${tricycle_details.plate_number}`}
           </Text>
         </Box>
@@ -61,7 +61,7 @@ export default function DriverDetails({ tricycle_details, driver_details }: Driv
               elevation: 2,
             }}>
             <Star fill="#000000" size={12} />
-            <Text fontWeight={600} fontSize={12}>
+            <Text variant="bodyBold" fontSize={12}>
               4.4
             </Text>
           </Box>

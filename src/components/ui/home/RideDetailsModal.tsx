@@ -12,14 +12,27 @@ type RideDetailsModalProps = {
   setIsModalVisible: (args: boolean) => void;
 };
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 export default function RideDetailsModal({
   ride,
   isModalVisible,
   setIsModalVisible,
 }: RideDetailsModalProps) {
+  const insets = useSafeAreaInsets();
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
-      <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
+      <Box
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="overlay"
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        }}>
         <Card
           variant="elevated"
           minHeight={400}
@@ -66,6 +79,6 @@ const InfoTextBox = ({ title, content }: { title: string; content: string }) => 
     <Text variant="body" color="muted">
       {title}
     </Text>
-    <Text variant="body">{content}</Text>
+    <Text variant="bodyBold">{content}</Text>
   </Box>
 );

@@ -4,6 +4,7 @@ import { ImageSourcePropType, Pressable } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 import { useRouter } from 'expo-router';
+import Card from '../Card';
 
 type CardProps = {
   title: string;
@@ -15,24 +16,14 @@ type CardProps = {
 export default function HomeCard({ source, path, icon: Icon, title }: CardProps) {
   const router = useRouter();
   return (
-    <Box
+    <Card
       flexGrow={1}
       flex={1}
-      borderRadius="m"
-      position="relative"
-      backgroundColor="white"
-      overflow="hidden"
       padding="l"
+      overflow="hidden"
       justifyContent="space-between"
       height={160}
-      style={{
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 2,
-        width: '48%',
-      }}>
+      width="48%">
       <Pressable onPress={() => router.push(`/(private)/(tabs)/${path}`)}>
         <Box
           flexDirection="row"
@@ -41,7 +32,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
           width={'100%'}
           style={{ zIndex: 2, marginBottom: 60 }}>
           <Icon size={20} />
-          <Text fontWeight={500} fontSize={16}>
+          <Text variant="bodyBold">
             {title}
           </Text>
         </Box>
@@ -63,6 +54,6 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
         </Box>
         <ArrowRight color={'#737373'} style={{ left: 120, top: 25 }} />
       </Pressable>
-    </Box>
+    </Card>
   );
 }

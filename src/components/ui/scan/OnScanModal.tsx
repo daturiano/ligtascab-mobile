@@ -5,16 +5,19 @@ import { getErrorMessage } from '@/src/utils/utils';
 import { useMutation } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { Modal, StyleSheet } from 'react-native';
+import { Modal } from 'react-native';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
+import Card from '../Card';
 
 type OnScanModalProps = {
   visible: boolean;
   tricycle_details: Tricycle;
   exitModalHandler: () => void;
 };
+
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function OnScanModal({
   visible,
@@ -23,6 +26,7 @@ export default function OnScanModal({
 }: OnScanModalProps) {
   const router = useRouter();
   const { setRideDetails } = useRideStore();
+  const insets = useSafeAreaInsets();
 
   const createRideMutation = useMutation({
     mutationFn: async (data: Tricycle) => createNewRide(tricycle_details),
@@ -43,12 +47,23 @@ export default function OnScanModal({
 
   return (
     <Modal visible={visible} transparent animationType="none" statusBarTranslucent>
-      <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
-        <Box
-          style={styles.card}
-          backgroundColor="white"
-          flexDirection="column"
-          justifyContent="space-between">
+      <Box
+        flex={1}
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="overlay"
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        }}>
+        <Card
+          minHeight={500}
+          width="92%"
+          maxWidth={380}
+          justifyContent="space-between"
+          alignItems="center">
           <Box flex={1} marginTop="xxl" flexDirection="column" alignItems="center">
             <Text variant="subheader" textAlign="center">
               {tricycle_details.status === 'active'
@@ -87,32 +102,15 @@ export default function OnScanModal({
           <Box flexDirection="column" width={'100%'} gap="s">
             {tricycle_details.status === 'active' && (
               <Button onPress={onConfirm}>
-                <Text color="mainBackground">Continue</Text>
+                <Text color="mainBackground" variant="bodyBold">Continue</Text>
               </Button>
             )}
             <Button variant="outline" onPress={exitModalHandler}>
               <Text>Cancel</Text>
             </Button>
           </Box>
-        </Box>
+        </Card>
       </Box>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    minHeight: 500,
-    width: '92%',
-    maxWidth: 380,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    padding: 20,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-  },
-});

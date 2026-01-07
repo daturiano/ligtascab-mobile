@@ -35,38 +35,3 @@ const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) =>
 
 export default Button;
 
-export const buttonVariants = {
-  defaults: {
-    paddingVertical: 'm',
-    paddingHorizontal: 'l',
-    borderRadius: 'm',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'primary',
-  },
-  primary: {
-    backgroundColor: 'primary',
-  },
-  secondary: {
-    backgroundColor: 'secondary',
-  },
-  destructive: {
-    backgroundColor: 'warning',
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: 'mainForeground',
-  },
-  input: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: 'mutedLighter',
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-};

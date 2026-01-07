@@ -16,24 +16,31 @@ export default function RideDetailsCard({ ride }: { ride: Ride }) {
         alignItems="center"
         justifyContent="space-between"
         width={'100%'}
-        backgroundColor="primaryLighter"
+        backgroundColor="primary"
         paddingVertical="m"
         paddingHorizontal="l"
         borderRadius="l">
-        <Box flexDirection="column" gap="s">
-          <Text fontSize={16} fontWeight={400}>
+        <Box flexDirection="column" gap="xs">
+          <Text color="white" variant="bodyBold" fontSize={18}>
             {ride.driver_details.first_name} {ride.driver_details.last_name}
           </Text>
-          <Text variant="description" fontSize={14} color="muted" fontWeight={400}>
-            {ride.tricycle_details.plate_number}
-          </Text>
+          <Box
+            backgroundColor="grayLight"
+            paddingHorizontal="m"
+            style={{ paddingVertical: .5 }}
+            borderRadius="rounded"
+            alignSelf="flex-start">
+            <Text variant="bodyBold" color="primary" fontSize={12}>
+              {ride.tricycle_details.plate_number}
+            </Text>
+          </Box>
         </Box>
-        <Box flexDirection="column" gap="s">
-          <Text variant="body" textAlign="right" fontWeight={400}>
-            ₱{ride.fare}
-          </Text>
-          <Text variant="description" fontSize={14} color="muted" fontWeight={400}>
+        <Box flexDirection="column" gap="xs">
+          <Text variant="details" color="white">
             {ride.end_time ? formatDate(ride.end_time.toLocaleString()) : ''}
+          </Text>
+          <Text variant="body" textAlign="right" color="white">
+            ₱{ride.fare}
           </Text>
         </Box>
       </Box>

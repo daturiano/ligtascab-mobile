@@ -100,10 +100,10 @@ export default function LocationInputRow({
             keyboardShouldPersistTaps="handled"
             renderItem={({ item }) => (
               <Pressable style={styles.suggestionItem} onPress={() => handleSelectSuggestion(item)}>
-                <Text fontSize={14} fontWeight={500} color="mainForeground" numberOfLines={1}>
+                <Text variant="bodyBold" color="mainForeground" numberOfLines={1}>
                   {item.structured_formatting.main_text}
                 </Text>
-                <Text fontSize={12} color="muted" numberOfLines={1}>
+                <Text variant="description" fontSize={12} color="muted" numberOfLines={1}>
                   {item.structured_formatting.secondary_text}
                 </Text>
               </Pressable>

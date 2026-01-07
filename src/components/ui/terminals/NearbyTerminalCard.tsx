@@ -24,7 +24,7 @@ const NearbyTerminalCard = ({ terminal, onPressTerminal }: NearbyTerminalCardPro
         <Box flexDirection="row" gap="m">
           <Image source={require('@/src/assets/motorbike.png')} style={{ width: 40, height: 40 }} />
           <Box flexDirection="column">
-            <Text fontSize={18} fontWeight={500} color="white">
+            <Text variant="title" color="white" fontSize={18}>
               {terminal.direction}
             </Text>
           </Box>

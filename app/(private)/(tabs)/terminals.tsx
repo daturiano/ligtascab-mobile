@@ -25,10 +25,12 @@ import {
   requestLocationPermission,
 } from '@/src/utils/locationService';
 import LocationInputRow from '@/src/components/ui/terminals/LocationInput';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Terminals() {
   const theme = useTheme();
   const { mainBackground } = theme.colors;
+  const insets = useSafeAreaInsets();
 
   const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | null>(null);
   const [currentAddress, setCurrentAddress] = useState('');
@@ -155,7 +157,7 @@ export default function Terminals() {
         />
       )}
 
-      <Box position="absolute" top="10%" width="100%" alignItems="center">
+      <Box position="absolute" top={0} marginTop="l" style={{ paddingTop: insets.top }} width="100%" alignItems="center">
         <Box
           bg="primary"
           paddingVertical="m"
@@ -188,7 +190,7 @@ export default function Terminals() {
             style={{ backgroundColor: '#fff' }}
             paddingVertical="m"
             onPress={handleFindTricycles}>
-            <Text fontWeight={500} color="primary">
+            <Text variant="bodyBold" color="primary">
               Find Tricycles
             </Text>
           </Button>

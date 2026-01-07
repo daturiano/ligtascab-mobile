@@ -39,10 +39,10 @@ export default function ReportDetailsCard({ report }: { report: Report }) {
               <TriangleAlert size={20} color={'#ffffff'} />
             </Box>
             <Box flexDirection="column">
-              <Text variant="body" color="mainForeground" fontWeight={400}>
+              <Text variant="bodyBold" color="mainForeground">
                 {formatReportReason(report.type)}
               </Text>
-              <Text color="muted" fontSize={14}>
+              <Text variant="details" color="mutedDark">
                 Ticket: {report.ticket_number}
               </Text>
             </Box>
@@ -54,8 +54,8 @@ export default function ReportDetailsCard({ report }: { report: Report }) {
             borderRadius="s"
             backgroundColor={report.report_status === 'Pending' ? 'secondaryLighter' : 'primary'}>
             <Text
+              variant="bodyBold"
               fontSize={12}
-              fontWeight={500}
               color={report.report_status === 'Pending' ? 'secondary' : 'mainBackground'}>
               {report.report_status}
             </Text>

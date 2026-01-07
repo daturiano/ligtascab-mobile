@@ -14,7 +14,7 @@ export default function EmergencyButton() {
       onPress={() => setIsModalVisible(!isModalVisible)}>
       <Box alignItems="center" gap="s" flexDirection="row">
         <TriangleAlert color={'#ffffff'} size={20} />
-        <Text color="white" fontWeight={600}>
+        <Text color="white" variant="bodyBold">
           Emergency
         </Text>
       </Box>

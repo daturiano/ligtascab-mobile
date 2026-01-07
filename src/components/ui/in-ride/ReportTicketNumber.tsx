@@ -20,12 +20,12 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
             height: 80,
           }}
         />
-        <Text variant="description" textAlign="center" fontSize={15}>
+        <Text variant="description" textAlign="center">
           Your report has been successfully submitted and is now being reviewed by our team.
         </Text>
       </Box>
       <Box alignItems="center" gap="s">
-        <Text variant="description" color="mainForeground" fontSize={18}>
+        <Text variant="title" color="mainForeground" fontSize={18}>
           Ticket Number
         </Text>
         <Box
@@ -39,7 +39,7 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
           width={'100%'}
           backgroundColor="grayLight"
           borderColor="mutedLighter">
-          <Text fontSize={22} fontWeight={600} color="primary">
+          <Text variant="title" color="primary">
             {reportDetails.ticket_number}
           </Text>
           <CopyButton id={reportDetails.ticket_number} />
@@ -71,10 +71,10 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
         </Box>
       </Box>
       <Box gap="s">
-        <Text fontSize={16} fontWeight={500}>
+        <Text variant="bodyBold">
           What happens next?
         </Text>
-        <Text variant="description" fontSize={15} lineHeight={24}>
+        <Text variant="description" lineHeight={24}>
           1. Our team will investigate your report{'\n'}
           2. We&apos;ll contact the driver if necessary{'\n'}
           3. You&apos;ll receive an update via notification{'\n'}

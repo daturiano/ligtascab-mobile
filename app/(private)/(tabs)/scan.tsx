@@ -8,7 +8,7 @@ export default function Scan() {
     <Container style={{ paddingHorizontal: 0, paddingTop: 0 }}>
       <HomeHeader
         title="Scan QR Code"
-        description="Scan the QR to get your tricycle's details and to start and confirm your ride."
+        description="Scan the QR to get your tricycle's details and confirm your ride."
       />
       <Box flex={1} paddingHorizontal="l" gap="l" width={'100%'} style={{ marginTop: 210 }}>
         <QRScanner />

@@ -1,5 +1,5 @@
 import { createTheme } from '@shopify/restyle';
-import { buttonVariants } from '../components/ui/Button';
+
 
 const palette = {
   yellowLighter: '#f9d5b9',
@@ -57,6 +57,7 @@ const theme = createTheme({
     warningLight: palette.warningLight,
     white: palette.whiter,
     overlay: palette.overlay,
+    shadowColor: palette.black,
   },
   spacing: {
     xs: 4,
@@ -99,19 +100,22 @@ const theme = createTheme({
   },
   textVariants: {
     header: {
-      fontWeight: 'bold',
-      fontFamily: 'PlusJakartaSans_600SemiBold',
+      fontFamily: 'PlusJakartaSans_700Bold',
       fontSize: 42,
       lineHeight: 42,
     },
     subheader: {
-      fontWeight: 'bold',
-      fontFamily: 'PlusJakartaSans_600SemiBold',
+      fontFamily: 'PlusJakartaSans_700Bold',
       fontSize: 28,
       lineHeight: 28,
     },
     body: {
       fontFamily: 'Nunito_300Light',
+      fontSize: 16,
+      lineHeight: 24,
+    },
+    bodyBold: {
+      fontFamily: 'Nunito_600SemiBold',
       fontSize: 16,
       lineHeight: 24,
     },
@@ -121,9 +125,14 @@ const theme = createTheme({
       fontSize: 16,
       lineHeight: 24,
     },
+    details: {
+      fontFamily: 'Nunito_300Light',
+      color: 'mutedDark',
+      fontSize: 14,
+      lineHeight: 24,
+    },
     title: {
       fontSize: 21,
-      fontWeight: '600',
       color: 'mainForeground',
       fontFamily: 'PlusJakartaSans_600SemiBold',
     },
@@ -131,7 +140,41 @@ const theme = createTheme({
       fontFamily: 'Nunito_300Light',
     },
   },
-  buttonVariants: buttonVariants,
+  buttonVariants: {
+    defaults: {
+      paddingVertical: 'm',
+      paddingHorizontal: 'l',
+      borderRadius: 'm',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'primary',
+    },
+    primary: {
+      backgroundColor: 'primary',
+    },
+    secondary: {
+      backgroundColor: 'secondary',
+    },
+    destructive: {
+      backgroundColor: 'warning',
+    },
+    outline: {
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: 'mainForeground',
+    },
+    input: {
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderColor: 'mutedLighter',
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+    },
+    disabled: {
+      opacity: 0.5,
+    },
+  },
 });
 
 export type Theme = typeof theme;

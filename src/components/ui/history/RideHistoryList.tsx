@@ -78,21 +78,7 @@ export default function RideHistoryList() {
         value={searchQuery}
         onChangeText={handleInputChange}
       />
-      <Box
-        flex={1}
-        borderRadius="m"
-        backgroundColor="white"
-        flexDirection="column"
-        paddingVertical="xl"
-        paddingHorizontal="l"
-        marginBottom="l"
-        style={{
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.05,
-          shadowRadius: 4,
-          elevation: 2,
-        }}>
+      <Box flex={1}>
         {loading ? (
           <Box alignItems="center" justifyContent="center" padding="xl">
             <ActivityIndicator />
@@ -103,7 +89,7 @@ export default function RideHistoryList() {
               style={{ width: 140, height: 140 }}
               source={require('@/src/assets/empty-search.png')}
             />
-            <Text>No rides found.</Text>
+            <Text variant="description">No rides found.</Text>
           </Box>
         ) : (
           <FlatList
@@ -111,7 +97,7 @@ export default function RideHistoryList() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => <RideDetailsCard ride={item} />}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ gap: 12, paddingBottom: 80 }}
+            contentContainerStyle={{ gap: 12, paddingBottom: 100, paddingTop: 4 }}
             onEndReachedThreshold={0.2}
             onEndReached={() => {
               if (canLoadMore && !fetchingNext) loadMore();

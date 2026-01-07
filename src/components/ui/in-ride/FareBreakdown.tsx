@@ -17,18 +17,18 @@ export default function FareBreakdown() {
       </Text>
       <Box flexDirection="column" gap="xs">
         <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-          <Text variant="description" fontSize={14} fontWeight={500}>
+          <Text variant="bodyBold">
             Base Fare
           </Text>
-          <Text variant="description" fontSize={14} fontWeight={500}>
+          <Text variant="bodyBold">
             ₱15.00
           </Text>
         </Box>
         <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-          <Text variant="description" fontSize={14} fontWeight={500}>
+          <Text variant="bodyBold">
             Per Exceeding Kilometer
           </Text>
-          <Text variant="description" fontSize={14} fontWeight={500}>
+          <Text variant="bodyBold">
             +₱5.00
           </Text>
         </Box>

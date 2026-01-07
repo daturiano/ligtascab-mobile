@@ -7,11 +7,17 @@ import SafetyTip from '@/src/components/ui/home/SafetyTip';
 import { MapIcon, QrCode } from 'lucide-react-native';
 import { ScrollView } from 'react-native';
 
+import { useAuth } from '@/src/context/AuthenticationContext';
+
 export default function Home() {
+  const { user } = useAuth();
   return (
     <Container style={{ paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <HomeHeader title="Hello, Daniel Joshua! 👋" description="Ready for your next safe ride?" />
+        <HomeHeader
+          title={`Hello, ${user?.first_name || 'Commuter'}! 👋`}
+          description="Ready for your next safe ride?"
+        />
         <Box
           flex={1}
           width="100%"
