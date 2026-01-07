@@ -32,6 +32,7 @@ export default function PrivateLayout() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="in-ride" options={{ headerShown: false }} />
+          <Stack.Screen name="location-search" options={{ presentation: 'modal', headerShown: false }} />
         </Stack>
       </QueryClientProvider>
     </AuthenticatedViewOnly>
