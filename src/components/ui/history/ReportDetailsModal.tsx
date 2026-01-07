@@ -1,7 +1,7 @@
 import { Report } from '@/src/types';
 import { formatDate } from '@/src/utils/utils';
 import { XIcon } from 'lucide-react-native';
-import { Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, TouchableOpacity } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 
@@ -33,6 +33,7 @@ export default function ReportDetailsModal({
         alignItems="center"
         justifyContent="center"
         backgroundColor="overlay"
+        paddingHorizontal="l"
         style={{
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
@@ -40,11 +41,21 @@ export default function ReportDetailsModal({
           paddingRight: insets.right,
         }}>
         <Box
-          style={styles.card}
           backgroundColor="white"
+          borderRadius="l"
           flexDirection="column"
           gap="l"
-          padding="xl">
+          padding="xl"
+          width="100%"
+          maxWidth={380}
+          height={400}
+          style={{
+            elevation: 10,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.15,
+            shadowRadius: 10,
+          }}>
           <Box flexDirection="row" justifyContent="space-between" width={'100%'}>
             <Text variant="title">Report Details</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(false)}>
@@ -80,18 +91,3 @@ const InfoTextBox = ({ title, content }: { title: string; content: string }) => 
     <Text variant="bodyBold">{content}</Text>
   </Box>
 );
-
-const styles = StyleSheet.create({
-  card: {
-    minHeight: 400,
-    width: '92%',
-    maxWidth: 380,
-    borderRadius: 10,
-    padding: 20,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-  },
-});

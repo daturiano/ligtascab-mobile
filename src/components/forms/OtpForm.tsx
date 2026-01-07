@@ -2,11 +2,13 @@ import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
 import Text from '@/src/components/ui/Text';
 import { otpSchema } from '@/src/schemas';
+import { Theme } from '@/src/theme/theme';
+import { useTheme } from '@shopify/restyle';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Pressable, StyleSheet, TextInput } from 'react-native';
+import { Pressable, TextInput } from 'react-native';
 import { z } from 'zod';
 import ErrorMessage from '../ui/ErrorMessage';
 
@@ -75,6 +77,8 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
     }
   };
 
+  const theme = useTheme<Theme>();
+
   return (
     <Box
       width="100%"
@@ -102,7 +106,16 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
                     keyboardType="number-pad"
                     maxLength={1}
                     autoFocus={true}
-                    style={styles.textBox}
+                    style={{
+                      width: 50,
+                      height: 60,
+                      borderWidth: 1.5,
+                      borderColor: theme.colors.muted,
+                      borderRadius: theme.borderRadii.m,
+                      textAlign: 'center',
+                      fontSize: 24,
+                      color: theme.colors.mainForeground,
+                    }}
                   />
                 ))}
               </Box>
@@ -122,7 +135,7 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
             </Text>
           ) : (
             <Pressable onPress={handleResend}>
-              <Text fontSize={16} color="primary" fontWeight={600}>
+              <Text fontSize={16} color="primary" fontWeight="600">
                 Resend
               </Text>
             </Pressable>
@@ -142,16 +155,3 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
     </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  textBox: {
-    width: 50,
-    height: 60,
-    borderWidth: 1.5,
-    borderColor: '#737373',
-    borderRadius: 12,
-    textAlign: 'center',
-    fontSize: 24,
-    color: '#000',
-  },
-});

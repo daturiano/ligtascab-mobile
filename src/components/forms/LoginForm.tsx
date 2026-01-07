@@ -62,11 +62,10 @@ export default function LoginForm() {
                 borderRadius="m"
                 borderColor="muted"
                 borderWidth={1}>
-                <Text fontSize={18} variant="bodyBold">🇵🇭 +63</Text>
+                <Text variant="bodyBold">🇵🇭 +63</Text>
               </Box>
               <Box flexGrow={1}>
                 <Input
-                  style={{ fontSize: 18 }}
                   placeholder="9xxxxxxxxx"
                   value={value}
                   onChangeText={onChange}

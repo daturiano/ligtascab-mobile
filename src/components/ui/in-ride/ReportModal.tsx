@@ -5,7 +5,6 @@ import { useState } from 'react';
 import {
   Keyboard,
   Modal,
-  StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -39,13 +38,27 @@ export default function ReportModal({ isModalVisible, setIsModalVisible }: Repor
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
+        <Box
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="overlay"
+          paddingHorizontal="l">
           <Box
-            style={styles.card}
             backgroundColor="white"
+            borderRadius="l"
             flexDirection="column"
             gap="l"
-            padding="xl">
+            padding="xl"
+            width="100%"
+            maxWidth={380}
+            style={{
+              elevation: 10,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 10,
+            }}>
             <Box flexDirection="row" justifyContent="space-between">
               <Text variant="title">{submittedReport ? 'Report Submitted' : 'Report Issue'}</Text>
               <TouchableOpacity onPress={() => setIsModalVisible(false)}>
@@ -63,17 +76,3 @@ export default function ReportModal({ isModalVisible, setIsModalVisible }: Repor
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    minHeight: 600,
-    width: '92%',
-    maxWidth: 380,
-    borderRadius: 10,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-  },
-});
