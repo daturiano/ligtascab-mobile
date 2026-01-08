@@ -24,7 +24,7 @@ export const otpSchema = z.object({
 export const AccountSetupSchema = z.object({
   fullName: z.string().max(100).min(4),
   email: z.email(),
-  phone: z.string().min(12).max(12),
+  phone: z.string().min(10).max(15),
   address: z.string().max(120),
   contact_person: z.string().min(2, 'Contact person name is required').max(100),
   contact_person_number: z

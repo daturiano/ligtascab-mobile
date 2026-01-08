@@ -6,16 +6,19 @@ import Text from '@/src/components/ui/Text';
 import { useAuth } from '@/src/context/AuthenticationContext';
 import { supabase } from '@/src/utils/supabase';
 import { useRouter } from 'expo-router';
-import { LogOut, Mail, MapPin, Phone, User, Calendar } from 'lucide-react-native';
-import { useState, useEffect } from 'react';
-import { Alert, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
+import { Calendar, LogOut, Mail, MapPin, Phone, User } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Profile() {
-  const { user, signOutUser } = useAuth();
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const { user, signOutUser, isEmailVerified } = useAuth();
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -42,6 +45,26 @@ export default function Profile() {
     }
   }, [user]);
 
+  const handleVerifyEmail = async () => {
+      if (!user?.email) {
+          Alert.alert('Error', 'No email address found.');
+          return;
+      }
+      setIsLoading(true);
+      try {
+          const { error } = await supabase.auth.resend({
+              type: 'signup',
+              email: user.email,
+          });
+          if (error) throw error;
+          Alert.alert('Sent!', 'A verification email has been sent to ' + user.email);
+      } catch (error: any) {
+           Alert.alert('Notice', 'Could not send verification email. ' + error.message);
+      } finally {
+          setIsLoading(false);
+      }
+  };
+
   const handleSave = async () => {
     if (!user) return;
 
@@ -63,7 +86,18 @@ export default function Profile() {
       if (error) {
         Alert.alert('Error', 'Failed to update profile. Please try again.');
       } else {
-        Alert.alert('Success', 'Profile updated successfully.');
+        // Sync email with Supabase Auth
+        if (formData.email && formData.email !== user.email) {
+            const { error: authError } = await supabase.auth.updateUser({ email: formData.email });
+            if (!authError) {
+                 Alert.alert('Success', 'Profile updated. A verification link has also been sent to your new email address.');
+            } else {
+                Alert.alert('Success', 'Profile updated, but failed to sync email to account settings: ' + authError.message);
+            }
+        } else {
+             Alert.alert('Success', 'Profile updated successfully.');
+        }
+
         setIsEditing(false);
       }
     } catch {
@@ -187,17 +221,46 @@ export default function Profile() {
                     onChangeText={(text) => setFormData({ ...formData, address: text })}
                     placeholder="Enter address"
                   />
+
                    <Input
                     title="Birth Date"
                     icon={Calendar}
                     value={formData.birth_date}
-                    onChangeText={(text) => setFormData({ ...formData, birth_date: text })}
                     placeholder="YYYY-MM-DD"
+                    onPress={() => setShowDatePicker(true)}
                   />
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={formData.birth_date ? new Date(formData.birth_date) : new Date()}
+                      mode="date"
+                      display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                      onChange={(event, selectedDate) => {
+                        if (Platform.OS === 'android') {
+                            setShowDatePicker(false);
+                        }
+                        if (selectedDate) {
+                            setFormData({ ...formData, birth_date: selectedDate.toISOString().split('T')[0] });
+                        }
+                      }}
+                    />
+                  )}
                 </>
               ) : (
                 <>
-                  <InfoRow icon={Mail} label="Email" value={formData.email || 'Not set'} />
+                  <Box>
+                     <InfoRow icon={Mail} label="Email" value={formData.email || 'Not set'} />
+                     {!isEmailVerified && formData.email ? (
+                         <Button variant="ghost" onPress={handleVerifyEmail} style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
+                             <Text variant="details" color="warning" fontWeight="bold">Verify Email</Text>
+                         </Button>
+                     ) : (
+                         isEmailVerified && formData.email && (
+                            <Box style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
+                                <Text variant="details" color="primary" fontWeight="bold">Verified</Text>
+                            </Box>
+                         )
+                     )}
+                  </Box>
                   <InfoRow icon={MapPin} label="Address" value={formData.address || 'Not set'} />
                   <InfoRow icon={Calendar} label="Birth Date" value={formData.birth_date || 'Not set'} />
                 </>

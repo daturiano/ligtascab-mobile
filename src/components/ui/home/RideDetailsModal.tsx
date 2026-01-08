@@ -6,10 +6,13 @@ import { Ride } from '@/src/types';
 import { extractTime, formatDate } from '@/src/utils/utils';
 import Card from '../Card';
 
+import Button from '../Button';
+
 type RideDetailsModalProps = {
   ride: Ride;
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
+  onReportPress: () => void;
 };
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,6 +21,7 @@ export default function RideDetailsModal({
   ride,
   isModalVisible,
   setIsModalVisible,
+  onReportPress,
 }: RideDetailsModalProps) {
   const insets = useSafeAreaInsets();
   return (
@@ -65,9 +69,25 @@ export default function RideDetailsModal({
             />
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
-          <Text textAlign="center" variant="description">
-            Rides older than 7 days cannot be reported.
-          </Text>
+          
+          {(() => {
+             const rideDate = new Date(ride.end_time);
+             const sevenDaysAgo = new Date();
+             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+             
+             const isReportable = rideDate > sevenDaysAgo;
+             
+             return isReportable ? (
+                 <Button variant="primary" onPress={onReportPress}>
+                    <Text variant="bodyBold" color="white">Report Issue</Text>
+                 </Button>
+             ) : (
+                <Text textAlign="center" variant="description">
+                    Rides older than 7 days cannot be reported.
+                </Text>
+             );
+             
+          })()}
         </Card>
       </Box>
     </Modal>

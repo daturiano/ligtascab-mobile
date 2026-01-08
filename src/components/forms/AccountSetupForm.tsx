@@ -4,16 +4,21 @@ import ErrorMessage from '@/src/components/ui/ErrorMessage';
 import Input from '@/src/components/ui/Input';
 import Text from '@/src/components/ui/Text';
 import { AccountSetupSchema } from '@/src/schemas';
-import { registerWithCredentials } from '@/src/services/authentication';
+import { registerWithCredentials, signOut } from '@/src/services/authentication';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { AtSign, LockIcon, MapPinHouse, Phone, User } from 'lucide-react-native';
+import { AtSign, Eye, EyeOff, LockIcon, MapPinHouse, Phone, User } from 'lucide-react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { Alert } from 'react-native';
+import { useState } from 'react';
 
 export default function AccountSetupForm() {
   const router = useRouter();
   const { mobileNumber } = useLocalSearchParams();
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const {
     control,
@@ -39,10 +44,15 @@ export default function AccountSetupForm() {
     try {
       const user = await registerWithCredentials(data);
       if (user) {
-        return router.replace('/(private)/(tabs)/home');
+        await signOut();
+        Alert.alert(
+            "Account Created!",
+            "Welcome to LigtasCab! Please check your email to verify your account. Please log in to continue.",
+            [{ text: "OK", onPress: () => router.replace('/(authentication)/login') }]
+        );
       }
     } catch (err: any) {
-      console.error('Login failed:', err);
+      console.error('Registration failed:', err);
       setError('root', {
         type: 'manual',
         message: err.message ?? 'An unexpected error occurred. Please try again.',
@@ -176,9 +186,11 @@ export default function AccountSetupForm() {
                 onBlur={onBlur}
                 autoCapitalize="none"
                 icon={LockIcon}
-                secureTextEntry
+                secureTextEntry={!isPasswordVisible}
                 errorMessage={errors.password?.message}
                 title="Password"
+                rightIcon={isPasswordVisible ? EyeOff : Eye}
+                onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
               />
             )}
           />
@@ -193,7 +205,7 @@ export default function AccountSetupForm() {
                 onBlur={onBlur}
                 autoCapitalize="none"
                 icon={LockIcon}
-                secureTextEntry
+                secureTextEntry={!isPasswordVisible}
                 errorMessage={errors.confirm_password?.message}
                 title="Confirm Password"
               />
@@ -203,10 +215,13 @@ export default function AccountSetupForm() {
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}
       </Box>
       <Button
-        onPress={handleSubmit(onSubmit)}
+        onPress={handleSubmit(onSubmit, (errors) => {
+            const messages = Object.values(errors).map((e: any) => e.message).join('\n');
+            Alert.alert("Please check the following:", messages);
+        })}
         isLoading={isSubmitting}
-        disabled={!isValid || isSubmitting}
-        variant={!isValid ? 'disabled' : 'primary'}>
+        disabled={isSubmitting}
+        variant="primary">
         <Text color="mainBackground" variant="body">
           Continue
         </Text>

@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff, LockIcon, PhoneIcon } from 'lucide-react-native';
 import { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -84,18 +85,23 @@ export default function LoginForm() {
           control={control}
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry={!isPasswordVisible}
-              autoCapitalize="none"
-              icon={LockIcon}
-              errorMessage={errors.password?.message}
-              rightIcon={isPasswordVisible ? EyeOff : Eye}
-              onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
-            />
+            <Box gap="xs">
+                <Input
+                placeholder="Password"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry={!isPasswordVisible}
+                autoCapitalize="none"
+                icon={LockIcon}
+                errorMessage={errors.password?.message}
+                rightIcon={isPasswordVisible ? EyeOff : Eye}
+                onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                />
+                <TouchableOpacity onPress={() => router.push('/(authentication)/forgot-password')} style={{ alignSelf: 'flex-end', padding: 4 }}>
+                    <Text variant="details" color="primary" fontWeight={'600'}>Forgot Password?</Text>
+                </TouchableOpacity>
+            </Box>
           )}
         />
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}

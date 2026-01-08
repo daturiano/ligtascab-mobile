@@ -60,6 +60,8 @@ export type Driver = {
   user_id?: string;
   address: string;
   birth_date: Date;
+  rating?: number;
+  total_reviews?: number;
 };
 
 export type Ride = {
@@ -106,3 +108,14 @@ export type Terminal = {
   };
   landmarks: string[];
 };
+
+export type Review = {
+  id: string;
+  ride_id: string;
+  passenger_id: string;
+  driver_id: string;
+  rating: number;
+  comment: string;
+  created_at: Date;
+};
+

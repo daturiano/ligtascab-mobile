@@ -61,7 +61,7 @@ export default function AlertModal({ visible, title, message, onClose, variant =
           <Text variant="body" textAlign="center" color="muted">
             {message}
           </Text>
-          <Button onPress={onClose} paddingVertical="s" marginTop="s" width="100%">
+          <Button onPress={onClose} paddingVertical="s" marginTop="s" style={{ width: '100%' }}>
             <Text variant="bodyBold" color="white" textAlign="center">
               Okay
             </Text>

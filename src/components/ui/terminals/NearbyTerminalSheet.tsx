@@ -52,7 +52,7 @@ const NearbyTerminalSheet = forwardRef<BottomSheet, NearbyTerminalSheetProps>(
               // DETAIL VIEW
               <Box gap="m">
                 <Box flexDirection="row" alignItems="center" marginBottom="s">
-                    <TouchableOpacity onPress={onBack}HitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
+                    <TouchableOpacity onPress={onBack} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
                         <Box padding="s" marginRight="s">
                             <ArrowLeft color={theme.colors.mainForeground} size={24} />
                         </Box>

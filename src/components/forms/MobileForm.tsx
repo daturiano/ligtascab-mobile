@@ -2,7 +2,7 @@ import Box from '@/src/components/ui/Box';
 import Button from '@/src/components/ui/Button';
 import Input from '@/src/components/ui/Input';
 import Text from '@/src/components/ui/Text';
-import { requestOtp } from '@/src/services/authentication';
+import { checkPhoneNumberExists, requestOtp } from '@/src/services/authentication';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -19,17 +19,32 @@ export default function MobileForm() {
   });
 
   const onSubmit = async () => {
-    setIsLoading(false);
+    setIsLoading(true);
+    const fullMobileNumber = `63${mobileNumber}`;
+
     try {
-      const data = await sendOtpMutation.mutateAsync(`63${mobileNumber}`);
-      console.log(data);
+      // 1. Pre-check availability
+      const isTaken = await checkPhoneNumberExists(fullMobileNumber);
+      
+      if (isTaken) {
+        setError('This mobile number is already linked to an account.');
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await sendOtpMutation.mutateAsync(fullMobileNumber);
+      
+      if (!data || !data[0] || !data[0].code) {
+         throw new Error('Invalid OTP response received');
+      }
+
       router.replace({
         pathname: '/(authentication)/verify-otp',
-        params: { mobileNumber: `63${mobileNumber}`, code: data[0].code },
+        params: { mobileNumber: fullMobileNumber, code: data[0].code },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setError('Something went wrong. Please try again.');
+      setError(error.message || 'Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }

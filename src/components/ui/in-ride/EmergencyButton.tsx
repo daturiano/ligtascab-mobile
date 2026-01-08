@@ -8,17 +8,19 @@ import EmergencyModal from './EmergencyModal';
 export default function EmergencyButton() {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   return (
-    <Button
-      style={{ position: 'absolute', bottom: 405, marginLeft: 12, zIndex: 0 }}
-      variant="destructive"
-      onPress={() => setIsModalVisible(!isModalVisible)}>
-      <Box alignItems="center" gap="s" flexDirection="row">
-        <TriangleAlert color={'#ffffff'} size={20} />
-        <Text color="white" variant="bodyBold">
-          Emergency
-        </Text>
-      </Box>
+    <>
+        <Button
+        variant="destructive"
+        paddingVertical="m"
+        onPress={() => setIsModalVisible(true)}>
+            <Box alignItems="center" gap="s" flexDirection="row" justifyContent="center">
+                <TriangleAlert color={'#ffffff'} size={20} />
+                <Text color="white" variant="bodyBold">
+                Emergency
+                </Text>
+            </Box>
+        </Button>
       {isModalVisible && <EmergencyModal isModalVisible setIsModalVisible={setIsModalVisible} />}
-    </Button>
+    </>
   );
 }

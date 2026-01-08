@@ -1,5 +1,6 @@
 import { Session } from '@supabase/supabase-js';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { fetchCommuterDetails } from '../services/authentication';
 import { Commuter } from '../types';
 import { supabase } from '../utils/supabase';
@@ -10,11 +11,13 @@ type AuthContextType = {
   session: Session | null;
   user: Commuter | null;
   authChecked: boolean;
+  isEmailVerified: boolean;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<Commuter | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -24,8 +27,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.auth.getSession();
       setSession(data.session);
 
-      const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
         setSession(session);
+        if (event === 'PASSWORD_RECOVERY') {
+            router.replace('/(authentication)/update-password');
+        }
       });
 
       return () => {
@@ -89,6 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signInWithPhoneNumber,
         signOutUser,
         authChecked,
+        isEmailVerified: !!session?.user?.email_confirmed_at,
       }}>
       {children}
     </AuthContext.Provider>

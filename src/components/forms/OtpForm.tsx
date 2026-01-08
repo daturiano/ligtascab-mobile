@@ -67,7 +67,7 @@ export default function OtpForm({ mobileNumber, code }: OtpFormProps) {
     if (code === otp.otp) {
       router.replace({
         pathname: '/(authentication)/account-setup',
-        params: { mobileNumber: `63${mobileNumber}` },
+        params: { mobileNumber: mobileNumber },
       });
     } else {
       setError('root', {
