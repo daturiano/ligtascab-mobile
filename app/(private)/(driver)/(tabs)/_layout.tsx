@@ -1,7 +1,7 @@
 import { Theme } from '@/src/theme/theme';
 import { useTheme } from '@shopify/restyle';
 import { Tabs } from 'expo-router';
-import { History, LayoutDashboard, QrCode, User } from 'lucide-react-native';
+import { Briefcase, History, LayoutDashboard, QrCode, User } from 'lucide-react-native';
 import { View } from 'react-native';
 
 export default function DriverTabsLayout() {
@@ -23,6 +23,15 @@ export default function DriverTabsLayout() {
             title: 'Dashboard',
             tabBarIcon: ({ color, size, focused }) => (
               <LayoutDashboard color={color} size={size} strokeWidth={focused ? 2 : 1.5} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="jobs"
+          options={{
+            title: 'Jobs',
+            tabBarIcon: ({ color, size, focused }) => (
+              <Briefcase color={color} size={size} strokeWidth={focused ? 2 : 1.5} />
             ),
           }}
         />

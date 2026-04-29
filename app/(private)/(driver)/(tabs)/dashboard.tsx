@@ -4,6 +4,7 @@ import Card from '@/src/components/ui/Card';
 import Container from '@/src/components/ui/Container';
 import Text from '@/src/components/ui/Text';
 import { useAuth } from '@/src/context/AuthenticationContext';
+import { useDriverActiveJob } from '@/src/hooks/useDriverActiveJob';
 import {
   fetchDriverActiveShift,
   fetchDriverEarningsSummary,
@@ -12,12 +13,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import {
   AlertTriangle,
+  Briefcase,
   CarFront,
   CircleDot,
   Coins,
-  Play,
 } from 'lucide-react-native';
-import { ScrollView } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 
 const formatPHP = (n: number) =>
   `₱${n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -53,6 +54,8 @@ export default function DriverDashboard() {
     enabled: !!driverId,
   });
 
+  const { job: activeJob } = useDriverActiveJob();
+
   const licenseDaysLeft = daysUntil(driver?.license_expiration);
   const licenseExpiringSoon = licenseDaysLeft !== null && licenseDaysLeft <= 30;
 
@@ -79,6 +82,32 @@ export default function DriverDashboard() {
             </Box>
           </Box>
 
+          {/* Active pickup-job banner */}
+          {activeJob ? (
+            <Pressable
+              onPress={() => router.push('/(private)/(driver)/active-job')}>
+              {({ pressed }) => (
+                <Card backgroundColor="primaryLighter" opacity={pressed ? 0.8 : 1}>
+                  <Box flexDirection="row" alignItems="center" gap="s">
+                    <Briefcase color="#0f766e" size={18} />
+                    <Box flex={1}>
+                      <Text variant="bodyBold">
+                        {activeJob.status === 'in_progress'
+                          ? 'Trip in progress'
+                          : 'You have an active job'}
+                      </Text>
+                      <Text variant="details" numberOfLines={1}>
+                        {activeJob.status === 'in_progress'
+                          ? activeJob.destination.address
+                          : `Heading to ${activeJob.origin.address}`}
+                      </Text>
+                    </Box>
+                  </Box>
+                </Card>
+              )}
+            </Pressable>
+          ) : null}
+
           {/* Active shift card */}
           <Card>
             <Box flexDirection="row" alignItems="center" gap="s" marginBottom="m">
@@ -88,50 +117,48 @@ export default function DriverDashboard() {
                 strokeWidth={2}
               />
               <Text variant="bodyBold">
-                {activeShift ? 'On shift' : 'Not on shift'}
+                {activeShift ? 'On shift today' : 'No shift today'}
               </Text>
             </Box>
             {activeShift ? (
               <Box gap="s">
                 <Text variant="description">
-                  Started{' '}
-                  {new Date(activeShift.start_time).toLocaleTimeString('en-PH', {
+                  Assigned at{' '}
+                  {new Date(activeShift.created_at).toLocaleTimeString('en-PH', {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
                 </Text>
-                {activeShift.tricycle ? (
-                  <Box flexDirection="row" alignItems="center" gap="s">
-                    <CarFront color="#0a0a0a" size={16} />
-                    <Text variant="body">
-                      {activeShift.tricycle.plate_number ?? 'Assigned tricycle'}
-                    </Text>
-                  </Box>
+                <Box flexDirection="row" alignItems="center" gap="s">
+                  <CarFront color="#0a0a0a" size={16} />
+                  <Text variant="body">
+                    {activeShift.plate_number ??
+                      activeShift.tricycle?.plate_number ??
+                      'Assigned tricycle'}
+                  </Text>
+                </Box>
+                {activeShift.shift_type ? (
+                  <Text variant="details">Shift: {activeShift.shift_type}</Text>
                 ) : null}
                 <Button
-                  variant="primary"
+                  variant="outline"
                   marginTop="s"
                   onPress={() => router.push('/(private)/(driver)/active-shift')}>
-                  <Text color="mainBackground" variant="bodyBold">
-                    View Active Shift
-                  </Text>
+                  <Text variant="bodyBold">View Shift Details</Text>
                 </Button>
               </Box>
             ) : (
               <Box gap="s">
                 <Text variant="description">
                   {shiftLoading
-                    ? 'Checking for an open shift…'
-                    : 'Your operator will assign your next tricycle. Tap below once you receive your assignment.'}
+                    ? 'Checking for today’s shift…'
+                    : 'Your operator hasn’t assigned you a shift for today yet.'}
                 </Text>
                 <Button
                   variant="outline"
                   marginTop="s"
                   onPress={() => router.push('/(private)/(driver)/active-shift')}>
-                  <Box flexDirection="row" alignItems="center" gap="s">
-                    <Play color="#0a0a0a" size={16} />
-                    <Text variant="bodyBold">Start Shift</Text>
-                  </Box>
+                  <Text variant="bodyBold">Refresh</Text>
                 </Button>
               </Box>
             )}

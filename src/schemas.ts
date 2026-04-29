@@ -62,3 +62,26 @@ export const ReportSchema = z.object({
 });
 
 export type CreateAccount = z.infer<typeof CreateAccountSchema>;
+
+export const PickupLocationSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  address: z.string().min(1, 'Address is required'),
+  name: z.string().nullish(),
+});
+
+export const PickupRequestFormSchema = z
+  .object({
+    origin: PickupLocationSchema,
+    destination: PickupLocationSchema,
+  })
+  .refine(
+    (data) =>
+      !(
+        data.origin.latitude === data.destination.latitude &&
+        data.origin.longitude === data.destination.longitude
+      ),
+    { message: 'Pickup and destination must be different locations.', path: ['destination'] }
+  );
+
+export type PickupRequestForm = z.infer<typeof PickupRequestFormSchema>;

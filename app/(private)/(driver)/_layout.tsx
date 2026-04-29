@@ -34,6 +34,7 @@ export default function DriverLayout() {
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="active-shift" options={{ headerShown: false }} />
+      <Stack.Screen name="active-job" options={{ headerShown: false }} />
     </Stack>
   );
 }

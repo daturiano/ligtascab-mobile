@@ -8,13 +8,14 @@ import Card from '../Card';
 
 type CardProps = {
   title: string;
-  path: 'scan' | 'terminals';
+  path: 'scan' | 'terminals' | 'pickup';
   icon: LucideIcon;
   source: ImageSourcePropType;
 };
 
 export default function HomeCard({ source, path, icon: Icon, title }: CardProps) {
   const router = useRouter();
+  const href = path === 'pickup' ? '/(private)/pickup' : `/(private)/(tabs)/${path}`;
   return (
     <Card
       flexGrow={1}
@@ -24,7 +25,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
       justifyContent="space-between"
       height={160}
       width="48%">
-      <Pressable onPress={() => router.push(`/(private)/(tabs)/${path}`)}>
+      <Pressable onPress={() => router.push(href as any)}>
         <Box
           flexDirection="row"
           gap="s"

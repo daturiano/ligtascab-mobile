@@ -122,14 +122,15 @@ export type Review = {
 export type UserRole = 'commuter' | 'driver' | 'operator' | 'authority';
 
 export type Shift = {
-  id: string;
-  driver_id: string;
+  id: number;
+  operator_id: string;
+  driver_id: string | null;
   tricycle_id: string;
-  start_time: string;
-  end_time: string | null;
-  status?: string;
-  total_fares?: number;
-  total_rides?: number;
+  driver_name: string;
+  plate_number: string;
+  shift_type: string;
+  revenue_collected: number | null;
+  shift_description: string | null;
   created_at: string;
 };
 
@@ -142,5 +143,45 @@ export type DriverEarningsSummary = {
   weekTotal: number;
   lifetimeTotal: number;
   hasRealData: boolean;
+};
+
+export type PickupStatus =
+  | 'pending'
+  | 'accepted'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled';
+
+export type PickupLocation = {
+  latitude: number;
+  longitude: number;
+  address: string;
+  name?: string | null;
+};
+
+export type PickupRequest = {
+  id: string;
+  commuter_id: string;
+  driver_id: string | null;
+  tricycle_id: string | null;
+  origin: PickupLocation;
+  destination: PickupLocation;
+  distance_km: number;
+  estimated_duration_min: number;
+  estimated_fare: number;
+  status: PickupStatus;
+  created_at: string;
+  accepted_at: string | null;
+  picked_up_at: string | null;
+  completed_at: string | null;
+  cancelled_at: string | null;
+  cancelled_by: 'commuter' | 'driver' | null;
+  confirmed_at: string | null;
+};
+
+export type PickupRequestWithParties = PickupRequest & {
+  driver?: Driver | null;
+  tricycle?: Tricycle | null;
+  commuter?: Commuter | null;
 };
 

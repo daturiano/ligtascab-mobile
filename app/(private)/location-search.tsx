@@ -18,7 +18,7 @@ export default function LocationSearchScreen() {
   const params = useLocalSearchParams<{ type: 'origin' | 'destination' }>();
   const type = params.type || 'origin';
   
-  const { setOrigin, setDestination, setIsSelectingOnMap } = useTerminalStore();
+  const { setOrigin, setDestination } = useTerminalStore();
   
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<PlacePrediction[]>([]);
@@ -99,8 +99,7 @@ export default function LocationSearchScreen() {
   };
 
   const handleChooseOnMap = () => {
-    setIsSelectingOnMap(type);
-    router.back();
+    router.push(`/(private)/map-picker?type=${type}` as any);
   };
 
   return (

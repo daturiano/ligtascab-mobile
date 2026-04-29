@@ -54,6 +54,8 @@ export default function PrivateLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="(driver)" options={{ headerShown: false }} />
           <Stack.Screen name="in-ride" options={{ headerShown: false }} />
+          <Stack.Screen name="pickup" options={{ headerShown: false }} />
+          <Stack.Screen name="map-picker" options={{ headerShown: false }} />
           <Stack.Screen
             name="location-search"
             options={{ presentation: 'modal', headerShown: false }}

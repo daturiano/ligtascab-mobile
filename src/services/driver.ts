@@ -1,4 +1,4 @@
-import { Driver, DriverEarningsSummary, Ride, Shift, ShiftWithTricycle } from '../types';
+import { Driver, DriverEarningsSummary, ShiftWithTricycle } from '../types';
 import { supabase } from '../utils/supabase';
 
 /**
@@ -16,16 +16,20 @@ export const fetchDriverByUserId = async (userId: string) => {
 };
 
 /**
- * Currently active shift (no end_time) for the given driver.
- * Returns null without an error when no active shift exists.
+ * Returns today's shift row for the driver, if any. The mere presence of a
+ * row for the current calendar day means the driver is "on shift" — the
+ * shifts table has no start/end columns; operators provision a row per shift.
  */
 export const fetchDriverActiveShift = async (driverId: string) => {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+
   const { data, error } = await supabase
     .from('shifts')
     .select('*, tricycle:tricycles(*)')
     .eq('driver_id', driverId)
-    .is('end_time', null)
-    .order('start_time', { ascending: false })
+    .gte('created_at', startOfToday.toISOString())
+    .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();
 
@@ -40,16 +44,15 @@ export const fetchDriverShiftHistory = async (driverId: string, limit = 50) => {
     .from('shifts')
     .select('*, tricycle:tricycles(*)')
     .eq('driver_id', driverId)
-    .order('start_time', { ascending: false })
+    .order('created_at', { ascending: false })
     .limit(limit);
 
   return { data: (data ?? []) as ShiftWithTricycle[], error };
 };
 
 /**
- * Earnings summary aggregated from rides.fare. Falls back to placeholder
- * values (zero) without surfacing an error when the rides table or
- * driver_id column doesn't exist yet — UI shows the empty state in that case.
+ * Earnings summary aggregated from completed pickup_requests. Falls back to
+ * placeholder zeros without surfacing an error so the UI degrades gracefully.
  */
 export const fetchDriverEarningsSummary = async (
   driverId: string
@@ -63,9 +66,11 @@ export const fetchDriverEarningsSummary = async (
 
   try {
     const { data, error } = await supabase
-      .from('rides')
-      .select('fare, end_time')
-      .eq('driver_id', driverId);
+      .from('pickup_requests')
+      .select('estimated_fare, completed_at')
+      .eq('driver_id', driverId)
+      .eq('status', 'completed')
+      .not('completed_at', 'is', null);
 
     if (error || !data) return placeholder;
 
@@ -78,16 +83,16 @@ export const fetchDriverEarningsSummary = async (
     let weekTotal = 0;
     let lifetimeTotal = 0;
 
-    for (const row of data as Pick<Ride, 'fare' | 'end_time'>[]) {
-      const fare = Number(row.fare ?? 0);
-      if (Number.isNaN(fare)) continue;
+    for (const row of data as { estimated_fare: number | string; completed_at: string | null }[]) {
+      const fare = Number(row.estimated_fare ?? 0);
+      if (!Number.isFinite(fare)) continue;
       lifetimeTotal += fare;
 
-      const endedAt = row.end_time ? new Date(row.end_time) : null;
-      if (!endedAt) continue;
+      const completedAt = row.completed_at ? new Date(row.completed_at) : null;
+      if (!completedAt) continue;
 
-      if (endedAt >= startOfWeek) weekTotal += fare;
-      if (endedAt >= startOfToday) todayTotal += fare;
+      if (completedAt >= startOfWeek) weekTotal += fare;
+      if (completedAt >= startOfToday) todayTotal += fare;
     }
 
     return {
@@ -101,36 +106,3 @@ export const fetchDriverEarningsSummary = async (
   }
 };
 
-/**
- * Start a new shift on a tricycle. Caller must pass the driver's own id
- * (resolved from auth context) — the UI never passes a foreign driver_id.
- */
-export const startShift = async (driverId: string, tricycleId: string) => {
-  const { data, error } = await supabase
-    .from('shifts')
-    .insert({
-      driver_id: driverId,
-      tricycle_id: tricycleId,
-      start_time: new Date().toISOString(),
-    })
-    .select()
-    .single();
-
-  return { data: data as Shift | null, error };
-};
-
-/**
- * Close out an active shift. Scoped by driver_id so a shift cannot be
- * closed by anyone other than the driver who owns it.
- */
-export const endShift = async (shiftId: string, driverId: string) => {
-  const { data, error } = await supabase
-    .from('shifts')
-    .update({ end_time: new Date().toISOString() })
-    .eq('id', shiftId)
-    .eq('driver_id', driverId)
-    .select()
-    .single();
-
-  return { data: data as Shift | null, error };
-};
