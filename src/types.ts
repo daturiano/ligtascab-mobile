@@ -119,3 +119,28 @@ export type Review = {
   created_at: Date;
 };
 
+export type UserRole = 'commuter' | 'driver' | 'operator' | 'authority';
+
+export type Shift = {
+  id: string;
+  driver_id: string;
+  tricycle_id: string;
+  start_time: string;
+  end_time: string | null;
+  status?: string;
+  total_fares?: number;
+  total_rides?: number;
+  created_at: string;
+};
+
+export type ShiftWithTricycle = Shift & {
+  tricycle?: Tricycle | null;
+};
+
+export type DriverEarningsSummary = {
+  todayTotal: number;
+  weekTotal: number;
+  lifetimeTotal: number;
+  hasRealData: boolean;
+};
+

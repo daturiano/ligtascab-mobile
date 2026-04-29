@@ -32,7 +32,7 @@ export default function LoginForm() {
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     try {
-      const { success } = await signInWithPhoneNumber(`63${data.phoneNumber}`, data.password);
+      const { success, role } = await signInWithPhoneNumber(`63${data.phoneNumber}`, data.password);
       if (!success) {
         setError('root', {
           type: 'manual',
@@ -40,7 +40,11 @@ export default function LoginForm() {
         });
         return;
       }
-      router.replace('/(private)/(tabs)/home');
+      if (role === 'driver') {
+        router.replace('/(private)/(driver)/(tabs)/dashboard');
+      } else {
+        router.replace('/(private)/(tabs)/home');
+      }
     } catch (err: any) {
       console.error('Login failed:', err);
       setError('root', {
