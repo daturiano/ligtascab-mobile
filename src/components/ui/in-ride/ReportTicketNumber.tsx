@@ -11,8 +11,8 @@ type ReportTicketNumberProps = {
 
 export default function ReportTicketNumber({ reportDetails }: ReportTicketNumberProps) {
   return (
-    <Box flexDirection="column" justifyContent="space-between" flex={1}>
-      <Box flexDirection="column" alignItems="center" gap="m" marginTop="l">
+    <Box flexDirection="column" gap="l" width="100%">
+      <Box flexDirection="column" alignItems="center" gap="m" marginTop="m">
         <Image
           source={require('@/src/assets/report.png')}
           style={{
@@ -24,7 +24,8 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
           Your report has been successfully submitted and is now being reviewed by our team.
         </Text>
       </Box>
-      <Box alignItems="center" gap="s">
+
+      <Box alignItems="center" gap="s" width="100%">
         <Text variant="title" color="mainForeground" fontSize={18}>
           Ticket Number
         </Text>
@@ -32,11 +33,11 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
           alignItems="center"
           flexDirection="row"
           justifyContent="center"
-          gap="l"
+          gap="m"
           borderWidth={1}
           borderRadius="m"
           paddingVertical="m"
-          width={'100%'}
+          width="100%"
           backgroundColor="grayLight"
           borderColor="mutedLighter">
           <Text variant="title" color="primary">
@@ -45,40 +46,35 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
           <CopyButton id={reportDetails.ticket_number} />
         </Box>
       </Box>
+
       <Box
         flexDirection="column"
         backgroundColor="primaryLighter"
-        width={'100%'}
+        width="100%"
         borderRadius="m"
-        gap="l"
-        paddingVertical="l"
-        paddingHorizontal="m">
+        gap="m"
+        padding="m">
         <Box flexDirection="row" alignItems="center" gap="s">
-          <Box flexDirection="row" alignItems="center" gap="s">
-            <BellIcon size={20} color="#1FAB89" />
-          </Box>
-          <Text flexShrink={1} color="primaryDark" lineHeight={18}>
-            You&apos;ll receive notificions about updates.
+          <BellIcon size={20} color="#1FAB89" />
+          <Text flexShrink={1} color="primaryDark" lineHeight={20}>
+            You will receive notifications about updates.
           </Text>
         </Box>
-        <Box flexDirection="row" gap="s">
-          <Box flexDirection="row" alignItems="center" gap="s">
-            <ClockIcon size={20} color="#1FAB89" />
-          </Box>
-          <Text flexShrink={1} color="primaryDark" lineHeight={18}>
+        <Box flexDirection="row" alignItems="center" gap="s">
+          <ClockIcon size={20} color="#1FAB89" />
+          <Text flexShrink={1} color="primaryDark" lineHeight={20}>
             Review typically takes 24-48 hours.
           </Text>
         </Box>
       </Box>
-      <Box gap="s">
-        <Text variant="bodyBold">
-          What happens next?
-        </Text>
-        <Text variant="description" lineHeight={24}>
-          1. Our team will investigate your report{'\n'}
-          2. We&apos;ll contact the driver if necessary{'\n'}
-          3. You&apos;ll receive an update via notification{'\n'}
-        </Text>
+
+      <Box gap="xs">
+        <Text variant="bodyBold">What happens next?</Text>
+        <Box gap="xs" paddingLeft="s">
+          <Text variant="description" lineHeight={22}>• Our team will investigate your report</Text>
+          <Text variant="description" lineHeight={22}>• We will contact the driver if necessary</Text>
+          <Text variant="description" lineHeight={22}>• You will receive an update via notification</Text>
+        </Box>
       </Box>
     </Box>
   );
