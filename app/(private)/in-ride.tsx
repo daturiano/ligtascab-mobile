@@ -10,16 +10,19 @@ import Text from '@/src/components/ui/Text';
 import { updateRide } from '@/src/services/rides';
 import { useRideStore } from '@/src/store/useRideStore';
 import { getCurrentLocation } from '@/src/utils/locationService';
+import { useActivePickupRequest } from '@/src/hooks/useActivePickupRequest';
+import { commuterFinishPickupRequest } from '@/src/services/pickup';
+import { getDirections } from '@/src/utils/directionsService';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Region, Marker, Polyline } from 'react-native-maps';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '@/src/theme/theme';
-import { Navigation } from 'lucide-react-native';
+import { Navigation, MapPin } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function InRide() {
@@ -32,10 +35,21 @@ export default function InRide() {
   const snapPoints = useMemo(() => ['40%', '85%'], []);
   const theme = useTheme<Theme>();
   const insets = useSafeAreaInsets();
+  
+  const mapRef = useRef<MapView>(null);
+  const [routeCoords, setRouteCoords] = useState<{latitude: number; longitude: number}[]>([]);
+  const { pickup } = useActivePickupRequest();
 
   const endRideMutation = useMutation({
     mutationFn: async (ride_id: string) => {
-      await updateRide(ride_id);
+      // If this is an E-Hailing ride, finish the pickup request cleanly.
+      // If it's just Scan-To-Ride, the active pickup is either null or doesn't match this ride id.
+      if (pickup && pickup.id === ride_id) {
+        const { error } = await commuterFinishPickupRequest(ride_id);
+        if (error) throw new Error(error.message);
+      } else {
+        await updateRide(ride_id);
+      }
     },
     onSuccess: () => {
       setIsFeedbackVisible(true);
@@ -57,6 +71,22 @@ export default function InRide() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (pickup?.origin && pickup?.destination) {
+      getDirections(pickup.origin, pickup.destination).then((res) => {
+        if (res?.coords) {
+          setRouteCoords(res.coords);
+          setTimeout(() => {
+            mapRef.current?.fitToCoordinates([pickup.origin, pickup.destination], {
+              edgePadding: { top: insets.top + 100, right: 50, bottom: 400, left: 50 },
+              animated: true,
+            });
+          }, 500);
+        }
+      });
+    }
+  }, [pickup, insets]);
 
   // Loading state to prevent flickering
   if (!rideDetails || !location) {
@@ -81,14 +111,41 @@ export default function InRide() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <MapView
+        ref={mapRef}
         mapPadding={{ top: insets.top + 60, right: 0, left: 0, bottom: 300 }}
         style={{ flexGrow: 1 }}
         provider={PROVIDER_GOOGLE}
         initialRegion={location}
         showsUserLocation
         showsMyLocationButton={false}
-        followsUserLocation
-      />
+        followsUserLocation={!pickup}
+      >
+        {pickup?.origin && (
+          <Marker 
+            coordinate={{ latitude: pickup.origin.latitude, longitude: pickup.origin.longitude }} 
+            title="Pickup"
+            centerOffset={{ x: 0, y: -16 }}
+          >
+            <MapPin size={32} color="white" fill={theme.colors.primary} />
+          </Marker>
+        )}
+        {pickup?.destination && (
+          <Marker 
+            coordinate={{ latitude: pickup.destination.latitude, longitude: pickup.destination.longitude }} 
+            title="Destination"
+            centerOffset={{ x: 0, y: -16 }}
+          >
+            <MapPin size={32} color="white" fill={theme.colors.secondary} />
+          </Marker>
+        )}
+        {routeCoords.length > 0 && (
+          <Polyline 
+            coordinates={routeCoords} 
+            strokeWidth={4} 
+            strokeColor={theme.colors.primary} 
+          />
+        )}
+      </MapView>
 
       {/* Status Header */}
       <Box position="absolute" top={insets.top + 10} left={20} right={20}>

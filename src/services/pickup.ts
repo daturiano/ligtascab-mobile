@@ -153,3 +153,10 @@ export const updatePickupOffer = async (requestId: string, newOfferAmount: numbe
   });
   return { data: data as PickupRequest | null, error };
 };
+
+export const commuterFinishPickupRequest = async (requestId: string) => {
+  const { data, error } = await supabase.rpc('commuter_finish_pickup_request', {
+    request_id: requestId,
+  });
+  return { data: data as PickupRequest | null, error };
+};

@@ -44,7 +44,7 @@
     "android": {
       "package": "com.ligtascab.mobile",
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [

@@ -48,7 +48,7 @@ export default function RideDetailsCard({ ride }: { ride: Ride }) {
           </Box>
           <Box flexDirection="column" gap="xs">
             <Text variant="details" color="white">
-              {ride.end_time ? formatDate(new Date(ride.end_time).toLocaleString()) : 'In Progress'}
+              {ride.end_time ? formatDate(ride.end_time.toString()) : 'In Progress'}
             </Text>
             <Text variant="body" textAlign="right" color="white">
               {formatPHP(Number(ride.fare))}

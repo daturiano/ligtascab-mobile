@@ -56,7 +56,7 @@ export default function RideDetailsModal({
             <InfoTextBox
               title="Date"
               content={
-                ride.end_time ? formatDate(new Date(ride.end_time).toLocaleString()) : 'In Progress'
+                ride.end_time ? formatDate(ride.end_time.toString()) : 'In Progress'
               }
             />
             <InfoTextBox
@@ -67,12 +67,12 @@ export default function RideDetailsModal({
             <InfoTextBox title="Fare" content={`${formatPHP(Number(ride.fare))}`} />
             <InfoTextBox
               title="Start Time"
-              content={`${extractTime(new Date(ride.created_at).toLocaleString())}`}
+              content={`${extractTime(ride.created_at.toString())}`}
             />
             <InfoTextBox
               title="End Time"
               content={
-                ride.end_time ? extractTime(new Date(ride.end_time).toLocaleString()) : 'Ongoing'
+                ride.end_time ? extractTime(ride.end_time.toString()) : 'Ongoing'
               }
             />
           </Box>

@@ -10,7 +10,7 @@ export default function GuestViewOnly({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     if (authChecked && session !== null) {
-      router.replace('/(private)/home');
+      router.replace('/(private)/home' as any);
     }
   }, [authChecked, session, router]);
 
