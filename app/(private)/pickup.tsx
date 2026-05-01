@@ -12,16 +12,19 @@ import {
   cancelPickupRequest,
   confirmPickupCompletion,
   createPickupRequest,
+  updatePickupOffer,
 } from '@/src/services/pickup';
+import { useRideStore } from '@/src/store/useRideStore';
 import { useTerminalStore } from '@/src/store/useTerminalStore';
 import { getRouteEstimate } from '@/src/utils/directionsService';
 import { calculateFare, formatPHP } from '@/src/utils/pricing';
 import { getErrorMessage } from '@/src/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, CheckCircle2, XCircle } from 'lucide-react-native';
+import { ArrowLeft, CheckCircle2, Edit2, XCircle } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import Input from '@/src/components/ui/Input';
 
 export default function PickupScreen() {
   const router = useRouter();
@@ -31,6 +34,12 @@ export default function PickupScreen() {
 
   const { pickup, isLoading } = useActivePickupRequest();
   const { origin, destination, setOrigin, setDestination } = useTerminalStore();
+  const { setRideDetails } = useRideStore();
+
+  const [offerAmount, setOfferAmount] = useState('');
+  const [editingOffer, setEditingOffer] = useState('');
+  const [isEditingOffer, setIsEditingOffer] = useState(false);
+  const [passengerCount, setPassengerCount] = useState(1);
 
   const [estimate, setEstimate] = useState<{
     distanceKm: number;
@@ -63,7 +72,26 @@ export default function PickupScreen() {
     };
   }, [origin, destination, pickup]);
 
-  const fare = useMemo(() => (estimate ? calculateFare(estimate.distanceKm) : null), [estimate]);
+  const fare = useMemo(() => (estimate ? calculateFare(estimate.distanceKm, Number(offerAmount) || 0, passengerCount) : null), [estimate, offerAmount, passengerCount]);
+
+  useEffect(() => {
+    if (pickup?.status === 'in_progress') {
+      if (pickup.driver && pickup.tricycle) {
+        setRideDetails({
+          id: pickup.id,
+          commuter_id: pickup.commuter_id,
+          tricycle_details: pickup.tricycle,
+          driver_details: pickup.driver,
+          operator_details: null as any, // Not strictly required for the in-ride UI, but present in DB
+          fare: pickup.estimated_fare.toString(),
+          start_time: new Date(),
+          end_time: new Date(),
+          created_at: new Date(pickup.created_at),
+        });
+        router.push('/(private)/in-ride');
+      }
+    }
+  }, [pickup?.status, pickup?.driver, pickup?.tricycle, setRideDetails, router, pickup]);
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -87,6 +115,8 @@ export default function PickupScreen() {
         distance_km: estimate.distanceKm,
         estimated_duration_min: estimate.durationMin,
         estimated_fare: fare.total,
+        offer_amount: Number(offerAmount) || 0,
+        passenger_count: passengerCount,
       });
       if (error) throw new Error(error.message);
       return data;
@@ -111,6 +141,22 @@ export default function PickupScreen() {
     },
     onError: (err) => {
       Alert.alert('Could not cancel', getErrorMessage(err));
+    },
+  });
+
+  const updateOfferMutation = useMutation({
+    mutationFn: async () => {
+      if (!pickup) throw new Error('No active request');
+      const { data, error } = await updatePickupOffer(pickup.id, Number(editingOffer));
+      if (error) throw new Error(error.message);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['active-pickup', commuterId] });
+      setIsEditingOffer(false);
+    },
+    onError: (err) => {
+      Alert.alert('Could not update offer', getErrorMessage(err));
     },
   });
 
@@ -176,6 +222,32 @@ export default function PickupScreen() {
               />
             </Box>
 
+            <Card gap="xs">
+              <Text variant="details">Number of Passengers</Text>
+              <Box flexDirection="row" justifyContent="space-between" marginTop="s">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <TouchableOpacity
+                    key={num}
+                    onPress={() => setPassengerCount(num)}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor: passengerCount === num ? '#1FAB89' : '#f5f5f5',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      variant="bodyBold"
+                      style={{ color: passengerCount === num ? '#fff' : '#0a0a0a' }}>
+                      {num}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </Box>
+              <Text variant="description" marginTop="s">Base fare adjusts per passenger.</Text>
+            </Card>
+
             {estimateLoading ? (
               <Card alignItems="center" paddingVertical="l">
                 <ActivityIndicator />
@@ -184,11 +256,23 @@ export default function PickupScreen() {
                 </Text>
               </Card>
             ) : fare && estimate ? (
-              <FareEstimateCard
-                fare={fare}
-                durationMin={estimate.durationMin}
-                isPrecise={estimate.isPrecise}
-              />
+              <Box gap="m">
+                <FareEstimateCard
+                  fare={fare}
+                  durationMin={estimate.durationMin}
+                  isPrecise={estimate.isPrecise}
+                />
+                <Card gap="xs">
+                  <Text variant="details">Special Offer (Optional)</Text>
+                  <Input
+                    placeholder="Enter extra amount (e.g., 20)"
+                    keyboardType="numeric"
+                    value={offerAmount}
+                    onChangeText={setOfferAmount}
+                  />
+                  <Text variant="description">Adding an offer may help you find a driver faster.</Text>
+                </Card>
+              </Box>
             ) : null}
 
             <Button
@@ -218,10 +302,49 @@ export default function PickupScreen() {
               <Text variant="details">Destination</Text>
               <Text variant="body">{pickup.destination.address}</Text>
               <Box height={1} backgroundColor="grayLighter" marginVertical="xs" />
-              <Box flexDirection="row" justifyContent="space-between">
+              <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+                <Text variant="details">Passengers</Text>
+                <Text variant="bodyBold">{pickup.passenger_count}</Text>
+              </Box>
+              <Box height={1} backgroundColor="grayLighter" marginVertical="xs" />
+              <Box flexDirection="row" justifyContent="space-between" alignItems="center">
                 <Text variant="details">Estimated Fare</Text>
                 <Text variant="bodyBold">{formatPHP(Number(pickup.estimated_fare))}</Text>
               </Box>
+              <Box height={1} backgroundColor="grayLighter" marginVertical="xs" />
+              {isEditingOffer ? (
+                <Box gap="xs">
+                  <Input
+                    placeholder="New Offer Amount"
+                    keyboardType="numeric"
+                    value={editingOffer}
+                    onChangeText={setEditingOffer}
+                  />
+                  <Box flexDirection="row" gap="s">
+                    <Button variant="outline" onPress={() => setIsEditingOffer(false)} style={{ flex: 1 }}>
+                      <Text variant="bodyBold" textAlign="center">Cancel</Text>
+                    </Button>
+                    <Button 
+                      variant="primary" 
+                      isLoading={updateOfferMutation.isPending} 
+                      onPress={() => updateOfferMutation.mutate()} 
+                      style={{ flex: 1 }}
+                    >
+                      <Text variant="bodyBold" color="white" textAlign="center">Save Offer</Text>
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                <TouchableOpacity onPress={() => { setEditingOffer((pickup.offer_amount || 0).toString()); setIsEditingOffer(true); }}>
+                  <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+                    <Box flexDirection="row" alignItems="center" gap="xs">
+                      <Text variant="details">Special Offer</Text>
+                      <Edit2 size={12} color="#737373" />
+                    </Box>
+                    <Text variant="bodyBold">{formatPHP(Number(pickup.offer_amount || 0))}</Text>
+                  </Box>
+                </TouchableOpacity>
+              )}
             </Card>
             <Button
               variant="destructive"
@@ -245,6 +368,11 @@ export default function PickupScreen() {
               <Box height={1} backgroundColor="grayLighter" marginVertical="xs" />
               <Text variant="details">Destination</Text>
               <Text variant="body">{pickup.destination.address}</Text>
+              <Box height={1} backgroundColor="grayLighter" marginVertical="xs" />
+              <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+                <Text variant="details">Passengers</Text>
+                <Text variant="bodyBold">{pickup.passenger_count}</Text>
+              </Box>
             </Card>
             <Button
               variant="destructive"
@@ -260,14 +388,12 @@ export default function PickupScreen() {
           </>
         ) : pickup.status === 'in_progress' ? (
           // ─── In progress: ride has started ────────────────────────────────
+          // We render a placeholder while useEffect redirects to /in-ride
           <>
             <Card alignItems="center" gap="m" paddingVertical="xl">
-              <Text variant="bodyBold">On the way to your destination</Text>
-              <Text variant="description" textAlign="center">
-                Sit back and enjoy the ride. Your driver will mark the trip complete on arrival.
-              </Text>
+              <ActivityIndicator size="large" color="#1FAB89" />
+              <Text variant="bodyBold">Starting your ride...</Text>
             </Card>
-            <DriverAcceptedCard pickup={pickup} />
           </>
         ) : (
           // ─── Completed: awaiting commuter confirmation ────────────────────

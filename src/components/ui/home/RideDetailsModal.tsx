@@ -4,6 +4,7 @@ import Text from '../Text';
 import { XIcon } from 'lucide-react-native';
 import { Ride } from '@/src/types';
 import { extractTime, formatDate } from '@/src/utils/utils';
+import { formatPHP } from '@/src/utils/pricing';
 import Card from '../Card';
 
 import Button from '../Button';
@@ -52,41 +53,49 @@ export default function RideDetailsModal({
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
           <Box flex={1} flexDirection="column" gap="l">
-            <InfoTextBox title="Date" content={`${formatDate(ride.end_time.toLocaleString())}`} />
+            <InfoTextBox
+              title="Date"
+              content={
+                ride.end_time ? formatDate(new Date(ride.end_time).toLocaleString()) : 'In Progress'
+              }
+            />
             <InfoTextBox
               title="Driver"
               content={`${ride.driver_details.first_name} ${ride.driver_details.last_name}`}
             />
             <InfoTextBox title="Plate Number" content={`${ride.tricycle_details.plate_number}`} />
-            <InfoTextBox title="Fare" content={`${ride.fare}`} />
+            <InfoTextBox title="Fare" content={`${formatPHP(Number(ride.fare))}`} />
             <InfoTextBox
               title="Start Time"
-              content={`${extractTime(ride.created_at.toLocaleString())}`}
+              content={`${extractTime(new Date(ride.created_at).toLocaleString())}`}
             />
             <InfoTextBox
               title="End Time"
-              content={`${extractTime(ride.end_time.toLocaleString())}`}
+              content={
+                ride.end_time ? extractTime(new Date(ride.end_time).toLocaleString()) : 'Ongoing'
+              }
             />
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />
-          
+
           {(() => {
-             const rideDate = new Date(ride.end_time);
-             const sevenDaysAgo = new Date();
-             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-             
-             const isReportable = rideDate > sevenDaysAgo;
-             
-             return isReportable ? (
-                 <Button variant="primary" onPress={onReportPress}>
-                    <Text variant="bodyBold" color="white">Report Issue</Text>
-                 </Button>
-             ) : (
-                <Text textAlign="center" variant="description">
-                    Rides older than 7 days cannot be reported.
+            const rideDate = ride.end_time ? new Date(ride.end_time) : new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            const isReportable = ride.end_time && rideDate > sevenDaysAgo;
+
+            return isReportable ? (
+              <Button variant="primary" onPress={onReportPress}>
+                <Text variant="bodyBold" color="white">
+                  Report Issue
                 </Text>
-             );
-             
+              </Button>
+            ) : (
+              <Text textAlign="center" variant="description">
+                Rides older than 7 days cannot be reported.
+              </Text>
+            );
           })()}
         </Card>
       </Box>

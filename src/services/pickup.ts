@@ -15,6 +15,8 @@ type CreatePickupRequestInput = {
   distance_km: number;
   estimated_duration_min: number;
   estimated_fare: number;
+  offer_amount: number;
+  passenger_count: number;
 };
 
 export const createPickupRequest = async (input: CreatePickupRequestInput) => {
@@ -27,6 +29,8 @@ export const createPickupRequest = async (input: CreatePickupRequestInput) => {
       distance_km: input.distance_km,
       estimated_duration_min: input.estimated_duration_min,
       estimated_fare: input.estimated_fare,
+      offer_amount: input.offer_amount,
+      passenger_count: input.passenger_count,
     })
     .select()
     .single();
@@ -140,4 +144,12 @@ export const fetchDriverCompletedJobs = async (driverId: string, limit = 50) => 
     .order('accepted_at', { ascending: false })
     .limit(limit);
   return { data: (data ?? []) as PickupRequest[], error };
+};
+
+export const updatePickupOffer = async (requestId: string, newOfferAmount: number) => {
+  const { data, error } = await supabase.rpc('update_pickup_offer', {
+    request_id: requestId,
+    new_offer: newOfferAmount,
+  });
+  return { data: data as PickupRequest | null, error };
 };

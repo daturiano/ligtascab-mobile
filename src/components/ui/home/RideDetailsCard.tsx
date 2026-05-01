@@ -1,6 +1,7 @@
 import { Ride } from '@/src/types';
 import { formatDate } from '@/src/utils/utils';
 import { useState } from 'react';
+import { formatPHP } from '@/src/utils/pricing';
 import { TouchableOpacity } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
@@ -14,60 +15,60 @@ export default function RideDetailsCard({ ride }: { ride: Ride }) {
   const handleReportPress = () => {
     setIsModalVisible(false);
     setTimeout(() => {
-        setIsReportVisible(true);
+      setIsReportVisible(true);
     }, 300); // Small delay for smoother transition
   };
 
   return (
     <>
-        <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+      <TouchableOpacity onPress={() => setIsModalVisible(true)}>
         <Box
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-            width={'100%'}
-            backgroundColor="primary"
-            paddingVertical="m"
-            paddingHorizontal="l"
-            borderRadius="l">
-            <Box flexDirection="column" gap="xs">
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          width={'100%'}
+          backgroundColor="primary"
+          paddingVertical="m"
+          paddingHorizontal="l"
+          borderRadius="l">
+          <Box flexDirection="column" gap="xs">
             <Text color="white" variant="bodyBold" fontSize={18}>
-                {ride.driver_details.first_name} {ride.driver_details.last_name}
+              {ride.driver_details.first_name} {ride.driver_details.last_name}
             </Text>
             <Box
-                backgroundColor="grayLight"
-                paddingHorizontal="m"
-                style={{ paddingVertical: .5 }}
-                borderRadius="rounded"
-                alignSelf="flex-start">
-                <Text variant="bodyBold" color="primary" fontSize={12}>
+              backgroundColor="grayLight"
+              paddingHorizontal="m"
+              style={{ paddingVertical: 0.5 }}
+              borderRadius="rounded"
+              alignSelf="flex-start">
+              <Text variant="bodyBold" color="primary" fontSize={12}>
                 {ride.tricycle_details.plate_number}
-                </Text>
+              </Text>
             </Box>
-            </Box>
-            <Box flexDirection="column" gap="xs">
+          </Box>
+          <Box flexDirection="column" gap="xs">
             <Text variant="details" color="white">
-                {ride.end_time ? formatDate(ride.end_time.toLocaleString()) : ''}
+              {ride.end_time ? formatDate(new Date(ride.end_time).toLocaleString()) : 'In Progress'}
             </Text>
             <Text variant="body" textAlign="right" color="white">
-                ₱{ride.fare}
+              {formatPHP(Number(ride.fare))}
             </Text>
-            </Box>
+          </Box>
         </Box>
-        </TouchableOpacity>
+      </TouchableOpacity>
 
-        <RideDetailsModal 
-            ride={ride} 
-            isModalVisible={isModalVisible} 
-            setIsModalVisible={setIsModalVisible} 
-            onReportPress={handleReportPress}
-        />
+      <RideDetailsModal
+        ride={ride}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        onReportPress={handleReportPress}
+      />
 
-        <ReportModal 
-            ride={ride}
-            isModalVisible={isReportVisible}
-            setIsModalVisible={setIsReportVisible}
-        />
+      <ReportModal
+        ride={ride}
+        isModalVisible={isReportVisible}
+        setIsModalVisible={setIsReportVisible}
+      />
     </>
   );
 }

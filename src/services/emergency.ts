@@ -39,9 +39,7 @@ export async function sendEmergencyAlert(
 
     console.log('Sending emergency message:', emergencyMessage);
 
-    const contacts: EmergencyContact[] = [
-      { name: 'Police Hotline', phone: POLICE_HOTLINE },
-    ];
+    const contacts: EmergencyContact[] = [{ name: 'Police Hotline', phone: POLICE_HOTLINE }];
 
     if (user.contact_person && user.contact_person_number) {
       contacts.push({
@@ -51,9 +49,7 @@ export async function sendEmergencyAlert(
     }
 
     // Send SMS to all contacts
-    const sendPromises = contacts.map((contact) =>
-      sendSMS(contact.phone, emergencyMessage)
-    );
+    const sendPromises = contacts.map((contact) => sendSMS(contact.phone, emergencyMessage));
 
     await Promise.all(sendPromises);
 
@@ -104,18 +100,15 @@ async function sendSMS(phone: string, message: string): Promise<void> {
   const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
   try {
-    const res = await fetch(
-      `${supabaseUrl}/functions/v1/send-emergency-sms`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({ phone, message }),
-        signal: controller.signal,
-      }
-    );
+    const res = await fetch(`${supabaseUrl}/functions/v1/send-emergency-sms`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+      body: JSON.stringify({ phone, message }),
+      signal: controller.signal,
+    });
 
     clearTimeout(timeoutId);
 

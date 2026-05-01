@@ -41,8 +41,8 @@ export default function InRide() {
       setIsFeedbackVisible(true);
     },
     onError: (error) => {
-        console.error("Failed to end ride", error);
-    }
+      console.error('Failed to end ride', error);
+    },
   });
 
   useEffect(() => {
@@ -60,11 +60,11 @@ export default function InRide() {
 
   // Loading state to prevent flickering
   if (!rideDetails || !location) {
-      return (
-        <Box flex={1} justifyContent="center" alignItems="center" backgroundColor="mainBackground">
-            <ActivityIndicator size="large" />
-        </Box>
-      );
+    return (
+      <Box flex={1} justifyContent="center" alignItems="center" backgroundColor="mainBackground">
+        <ActivityIndicator size="large" />
+      </Box>
+    );
   }
 
   const handleEndRide = async () => {
@@ -72,10 +72,10 @@ export default function InRide() {
   };
 
   const traverseToHome = () => {
-      clearAll();
-      router.push({
-        pathname: '/(private)/(tabs)/home',
-      });
+    clearAll();
+    router.push({
+      pathname: '/(private)/(tabs)/home',
+    });
   };
 
   return (
@@ -92,27 +92,28 @@ export default function InRide() {
 
       {/* Status Header */}
       <Box position="absolute" top={insets.top + 10} left={20} right={20}>
-        <Box 
-            backgroundColor="mainBackground" 
-            flexDirection="row" 
-            alignItems="center" 
-            padding="m" 
-            borderRadius="l"
-            elevation={4}
-            shadowColor="shadowColor"
-            shadowOffset={{ width: 0, height: 2 }}
-            shadowOpacity={0.15}
-            shadowRadius={4}
-        >
-            <Box backgroundColor="primary" padding="s" borderRadius="rounded" marginRight="m">
-                <Navigation size={20} color="white" />
-            </Box>
-            <Box flex={1}>
-                <Text variant="details" color="muted">Current Trip</Text>
-                <Text variant="bodyBold" numberOfLines={1}>
-                    On the way to destination
-                </Text>
-            </Box>
+        <Box
+          backgroundColor="mainBackground"
+          flexDirection="row"
+          alignItems="center"
+          padding="m"
+          borderRadius="l"
+          elevation={4}
+          shadowColor="shadowColor"
+          shadowOffset={{ width: 0, height: 2 }}
+          shadowOpacity={0.15}
+          shadowRadius={4}>
+          <Box backgroundColor="primary" padding="s" borderRadius="rounded" marginRight="m">
+            <Navigation size={20} color="white" />
+          </Box>
+          <Box flex={1}>
+            <Text variant="details" color="muted">
+              Current Trip
+            </Text>
+            <Text variant="bodyBold" numberOfLines={1}>
+              On the way to destination
+            </Text>
+          </Box>
         </Box>
       </Box>
 
@@ -124,7 +125,7 @@ export default function InRide() {
           backgroundColor: theme.colors.mainBackground,
           borderTopLeftRadius: theme.borderRadii.xl,
           borderTopRightRadius: theme.borderRadii.xl,
-          shadowColor: "#000",
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: -2 },
           shadowOpacity: 0.1,
           shadowRadius: 5,
@@ -134,58 +135,61 @@ export default function InRide() {
           backgroundColor: theme.colors.mutedLight,
           width: 40,
         }}>
-        <BottomSheetScrollView contentContainerStyle={{ paddingHorizontal: theme.spacing.l, paddingBottom: theme.spacing.xl }}>
-            
-            {/* Driver Section */}
-            <Text variant="subheader" marginBottom="m">Ride Details</Text>
-            <DriverDetails
-              tricycle_details={rideDetails.tricycle_details}
-              driver_details={rideDetails.driver_details}
-              onRatingPress={() => setIsReviewsVisible(true)}
-            />
-            
-            <Box height={1} backgroundColor="grayLight" marginVertical="m" />
+        <BottomSheetScrollView
+          contentContainerStyle={{
+            paddingHorizontal: theme.spacing.l,
+            paddingBottom: theme.spacing.xl,
+          }}>
+          {/* Driver Section */}
+          <Text variant="subheader" marginBottom="m">
+            Ride Details
+          </Text>
+          <DriverDetails
+            tricycle_details={rideDetails.tricycle_details}
+            driver_details={rideDetails.driver_details}
+            onRatingPress={() => setIsReviewsVisible(true)}
+          />
 
-            {/* Fare Section */}
-            <FareBreakdown />
+          <Box height={1} backgroundColor="grayLight" marginVertical="m" />
 
-            <Box height={1} backgroundColor="grayLight" marginVertical="m" />
+          {/* Fare Section */}
+          <FareBreakdown />
 
-            {/* Actions Grid */}
-            <Box flexDirection="row" gap="m" marginBottom="l">
-                <Box flex={1}>
-                     <EmergencyButton />
-                </Box>
-                <Box flex={1}>
-                    <Report />
-                </Box>
+          <Box height={1} backgroundColor="grayLight" marginVertical="m" />
+
+          {/* Actions Grid */}
+          <Box flexDirection="row" gap="m" marginBottom="l">
+            <Box flex={1}>
+              <EmergencyButton />
             </Box>
+            <Box flex={1}>
+              <Report />
+            </Box>
+          </Box>
 
-            {/* Finish Ride Button */}
-            <Button 
-                paddingVertical="l" 
-                onPress={handleEndRide}
-                isLoading={endRideMutation.isPending}
-                disabled={endRideMutation.isPending}
-                style={{ borderRadius: theme.borderRadii.l, elevation: 2 }}
-            >
-              <Text variant="bodyBold" color="white" textAlign="center" fontSize={16}>
-                Finish Ride
-              </Text>
-            </Button>
-
+          {/* Finish Ride Button */}
+          <Button
+            paddingVertical="l"
+            onPress={handleEndRide}
+            isLoading={endRideMutation.isPending}
+            disabled={endRideMutation.isPending}
+            style={{ borderRadius: theme.borderRadii.l, elevation: 2 }}>
+            <Text variant="bodyBold" color="white" textAlign="center" fontSize={16}>
+              Finish Ride
+            </Text>
+          </Button>
         </BottomSheetScrollView>
       </BottomSheet>
 
       {/* Feedback Modal */}
-      <FeedbackModal 
-        isModalVisible={isFeedbackVisible} 
+      <FeedbackModal
+        isModalVisible={isFeedbackVisible}
         setIsModalVisible={setIsFeedbackVisible}
         onFinish={traverseToHome}
       />
-      
+
       {/* Public Reviews Modal */}
-       <DriverReviewsModal
+      <DriverReviewsModal
         isVisible={isReviewsVisible}
         onClose={() => setIsReviewsVisible(false)}
         driverId={rideDetails.driver_details.id}

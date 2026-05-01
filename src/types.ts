@@ -169,6 +169,8 @@ export type PickupRequest = {
   distance_km: number;
   estimated_duration_min: number;
   estimated_fare: number;
+  offer_amount: number;
+  passenger_count: number;
   status: PickupStatus;
   created_at: string;
   accepted_at: string | null;

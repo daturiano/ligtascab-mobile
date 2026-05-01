@@ -19,6 +19,7 @@ import {
   Phone,
   Route,
   UserCircle,
+  Users,
 } from 'lucide-react-native';
 import { ActivityIndicator, Alert, Linking, ScrollView, TouchableOpacity } from 'react-native';
 
@@ -136,7 +137,7 @@ export default function DriverActiveJob() {
 
               <Box height={1} backgroundColor="grayLighter" />
 
-              <Box flexDirection="row" gap="l">
+              <Box flexDirection="row" gap="m">
                 <Box flexDirection="row" alignItems="center" gap="xs">
                   <Route color="#737373" size={14} />
                   <Text variant="details">{Number(job.distance_km).toFixed(2)} km</Text>
@@ -144,6 +145,10 @@ export default function DriverActiveJob() {
                 <Box flexDirection="row" alignItems="center" gap="xs">
                   <Clock color="#737373" size={14} />
                   <Text variant="details">~{job.estimated_duration_min} min</Text>
+                </Box>
+                <Box flexDirection="row" alignItems="center" gap="xs">
+                  <Users color="#737373" size={14} />
+                  <Text variant="details">{job.passenger_count}</Text>
                 </Box>
                 <Box flex={1} alignItems="flex-end">
                   <Text variant="bodyBold">{formatPHP(Number(job.estimated_fare))}</Text>

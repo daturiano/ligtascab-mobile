@@ -12,8 +12,8 @@ import { formatPHP } from '@/src/utils/pricing';
 import { getErrorMessage } from '@/src/utils/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { CircleDot, Clock, MapPin, Route } from 'lucide-react-native';
-import { ActivityIndicator, Alert, FlatList, RefreshControl } from 'react-native';
+import { CircleDot, Clock, MapPin, Route, Users } from 'lucide-react-native';
+import { ActivityIndicator, Alert, FlatList, RefreshControl, ScrollView } from 'react-native';
 
 export default function DriverJobsTab() {
   const router = useRouter();
@@ -81,12 +81,15 @@ export default function DriverJobsTab() {
           <ActivityIndicator size="large" />
         </Box>
       ) : jobs.length === 0 ? (
-        <Box flex={1} justifyContent="center" alignItems="center" paddingHorizontal="l">
+        <ScrollView
+          contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16 }}
+          refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}
+        >
           <Text variant="bodyBold">No pending requests</Text>
           <Text variant="description" textAlign="center">
-            New jobs will appear here automatically.
+            New jobs will appear here automatically. Pull down to refresh.
           </Text>
-        </Box>
+        </ScrollView>
       ) : (
         <FlatList
           data={jobs}
@@ -139,7 +142,7 @@ function JobCard({
         </Box>
       </Box>
 
-      <Box flexDirection="row" gap="l">
+      <Box flexDirection="row" gap="m">
         <Box flexDirection="row" alignItems="center" gap="xs">
           <Route color="#737373" size={14} />
           <Text variant="details">{Number(job.distance_km).toFixed(2)} km</Text>
@@ -147,6 +150,10 @@ function JobCard({
         <Box flexDirection="row" alignItems="center" gap="xs">
           <Clock color="#737373" size={14} />
           <Text variant="details">~{job.estimated_duration_min} min</Text>
+        </Box>
+        <Box flexDirection="row" alignItems="center" gap="xs">
+          <Users color="#737373" size={14} />
+          <Text variant="details">{job.passenger_count}</Text>
         </Box>
         <Box flex={1} alignItems="flex-end">
           <Text variant="bodyBold">{formatPHP(Number(job.estimated_fare))}</Text>

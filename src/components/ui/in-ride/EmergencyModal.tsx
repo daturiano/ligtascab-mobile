@@ -7,17 +7,15 @@ import {
 import { useRideStore } from '@/src/store/useRideStore';
 import { AlertTriangle, User, XIcon } from 'lucide-react-native';
 import { useState } from 'react';
-import {
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
 import Card from '../Card';
+import SwipeButton from '../SwipeButton';
+import { useTheme } from '@shopify/restyle';
+import { Theme } from '@/src/theme/theme';
 
 type EmergencyModalProps = {
   isModalVisible: boolean;
@@ -26,11 +24,9 @@ type EmergencyModalProps = {
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function EmergencyModal({
-  isModalVisible,
-  setIsModalVisible,
-}: EmergencyModalProps) {
+export default function EmergencyModal({ isModalVisible, setIsModalVisible }: EmergencyModalProps) {
   const insets = useSafeAreaInsets();
+  const theme = useTheme<Theme>();
   const { user } = useAuth();
   const { rideDetails } = useRideStore();
   const [isActivated, setIsActivated] = useState(false);
@@ -65,24 +61,25 @@ export default function EmergencyModal({
 
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
-      <Box
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="overlay"
-        style={{
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-        }}>
-        <Card
-          minHeight={500}
-          maxHeight="80%"
-          width="92%"
-          maxWidth={380}
-          flexDirection="column"
-          padding="xl">
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Box
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="overlay"
+          style={{
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          }}>
+          <Card
+            minHeight={500}
+            maxHeight="80%"
+            width="92%"
+            maxWidth={380}
+            flexDirection="column"
+            padding="xl">
             {!isActivated ? (
               <>
                 <Box flexDirection="row" justifyContent="space-between">
@@ -102,18 +99,16 @@ export default function EmergencyModal({
                     <AlertTriangle size={50} color="#ef4444" />
                   </Box>
                   <Text variant="description" textAlign="center">
-                    Once you activate the emergency alert, your location and vehicle details will
-                    be automatically shared with local authorities and your emergency contacts.
+                    Once you activate the emergency alert, your location and vehicle details will be
+                    automatically shared with local authorities and your emergency contacts.
                   </Text>
-                  <Button
-                    variant="destructive"
-                    onPress={handleActivateEmergency}
-                    isLoading={isLoading}
-                    style={styles.activateButton}>
-                    <Text color="white" variant="bodyBold">
-                      Activate Emergency
-                    </Text>
-                  </Button>
+                  <Box width="100%">
+                    <SwipeButton
+                      title="Swipe to Activate"
+                      icon={<AlertTriangle color={theme.colors.warning} size={20} />}
+                      onComplete={handleActivateEmergency}
+                    />
+                  </Box>
                 </Box>
               </>
             ) : (
@@ -164,7 +159,9 @@ export default function EmergencyModal({
                             <User size={20} color="#374151" />
                             <Text variant="bodyBold">{contact.name}</Text>
                             {contact.name === 'Police Hotline' && (
-                              <Text variant="description" color="muted">(Authorities)</Text>
+                              <Text variant="description" color="muted">
+                                (Authorities)
+                              </Text>
                             )}
                           </Box>
                         ))}
@@ -189,8 +186,9 @@ export default function EmergencyModal({
                 </ScrollView>
               </>
             )}
-        </Card>
-      </Box>
+          </Card>
+        </Box>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
