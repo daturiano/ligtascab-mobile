@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -54,8 +55,14 @@ export default function LoginForm() {
     }
   };
   return (
-    <Box width="100%" gap="l">
-      <Box gap="m">
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+      style={{ width: '100%' }}>
+      <Box width="100%" gap="l">
+        <Box gap="m">
         <Controller
           control={control}
           name="phoneNumber"
@@ -115,10 +122,11 @@ export default function LoginForm() {
         isLoading={isSubmitting}
         disabled={!isValid}
         variant={!isValid ? 'disabled' : 'primary'}>
-        <Text color="mainBackground" variant="body">
+        <Text color="mainBackground" variant="bodyBold">
           Sign In
         </Text>
       </Button>
-    </Box>
+      </Box>
+    </KeyboardAwareScrollView>
   );
 }

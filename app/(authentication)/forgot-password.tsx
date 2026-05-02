@@ -8,6 +8,7 @@ import { useRouter } from 'expo-router';
 import { ChevronLeft, Mail } from 'lucide-react-native';
 import { useState } from 'react';
 import { Alert, TouchableOpacity } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -36,11 +37,16 @@ export default function ForgotPassword() {
   };
 
   return (
-    <Container>
-
-      <Box flex={1} gap="l" justifyContent="center">
-        <Box gap="s">
-          <Text variant="header">Forgot Password?</Text>
+    <Container style={{ paddingHorizontal: 0 }}>
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 16 }}
+        style={{ width: '100%' }}>
+        <Box flex={1} gap="l" justifyContent="center">
+          <Box gap="s">
+            <Text variant="header">Forgot Password?</Text>
           <Text variant="body" color="muted">
             Enter your email address and we&apos;ll send you a link to reset your password.
           </Text>
@@ -64,7 +70,8 @@ export default function ForgotPassword() {
             Send Reset Link
           </Text>
         </Button>
-      </Box>
+        </Box>
+      </KeyboardAwareScrollView>
     </Container>
   );
 }

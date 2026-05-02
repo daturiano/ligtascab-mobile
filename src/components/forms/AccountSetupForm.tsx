@@ -12,6 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Alert } from 'react-native';
 import { useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function AccountSetupForm() {
   const router = useRouter();
@@ -61,8 +62,14 @@ export default function AccountSetupForm() {
   };
 
   return (
-    <Box width="100%" gap="l" flexGrow={1} flexDirection="column" justifyContent="space-between">
-      <Box gap="l">
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1 }}
+      style={{ width: '100%' }}>
+      <Box gap="l" flexGrow={1} flexDirection="column" justifyContent="space-between" paddingBottom="xl">
+        <Box gap="l">
         {/* Personal Information Section */}
         <Box gap="m">
           <Text variant="title">Personal Information</Text>
@@ -215,17 +222,15 @@ export default function AccountSetupForm() {
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}
       </Box>
       <Button
-        onPress={handleSubmit(onSubmit, (errors) => {
-            const messages = Object.values(errors).map((e: any) => e.message).join('\n');
-            Alert.alert("Please check the following:", messages);
-        })}
+        onPress={handleSubmit(onSubmit)}
         isLoading={isSubmitting}
-        disabled={isSubmitting}
-        variant="primary">
-        <Text color="mainBackground" variant="body">
+        disabled={isSubmitting || !isValid}
+        variant={(!isValid || isSubmitting) ? 'disabled' : 'primary'}>
+        <Text color="mainBackground" variant="bodyBold">
           Continue
         </Text>
       </Button>
-    </Box>
+      </Box>
+    </KeyboardAwareScrollView>
   );
 }

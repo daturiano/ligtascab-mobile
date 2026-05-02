@@ -13,7 +13,9 @@ export default function Home() {
   const { user } = useAuth();
   return (
     <Container style={{ paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20
+        
+       }}>
         <HomeHeader
           title={`Hello, ${user?.first_name || 'Commuter'}! 👋`}
           description="Ready for your next safe ride?"

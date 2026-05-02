@@ -24,6 +24,8 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '@/src/theme/theme';
 import { Navigation, MapPin } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CLEAN_MAP_STYLE } from '@/src/utils/mapStyle';
+import { INITIAL_REGION } from '@/src/utils/constants';
 
 export default function InRide() {
   const [location, setLocation] = useState<Region | null>(null);
@@ -91,8 +93,9 @@ export default function InRide() {
   // Loading state to prevent flickering
   if (!rideDetails || !location) {
     return (
-      <Box flex={1} justifyContent="center" alignItems="center" backgroundColor="mainBackground">
-        <ActivityIndicator size="large" />
+      <Box flex={1} justifyContent="center" alignItems="center" backgroundColor="mainBackground" gap="m">
+        <ActivityIndicator size="large" color="#1FAB89" />
+        <Text variant="body" color="muted">Loading ride details...</Text>
       </Box>
     );
   }
@@ -115,10 +118,11 @@ export default function InRide() {
         mapPadding={{ top: insets.top + 60, right: 0, left: 0, bottom: 300 }}
         style={{ flexGrow: 1 }}
         provider={PROVIDER_GOOGLE}
-        initialRegion={location}
+        initialRegion={location || INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton={false}
         followsUserLocation={!pickup}
+        customMapStyle={CLEAN_MAP_STYLE}
       >
         {pickup?.origin && (
           <Marker 

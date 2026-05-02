@@ -18,7 +18,10 @@ export default function Container({ style, children }: ContainerProps) {
       justifyContent="space-between"
       paddingHorizontal="xl"
       backgroundColor="mainBackground"
-      style={[{ paddingTop: insets.top, paddingBottom: insets.bottom }, style]}>
+      style={[
+        { paddingTop: insets.top, paddingBottom: insets.bottom, maxWidth: 600, width: '100%', alignSelf: 'center' },
+        style
+      ]}>
       {children}
     </Box>
   );

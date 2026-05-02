@@ -43,28 +43,29 @@ export default function MapPickerScreen() {
     setAddressLoading(false);
   }, 400);
 
-  // On mount: try to center on user location, then geocode initial center.
+  // On mount: for pickup → center on GPS; for destination → stay on Naga.
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const loc = await getCurrentLocation();
-      if (cancelled) return;
-      if (loc) {
-        const next: Region = {
-          latitude: loc.latitude,
-          longitude: loc.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-        };
-        setRegion(next);
-        mapRef.current?.animateToRegion(next, 500);
-        debouncedGeocode(next.latitude, next.longitude);
-      } else {
-        debouncedGeocode(region.latitude, region.longitude);
-      }
-    })();
+    if (type === 'origin') {
+      (async () => {
+        const loc = await getCurrentLocation();
+        if (loc) {
+          const next: Region = {
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          };
+          setRegion(next);
+          mapRef.current?.animateToRegion(next, 500);
+          debouncedGeocode(next.latitude, next.longitude);
+        } else {
+          debouncedGeocode(NAGA_CITY.latitude, NAGA_CITY.longitude);
+        }
+      })();
+    } else {
+      debouncedGeocode(NAGA_CITY.latitude, NAGA_CITY.longitude);
+    }
     return () => {
-      cancelled = true;
       debouncedGeocode.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -5,6 +5,7 @@ import { Theme } from '../../theme/theme';
 import Box from './Box';
 import ErrorMessage from './ErrorMessage';
 import Text from './Text';
+import { useState } from 'react';
 
 type ThemedInputProps = {
   style?: StyleProp<TextStyle>;
@@ -27,7 +28,14 @@ export default function Input({
   ...props
 }: ThemedInputProps) {
   const theme = useTheme<Theme>();
-  const { description, muted } = theme.colors;
+  const { description, muted, primary, warning } = theme.colors;
+  const [isFocused, setIsFocused] = useState(false);
+
+  const getBorderColor = () => {
+    if (errorMessage) return 'warning';
+    if (isFocused) return 'primary';
+    return 'input'; // transparent or match background
+  };
 
   const InputContent = (
     <Box
@@ -35,13 +43,23 @@ export default function Input({
       paddingHorizontal="l"
       paddingVertical="l"
       borderRadius="m"
+      borderWidth={1}
+      borderColor={getBorderColor()}
       flexDirection="row"
       alignItems="center"
       width={'100%'}
       gap="s">
-      {Icon ? <Icon size={20} color={muted} style={[styles.icon]} /> : null}
+      {Icon ? <Icon size={20} color={isFocused ? primary : muted} style={[styles.icon]} /> : null}
       <TextInput
         placeholderTextColor={description}
+        onFocus={(e) => {
+          setIsFocused(true);
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setIsFocused(false);
+          props.onBlur?.(e);
+        }}
         style={[styles.input, style]}
         editable={!onPress} // Disable editing if onPress is provided
         pointerEvents={onPress ? "none" : "auto"} // Pass clicks through if onPress is provided
