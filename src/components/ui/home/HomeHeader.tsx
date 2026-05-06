@@ -26,7 +26,7 @@ export default function HomeHeader({ title, description }: HomeHeaderProps) {
           <Text variant="subheader" color="white">
             {title}
           </Text>
-          <Text variant="description" color="white" fontSize={16}>
+          <Text variant="description" color="white">
             {description}
           </Text>
         </Box>

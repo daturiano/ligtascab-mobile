@@ -35,7 +35,7 @@ export default function NavigationMap() {
 
     setDestination(destCoords);
     const routeCoords = await getDirections(origin, destCoords);
-    setRoute(routeCoords);
+    setRoute(routeCoords?.coords || []);
     setLoading(false);
   };
 

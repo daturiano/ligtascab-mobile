@@ -1,8 +1,13 @@
 import { AuthProvider } from '@/src/context/AuthenticationContext';
 import { useRideStore } from '@/src/store/useRideStore';
 import theme from '@/src/theme/theme';
-import { Nunito_300Light, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
-import { Roboto_600SemiBold, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
+import { Nunito_300Light, Nunito_600SemiBold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito';
+import {
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  useFonts,
+} from '@expo-google-fonts/plus-jakarta-sans';
 import { ThemeProvider } from '@shopify/restyle';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -15,9 +20,11 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Roboto_600SemiBold,
-    Roboto_700Bold,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
     Nunito_300Light,
+    Nunito_600SemiBold,
     Nunito_800ExtraBold,
   });
 

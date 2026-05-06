@@ -8,6 +8,24 @@ export const fetchCommuterDetails = async (id: string) => {
   return { data, error };
 };
 
+export const checkPhoneNumberExists = async (phone: string) => {
+  try {
+    const { count, error } = await supabase
+      .from('commuters')
+      .select('phone_number', { count: 'exact', head: true })
+      .eq('phone_number', phone);
+
+    if (error) {
+      console.warn('Check phone error:', error.message);
+      return false; // Fail open if we can't check
+    }
+    return count !== null && count > 0;
+  } catch (err) {
+    console.warn('Check phone exception:', err);
+    return false;
+  }
+};
+
 export async function requestOtp(phone: string) {
   const res = await fetch('https://xlcoxbizbuasgbjzfrlx.supabase.co/functions/v1/send-otp', {
     method: 'POST',
@@ -16,6 +34,32 @@ export async function requestOtp(phone: string) {
   });
   return res.json();
 }
+
+export const resetPassword = async (email: string) => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'ligtascab-mobile://auth/callback',
+  });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return true;
+};
+
+export const updatePassword = async (password: string) => {
+  const { data, error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+export const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    throw new Error(error.message);
+  }
+  return true;
+};
 
 export const registerWithCredentials = async (User: unknown) => {
   const result = AccountSetupSchema.safeParse(User);
@@ -44,6 +88,14 @@ export const registerWithCredentials = async (User: unknown) => {
 
   if (signUpError) {
     throw new Error(signUpError.message);
+  }
+
+  if (data?.user && result.data.email) {
+    // Determine if we can update email immediately.
+    // If auto-login happened, 'data.session' should exist.
+    if (data.session) {
+      await supabase.auth.updateUser({ email: result.data.email });
+    }
   }
 
   if (!data.user) return null;

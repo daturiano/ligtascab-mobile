@@ -41,12 +41,13 @@ export default function History() {
     <Container style={styles.container}>
       <HomeHeader title="Ride History" description="Search Your Rides & Report History" />
       <Box flex={1} width="100%" paddingHorizontal="l" gap="l" style={{ marginTop: 220 }}>
+        {/* Modern Segmented Control */}
         <Box
           flexDirection="row"
           borderRadius="xl"
-          borderWidth={1}
-          borderColor="muted"
-          backgroundColor="mainBackground">
+          backgroundColor="grayLighter"
+          padding="s"
+          gap="s">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
@@ -56,14 +57,22 @@ export default function History() {
                 onPress={() => setActiveTab(tab.key)}
                 style={[
                   styles.tab,
-                  { backgroundColor: isActive ? secondaryLight : mainBackground },
+                  isActive && {
+                    backgroundColor: 'white',
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 3,
+                    elevation: 2,
+                  },
                 ]}>
                 <Box flexDirection="row" alignItems="center" justifyContent="center" gap="s">
-                  <Icon size={16} color={isActive ? 'white' : muted} />
+                  <Icon size={18} color={isActive ? theme.colors.primary : theme.colors.muted} />
                   <Text
-                    color={isActive ? 'white' : 'muted'}
-                    fontWeight={isActive ? '600' : '300'}
-                    textAlign="center">
+                    variant="bodyBold"
+                    color={isActive ? 'primary' : 'muted'}
+                    textAlign="center"
+                    fontSize={14}>
                     {tab.label}
                   </Text>
                 </Box>
@@ -71,7 +80,11 @@ export default function History() {
             );
           })}
         </Box>
-        {tabs.find((tab) => tab.key === activeTab)!.content}
+        
+        {/* Content Area */}
+        <Box flex={1}>
+           {tabs.find((tab) => tab.key === activeTab)!.content}
+        </Box>
       </Box>
     </Container>
   );

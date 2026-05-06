@@ -61,30 +61,27 @@ export default function ReportHistoryList() {
               style={{ width: 140, height: 140 }}
               source={require('@/src/assets/empty-report.png')}
             />
-            <Text>No reports found.</Text>
+            <Text variant="description">No reports found.</Text>
           </Box>
         ) : (
-          <Box gap="m">
-            <Text variant="title">Report Summary</Text>
-            <FlatList
-              data={reports}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => <ReportDetailsCard report={item} />}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ gap: 12, paddingBottom: 80 }}
-              onEndReachedThreshold={0.2}
-              onEndReached={() => {
-                if (hasNextPage && !isFetchingNextPage) fetchNextPage();
-              }}
-              ListFooterComponent={
-                isFetchingNextPage ? (
-                  <Box padding="m" alignItems="center">
-                    <ActivityIndicator />
-                  </Box>
-                ) : null
-              }
-            />
-          </Box>
+          <FlatList
+            data={reports}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ReportDetailsCard report={item} />}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ gap: 12, paddingBottom: 100, paddingTop: 4 }}
+            onEndReachedThreshold={0.2}
+            onEndReached={() => {
+              if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+            }}
+            ListFooterComponent={
+              isFetchingNextPage ? (
+                <Box padding="m" alignItems="center">
+                  <ActivityIndicator />
+                </Box>
+              ) : null
+            }
+          />
         )}
       </Box>
     </Box>

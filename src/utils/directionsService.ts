@@ -1,4 +1,5 @@
 import { decode } from '@mapbox/polyline';
+import { getDistanceMeters } from './utils';
 
 type Coordinates = { latitude: number; longitude: number };
 
@@ -51,6 +52,58 @@ export async function getDirections(
     console.error('Error fetching directions:', error);
     return null;
   }
+}
+
+export type RouteEstimate = {
+  distanceKm: number;
+  durationMin: number;
+  /** True when the result came from the Directions API; false on Haversine fallback. */
+  isPrecise: boolean;
+};
+
+/**
+ * Numeric distance/duration estimate suitable for fare calculation. Uses the
+ * Google Directions API (driving mode) when available, falls back to a
+ * straight-line Haversine distance with a conservative speed assumption when
+ * the API errors or returns no route.
+ */
+export async function getRouteEstimate(
+  origin: Coordinates,
+  destination: Coordinates
+): Promise<RouteEstimate> {
+  const apiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const haversineKm =
+    getDistanceMeters(origin.latitude, origin.longitude, destination.latitude, destination.longitude) /
+    1000;
+
+  if (apiKey) {
+    try {
+      const url =
+        `https://maps.googleapis.com/maps/api/directions/json` +
+        `?origin=${origin.latitude},${origin.longitude}` +
+        `&destination=${destination.latitude},${destination.longitude}` +
+        `&mode=driving&key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const leg = data?.routes?.[0]?.legs?.[0];
+      if (data.status === 'OK' && leg?.distance?.value && leg?.duration?.value) {
+        return {
+          distanceKm: leg.distance.value / 1000,
+          durationMin: Math.max(1, Math.round(leg.duration.value / 60)),
+          isPrecise: true,
+        };
+      }
+    } catch (error) {
+      console.warn('Directions API failed, falling back to Haversine:', error);
+    }
+  }
+
+  // Fallback: straight-line distance, 25 km/h average tricycle speed
+  return {
+    distanceKm: Math.round(haversineKm * 100) / 100,
+    durationMin: Math.max(1, Math.round((haversineKm / 25) * 60)),
+    isPrecise: false,
+  };
 }
 
 export async function geocodeAddress(address: string) {

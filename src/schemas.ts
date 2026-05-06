@@ -3,9 +3,9 @@ import { z } from 'zod';
 export const LoginSchema = z.object({
   phoneNumber: z
     .string()
-    .min(12, 'Phone number must be 12 digits.')
-    .max(12, 'Phone number must be 12 digits.')
-    .regex(/^[0-9]+$/, 'Phone number must contain only digits.'),
+    .min(10, 'Phone number must be 10 digits.')
+    .max(10, 'Phone number must be 10 digits.')
+    .regex(/^[9][0-9]*$/, 'Phone number must start with 9.'),
   password: z.string().min(6, 'Password must be at least 6 characters long.'),
 });
 
@@ -14,7 +14,7 @@ export const MobileSchema = z.object({
     .string()
     .min(10, 'Phone number must be 10 digits.')
     .max(10, 'Phone number must be 10 digits.')
-    .regex(/^[0-9]+$/, 'Phone number must contain only digits.'),
+    .regex(/^[9][0-9]*$/, 'Phone number must start with 9.'),
 });
 
 export const otpSchema = z.object({
@@ -24,14 +24,14 @@ export const otpSchema = z.object({
 export const AccountSetupSchema = z.object({
   fullName: z.string().max(100).min(4),
   email: z.email(),
-  phone: z.string().min(12).max(12),
+  phone: z.string().min(10).max(15),
   address: z.string().max(120),
   contact_person: z.string().min(2, 'Contact person name is required').max(100),
   contact_person_number: z
     .string()
-    .min(12, 'Contact number must be 12 digits')
-    .max(12, 'Contact number must be 12 digits')
-    .regex(/^63[0-9]+$/, 'Contact number must start with 63'),
+    .min(10, 'Contact number must be 10 digits')
+    .max(10, 'Contact number must be 10 digits')
+    .regex(/^[9][0-9]*$/, 'Phone number must start with 9'),
   password: z
     .string()
     .min(6, {
@@ -62,3 +62,26 @@ export const ReportSchema = z.object({
 });
 
 export type CreateAccount = z.infer<typeof CreateAccountSchema>;
+
+export const PickupLocationSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  address: z.string().min(1, 'Address is required'),
+  name: z.string().nullish(),
+});
+
+export const PickupRequestFormSchema = z
+  .object({
+    origin: PickupLocationSchema,
+    destination: PickupLocationSchema,
+  })
+  .refine(
+    (data) =>
+      !(
+        data.origin.latitude === data.destination.latitude &&
+        data.origin.longitude === data.destination.longitude
+      ),
+    { message: 'Pickup and destination must be different locations.', path: ['destination'] }
+  );
+
+export type PickupRequestForm = z.infer<typeof PickupRequestFormSchema>;

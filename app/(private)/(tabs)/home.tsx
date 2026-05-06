@@ -4,14 +4,22 @@ import HomeCard from '@/src/components/ui/home/HomeCard';
 import HomeHeader from '@/src/components/ui/home/HomeHeader';
 import RecentRides from '@/src/components/ui/home/RecentRides';
 import SafetyTip from '@/src/components/ui/home/SafetyTip';
-import { MapIcon, QrCode } from 'lucide-react-native';
+import { Hand, MapIcon, QrCode } from 'lucide-react-native';
 import { ScrollView } from 'react-native';
 
+import { useAuth } from '@/src/context/AuthenticationContext';
+
 export default function Home() {
+  const { user } = useAuth();
   return (
     <Container style={{ paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <HomeHeader title="Hello, Daniel Joshua! 👋" description="Ready for your next safe ride?" />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20
+        
+       }}>
+        <HomeHeader
+          title={`Hello, ${user?.first_name || 'Commuter'}! 👋`}
+          description="Ready for your next safe ride?"
+        />
         <Box
           flex={1}
           width="100%"
@@ -31,6 +39,14 @@ export default function Home() {
                 path="terminals"
                 title="Find Terminal"
                 icon={MapIcon}
+                source={require('@/src/assets/find.png')}
+              />
+            </Box>
+            <Box flexDirection="row" justifyContent="space-between" gap="l" alignItems="center">
+              <HomeCard
+                path="pickup"
+                title="Pick Me Up"
+                icon={Hand}
                 source={require('@/src/assets/find.png')}
               />
             </Box>

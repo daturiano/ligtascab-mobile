@@ -4,36 +4,39 @@ import { ImageSourcePropType, Pressable } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 import { useRouter } from 'expo-router';
+import Card from '../Card';
+import { useRef } from 'react';
+import { Animated } from 'react-native';
 
 type CardProps = {
   title: string;
-  path: 'scan' | 'terminals';
+  path: 'scan' | 'terminals' | 'pickup';
   icon: LucideIcon;
   source: ImageSourcePropType;
 };
 
 export default function HomeCard({ source, path, icon: Icon, title }: CardProps) {
   const router = useRouter();
+  const href = path === 'pickup' ? '/(private)/pickup' : `/(private)/(tabs)/${path}`;
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.spring(scale, { toValue: 0.96, useNativeDriver: true, speed: 20 }).start();
+  };
+  const handlePressOut = () => {
+    Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 20 }).start();
+  };
+
   return (
-    <Box
-      flexGrow={1}
-      flex={1}
-      borderRadius="m"
-      position="relative"
-      backgroundColor="white"
-      overflow="hidden"
-      padding="l"
-      justifyContent="space-between"
-      height={160}
-      style={{
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-        elevation: 2,
-        width: '48%',
-      }}>
-      <Pressable onPress={() => router.push(`/(private)/(tabs)/${path}`)}>
+    <Animated.View style={{ flexGrow: 1, flex: 1, width: '48%', transform: [{ scale }] }}>
+      <Card
+        flex={1}
+        padding="l"
+        overflow="hidden"
+        justifyContent="space-between"
+        height={160}
+        width="100%">
+        <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={() => router.push(href as any)}>
         <Box
           flexDirection="row"
           gap="s"
@@ -41,7 +44,7 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
           width={'100%'}
           style={{ zIndex: 2, marginBottom: 60 }}>
           <Icon size={20} />
-          <Text fontWeight={500} fontSize={16}>
+          <Text variant="bodyBold">
             {title}
           </Text>
         </Box>
@@ -61,8 +64,9 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
             }}
           />
         </Box>
-        <ArrowRight color={'#737373'} style={{ left: 120, top: 25 }} />
-      </Pressable>
-    </Box>
+          <ArrowRight color={'#737373'} style={{ left: 120, top: 25 }} />
+        </Pressable>
+      </Card>
+    </Animated.View>
   );
 }

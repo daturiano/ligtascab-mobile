@@ -60,7 +60,7 @@ export default function QRScanner() {
   };
 
   return (
-    <Card>
+    <Card flex={1}>
       <Box position="relative" width={'100%'} justifyContent="center" flex={1} overflow="hidden">
         <CameraView
           active={!cameraDisabled}
@@ -102,13 +102,8 @@ const Overlay = () => (
       <View style={styles.sideOverlay} />
     </View>
     <View style={styles.bottomOverlay}>
-      <Text
-        textAlign="center"
-        variant="description"
-        fontSize={14}
-        color="white"
-        paddingHorizontal="xxl">
-        Hold the code inside the frame, it will be scanned automatically
+      <Text variant="description" color="white" textAlign="center" marginTop="l">
+        Scan the QR Code inside the tricycle
       </Text>
     </View>
   </View>

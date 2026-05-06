@@ -1,4 +1,4 @@
-import { Report, Ride, Tricycle } from '../types';
+import { Review, Report, Ride, Tricycle } from '../types';
 import { supabase } from '../utils/supabase';
 import { getErrorMessage } from '../utils/utils';
 import { fetchDriverDetails, fetchOperatorDetails } from './db';
@@ -26,6 +26,69 @@ export async function submitReport(reportDetails: Partial<Report>): Promise<Repo
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
+}
+
+export async function submitReview(reviewDetails: Partial<Review>): Promise<Review> {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) throw new Error('User not authenticated');
+
+    const reviewData = {
+      ...reviewDetails,
+      passenger_id: user.id,
+    };
+
+    // 1. Insert Review
+    const { data: review, error: reviewError } = await supabase
+      .from('review')
+      .insert(reviewData)
+      .select()
+      .single();
+
+    if (reviewError || !review) {
+      console.error('Submit Review Error:', reviewError);
+      throw new Error(reviewError?.message || 'Unable to submit review');
+    }
+
+    return review;
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
+  }
+}
+
+export async function fetchDriverRating(driver_id: string): Promise<number> {
+  const { data, error } = await supabase
+    .from('review')
+    .select('rating')
+    .eq('driver_id', driver_id);
+
+  if (error) {
+    console.error('Error fetching driver rating:', error);
+    return 5.0;
+  }
+
+  if (!data || data.length === 0) return 5.0;
+
+  const totalRating = data.reduce((sum, item) => sum + item.rating, 0);
+  return totalRating / data.length;
+}
+
+export async function fetchDriverReviews(driver_id: string): Promise<Review[]> {
+  const { data, error } = await supabase
+    .from('review')
+    .select('id, rating, comment, created_at, passenger_id, ride_id, driver_id')
+    .eq('driver_id', driver_id)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching driver reviews:', error);
+    return [];
+  }
+
+  return data || [];
 }
 
 export async function createNewRide(tricycleDetails: Tricycle): Promise<Ride> {

@@ -7,26 +7,26 @@ import {
 import { useRideStore } from '@/src/store/useRideStore';
 import { AlertTriangle, User, XIcon } from 'lucide-react-native';
 import { useState } from 'react';
-import {
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
+import Card from '../Card';
+import SwipeButton from '../SwipeButton';
+import { useTheme } from '@shopify/restyle';
+import { Theme } from '@/src/theme/theme';
 
 type EmergencyModalProps = {
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
 };
 
-export default function EmergencyModal({
-  isModalVisible,
-  setIsModalVisible,
-}: EmergencyModalProps) {
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+export default function EmergencyModal({ isModalVisible, setIsModalVisible }: EmergencyModalProps) {
+  const insets = useSafeAreaInsets();
+  const theme = useTheme<Theme>();
   const { user } = useAuth();
   const { rideDetails } = useRideStore();
   const [isActivated, setIsActivated] = useState(false);
@@ -61,18 +61,31 @@ export default function EmergencyModal({
 
   return (
     <Modal visible={isModalVisible} transparent animationType="none" statusBarTranslucent>
-      <Box flex={1} alignItems="center" justifyContent="center" backgroundColor="overlay">
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <Box
-          style={styles.card}
-          backgroundColor="white"
-          flexDirection="column"
-          padding="xl">
+          flex={1}
+          alignItems="center"
+          justifyContent="center"
+          backgroundColor="overlay"
+          style={{
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          }}>
+          <Card
+            minHeight={500}
+            maxHeight="80%"
+            width="92%"
+            maxWidth={380}
+            flexDirection="column"
+            padding="xl">
             {!isActivated ? (
               <>
                 <Box flexDirection="row" justifyContent="space-between">
                   <Text variant="title">Emergency Assistance</Text>
                   <TouchableOpacity onPress={handleClose}>
-                    <XIcon />
+                    <XIcon color="#000" />
                   </TouchableOpacity>
                 </Box>
                 <Box flex={1} justifyContent="center" alignItems="center" gap="xl">
@@ -86,25 +99,23 @@ export default function EmergencyModal({
                     <AlertTriangle size={50} color="#ef4444" />
                   </Box>
                   <Text variant="description" textAlign="center">
-                    Once you activate the emergency alert, your location and vehicle details will
-                    be automatically shared with local authorities and your emergency contacts.
+                    Once you activate the emergency alert, your location and vehicle details will be
+                    automatically shared with local authorities and your emergency contacts.
                   </Text>
-                  <Button
-                    variant="destructive"
-                    onPress={handleActivateEmergency}
-                    isLoading={isLoading}
-                    style={styles.activateButton}>
-                    <Text color="white" fontWeight={600} fontSize={16}>
-                      Activate Emergency
-                    </Text>
-                  </Button>
+                  <Box width="100%">
+                    <SwipeButton
+                      title="Swipe to Activate"
+                      icon={<AlertTriangle color={theme.colors.warning} size={20} />}
+                      onComplete={handleActivateEmergency}
+                    />
+                  </Box>
                 </Box>
               </>
             ) : (
               <>
                 <Box flexDirection="row" justifyContent="flex-end">
                   <TouchableOpacity onPress={handleClose}>
-                    <XIcon />
+                    <XIcon color="#000" />
                   </TouchableOpacity>
                 </Box>
                 <ScrollView
@@ -121,7 +132,7 @@ export default function EmergencyModal({
                       alignItems="center">
                       <AlertTriangle size={40} color="#ef4444" />
                     </Box>
-                    <Text color="warning" fontSize={24} fontWeight={700} textAlign="center">
+                    <Text color="warning" variant="header" fontSize={24} textAlign="center">
                       EMERGENCY{'\n'}ACTIVATED
                     </Text>
                     <Text variant="description" textAlign="center" paddingHorizontal="m">
@@ -135,7 +146,7 @@ export default function EmergencyModal({
                         borderColor="mutedLighter"
                         paddingTop="l"
                         width="100%">
-                        <Text fontWeight={600} fontSize={16} marginBottom="m">
+                        <Text variant="bodyBold" marginBottom="m">
                           Notified Contacts:
                         </Text>
                         {alertResult?.notifiedContacts.map((contact, index) => (
@@ -146,9 +157,11 @@ export default function EmergencyModal({
                             gap="m"
                             marginBottom="s">
                             <User size={20} color="#374151" />
-                            <Text fontWeight={600}>{contact.name}</Text>
+                            <Text variant="bodyBold">{contact.name}</Text>
                             {contact.name === 'Police Hotline' && (
-                              <Text color="muted">(Authorities)</Text>
+                              <Text variant="description" color="muted">
+                                (Authorities)
+                              </Text>
                             )}
                           </Box>
                         ))}
@@ -163,7 +176,7 @@ export default function EmergencyModal({
                         {isSendingSafe ? (
                           <ActivityIndicator color="white" />
                         ) : (
-                          <Text color="white" fontWeight={600} fontSize={16}>
+                          <Text color="white" fontWeight={600} variant="body">
                             {"I'm Safe Now"}
                           </Text>
                         )}
@@ -173,25 +186,14 @@ export default function EmergencyModal({
                 </ScrollView>
               </>
             )}
-          </Box>
+          </Card>
         </Box>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    minHeight: 500,
-    maxHeight: '80%',
-    width: '92%',
-    maxWidth: 380,
-    borderRadius: 10,
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-  },
   scrollContent: {
     flex: 1,
   },

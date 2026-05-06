@@ -8,8 +8,9 @@ import {
   SpacingProps,
   VariantProps,
 } from '@shopify/restyle';
-import React from 'react';
-import { ActivityIndicator, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import React, { useRef } from 'react';
+import { ActivityIndicator, Animated, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 type ButtonProps = SpacingProps<Theme> &
   BackgroundColorProps<Theme> &
@@ -26,47 +27,44 @@ const BaseButton = createRestyleComponent<ButtonProps, Theme>(
 );
 
 const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) => {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = (e: any) => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+      speed: 20,
+    }).start();
+    if (rest.onPressIn) rest.onPressIn(e);
+  };
+
+  const handlePressOut = (e: any) => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 20,
+    }).start();
+    if (rest.onPressOut) rest.onPressOut(e);
+  };
+
+  const handlePress = (e: any) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (rest.onPress) rest.onPress(e);
+  };
+
   return (
-    <BaseButton {...rest} style={({ pressed }) => [pressed && { opacity: 0.5 }, style]}>
-      {isLoading ? <ActivityIndicator color="#737373" /> : children}
-    </BaseButton>
+    <Animated.View style={[{ transform: [{ scale: scaleAnim }], width: '100%' }]}>
+      <BaseButton 
+        {...rest} 
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={handlePress}
+        style={({ pressed }) => [pressed && { opacity: 0.8 }, style]}>
+        {isLoading ? <ActivityIndicator color="#ffffff" /> : children}
+      </BaseButton>
+    </Animated.View>
   );
 };
 
 export default Button;
 
-export const buttonVariants = {
-  defaults: {
-    paddingVertical: 'm',
-    paddingHorizontal: 'l',
-    borderRadius: 'm',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'primary',
-  },
-  primary: {
-    backgroundColor: 'primary',
-  },
-  secondary: {
-    backgroundColor: 'secondary',
-  },
-  destructive: {
-    backgroundColor: 'warning',
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: 'mainForeground',
-  },
-  input: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: 'mutedLighter',
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-};

@@ -7,9 +7,12 @@ import { useAuth } from '@/src/context/AuthenticationContext';
 import { LoginSchema } from '@/src/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { LockIcon, PhoneIcon } from 'lucide-react-native';
+import { Eye, EyeOff, LockIcon, PhoneIcon } from 'lucide-react-native';
+import { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -25,10 +28,12 @@ export default function LoginForm() {
     defaultValues: { phoneNumber: '', password: '' },
     mode: 'onTouched',
   });
+  
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     try {
-      const { success } = await signInWithPhoneNumber(data.phoneNumber, data.password);
+      const { success, role } = await signInWithPhoneNumber(`63${data.phoneNumber}`, data.password);
       if (!success) {
         setError('root', {
           type: 'manual',
@@ -36,7 +41,11 @@ export default function LoginForm() {
         });
         return;
       }
-      router.replace('/(private)/(tabs)/home');
+      if (role === 'driver') {
+        router.replace('/(private)/(driver)/(tabs)/dashboard');
+      } else {
+        router.replace('/(private)/(tabs)/home');
+      }
     } catch (err: any) {
       console.error('Login failed:', err);
       setError('root', {
@@ -46,39 +55,64 @@ export default function LoginForm() {
     }
   };
   return (
-    <Box width="100%" gap="l">
-      <Box gap="m">
+    <KeyboardAwareScrollView
+      enableOnAndroid={true}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+      style={{ width: '100%' }}>
+      <Box width="100%" gap="l">
+        <Box gap="m">
         <Controller
           control={control}
           name="phoneNumber"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Phone Number"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              keyboardType="number-pad"
-              autoCapitalize="none"
-              maxLength={12}
-              icon={PhoneIcon}
-              errorMessage={errors.phoneNumber?.message}
-            />
+             <Box gap="m" flexDirection="row" alignItems="center">
+              <Box
+                paddingHorizontal="l"
+                paddingVertical="l"
+                borderRadius="m"
+                borderColor="muted"
+                borderWidth={1}>
+                <Text variant="bodyBold">🇵🇭 +63</Text>
+              </Box>
+              <Box flexGrow={1}>
+                <Input
+                  placeholder="9xxxxxxxxx"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  keyboardType="number-pad"
+                  autoCapitalize="none"
+                  maxLength={10}
+                  icon={PhoneIcon}
+                  errorMessage={errors.phoneNumber?.message}
+                />
+              </Box>
+            </Box>
           )}
         />
         <Controller
           control={control}
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              placeholder="Password"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              secureTextEntry
-              autoCapitalize="none"
-              icon={LockIcon}
-              errorMessage={errors.password?.message}
-            />
+            <Box gap="xs">
+                <Input
+                placeholder="Password"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry={!isPasswordVisible}
+                autoCapitalize="none"
+                icon={LockIcon}
+                errorMessage={errors.password?.message}
+                rightIcon={isPasswordVisible ? EyeOff : Eye}
+                onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                />
+                <TouchableOpacity onPress={() => router.push('/(authentication)/forgot-password')} style={{ alignSelf: 'flex-end', padding: 4 }}>
+                    <Text variant="details" color="primary" fontWeight={'600'}>Forgot Password?</Text>
+                </TouchableOpacity>
+            </Box>
           )}
         />
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}
@@ -88,10 +122,11 @@ export default function LoginForm() {
         isLoading={isSubmitting}
         disabled={!isValid}
         variant={!isValid ? 'disabled' : 'primary'}>
-        <Text color="mainBackground" variant="body">
+        <Text color="mainBackground" variant="bodyBold">
           Sign In
         </Text>
       </Button>
-    </Box>
+      </Box>
+    </KeyboardAwareScrollView>
   );
 }

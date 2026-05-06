@@ -1,7 +1,12 @@
 import Box from '../Box';
 import Text from '../Text';
+import { useRideStore } from '@/src/store/useRideStore';
+import { formatPHP } from '@/src/utils/pricing';
 
 export default function FareBreakdown() {
+  const { rideDetails } = useRideStore();
+  const totalFare = rideDetails?.fare ? Number(rideDetails.fare) : 0;
+
   return (
     <Box
       gap="s"
@@ -13,23 +18,15 @@ export default function FareBreakdown() {
       paddingBottom="l"
       borderWidth={1}>
       <Text variant="title" color="secondary">
-        Fare Breakdown
+        Fare Overview
       </Text>
       <Box flexDirection="column" gap="xs">
         <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-          <Text variant="description" fontSize={14} fontWeight={500}>
-            Base Fare
+          <Text variant="bodyBold" color="muted">
+            Total Agreed Fare
           </Text>
-          <Text variant="description" fontSize={14} fontWeight={500}>
-            ₱15.00
-          </Text>
-        </Box>
-        <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-          <Text variant="description" fontSize={14} fontWeight={500}>
-            Per Exceeding Kilometer
-          </Text>
-          <Text variant="description" fontSize={14} fontWeight={500}>
-            +₱5.00
+          <Text variant="title" color="primary">
+            {formatPHP(totalFare)}
           </Text>
         </Box>
       </Box>
