@@ -29,9 +29,7 @@ export default function DriverAcceptedCard({ pickup }: DriverAcceptedCardProps) 
       <Box gap="xs">
         <Box flexDirection="row" justifyContent="space-between">
           <Text variant="details">Driver</Text>
-          <Text variant="body">
-            {driver ? `${driver.first_name} ${driver.last_name}` : '—'}
-          </Text>
+          <Text variant="body">{driver ? `${driver.first_name} ${driver.last_name}` : '—'}</Text>
         </Box>
         {tricycle ? (
           <Box flexDirection="row" justifyContent="space-between">

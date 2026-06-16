@@ -6,6 +6,8 @@ import Text from '../Text';
 import Button from '../Button';
 import Card from '../Card';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 type MarkerModalProps = {
   hasRoute: boolean;
   setRoute: (args: { latitude: number; longitude: number }[] | null) => void;
@@ -14,8 +16,6 @@ type MarkerModalProps = {
   setIsModalVisible: (args: boolean) => void;
   handleGetDirections: () => void;
 };
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function MarkerModal({
   hasRoute,
@@ -39,12 +39,7 @@ export default function MarkerModal({
           paddingLeft: insets.left,
           paddingRight: insets.right,
         }}>
-        <Card
-          minHeight={400}
-          width="92%"
-          maxWidth={380}
-          flexDirection="column"
-          gap="l">
+        <Card minHeight={400} width="92%" maxWidth={380} flexDirection="column" gap="l">
           <Box flexDirection="row" justifyContent="space-between" width={'100%'}>
             <Text variant="title">Terminal Routes</Text>
             <TouchableOpacity onPress={() => setIsModalVisible(false)}>

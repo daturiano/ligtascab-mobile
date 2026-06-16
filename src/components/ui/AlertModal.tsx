@@ -14,7 +14,13 @@ type AlertModalProps = {
   variant?: 'success' | 'error' | 'info' | 'warning';
 };
 
-export default function AlertModal({ visible, title, message, onClose, variant = 'warning' }: AlertModalProps) {
+export default function AlertModal({
+  visible,
+  title,
+  message,
+  onClose,
+  variant = 'warning',
+}: AlertModalProps) {
   const theme = useTheme<Theme>();
 
   const getIcon = () => {
@@ -33,14 +39,7 @@ export default function AlertModal({ visible, title, message, onClose, variant =
   return (
     <Modal transparent visible={visible} animationType="fade" onRequestClose={onClose}>
       <Box flex={1} justifyContent="center" alignItems="center" padding="l">
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          backgroundColor="overlay"
-        />
+        <Box position="absolute" top={0} left={0} right={0} bottom={0} backgroundColor="overlay" />
         <Box
           backgroundColor="mainBackground"
           borderRadius="xl"
@@ -50,10 +49,7 @@ export default function AlertModal({ visible, title, message, onClose, variant =
           gap="m"
           alignItems="center"
           style={styles.shadow}>
-          
-          <Box marginBottom="s">
-            {getIcon()}
-          </Box>
+          <Box marginBottom="s">{getIcon()}</Box>
 
           <Text variant="subheader" textAlign="center">
             {title}

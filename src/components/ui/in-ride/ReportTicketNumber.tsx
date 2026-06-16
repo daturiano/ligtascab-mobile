@@ -71,9 +71,15 @@ export default function ReportTicketNumber({ reportDetails }: ReportTicketNumber
       <Box gap="xs">
         <Text variant="bodyBold">What happens next?</Text>
         <Box gap="xs" paddingLeft="s">
-          <Text variant="description" lineHeight={22}>• Our team will investigate your report</Text>
-          <Text variant="description" lineHeight={22}>• We will contact the driver if necessary</Text>
-          <Text variant="description" lineHeight={22}>• You will receive an update via notification</Text>
+          <Text variant="description" lineHeight={22}>
+            • Our team will investigate your report
+          </Text>
+          <Text variant="description" lineHeight={22}>
+            • We will contact the driver if necessary
+          </Text>
+          <Text variant="description" lineHeight={22}>
+            • You will receive an update via notification
+          </Text>
         </Box>
       </Box>
     </Box>

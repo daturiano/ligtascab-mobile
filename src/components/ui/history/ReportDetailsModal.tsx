@@ -5,13 +5,13 @@ import { Modal, TouchableOpacity } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 type ReportDetailsModalProps = {
   report: Report;
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
 };
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ReportDetailsModal({
   report,

@@ -13,17 +13,17 @@ Deno.serve(async (req) => {
     const { phone, message } = await req.json();
 
     if (!phone) {
-      return new Response(
-        JSON.stringify({ error: 'Phone number is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Phone number is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     if (!message) {
-      return new Response(
-        JSON.stringify({ error: 'Message is required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'Message is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const apiKey = Deno.env.get('SEMAPHORE_API_KEY');
@@ -47,16 +47,15 @@ Deno.serve(async (req) => {
 
     console.log('Semaphore response:', smsData);
 
-    return new Response(
-      JSON.stringify(smsData),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify(smsData), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (err: unknown) {
     console.error('Error sending SMS:', err);
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify({ success: false, error: errorMessage }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });

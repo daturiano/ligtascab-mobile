@@ -84,9 +84,17 @@ export default function RideHistoryList() {
 
     // Sort
     if (activeSort === 'newest') {
-      filtered.sort((a, b) => new Date(b.end_time || b.start_time).getTime() - new Date(a.end_time || a.start_time).getTime());
+      filtered.sort(
+        (a, b) =>
+          new Date(b.end_time || b.start_time).getTime() -
+          new Date(a.end_time || a.start_time).getTime()
+      );
     } else if (activeSort === 'oldest') {
-      filtered.sort((a, b) => new Date(a.end_time || a.start_time).getTime() - new Date(b.end_time || b.start_time).getTime());
+      filtered.sort(
+        (a, b) =>
+          new Date(a.end_time || a.start_time).getTime() -
+          new Date(b.end_time || b.start_time).getTime()
+      );
     }
 
     return filtered;
@@ -106,7 +114,6 @@ export default function RideHistoryList() {
         onChangeText={handleInputChange}
       />
 
-
       {/* Sort Chips */}
       <Box flexDirection="row" gap="s" alignItems="center">
         <ArrowDownUp size={16} color={theme.colors.muted} />
@@ -118,7 +125,8 @@ export default function RideHistoryList() {
               paddingHorizontal: 14,
               paddingVertical: 6,
               borderRadius: 20,
-              backgroundColor: activeSort === opt.key ? theme.colors.primaryDark : theme.colors.grayLighter,
+              backgroundColor:
+                activeSort === opt.key ? theme.colors.primaryDark : theme.colors.grayLighter,
             }}>
             <Text
               variant="details"
@@ -168,4 +176,3 @@ export default function RideHistoryList() {
     </Box>
   );
 }
-

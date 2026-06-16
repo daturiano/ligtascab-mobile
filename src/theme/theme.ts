@@ -1,6 +1,5 @@
 import { createTheme } from '@shopify/restyle';
 
-
 const palette = {
   yellowLighter: '#f9d5b9',
   yellowLight: '#f2ab74',

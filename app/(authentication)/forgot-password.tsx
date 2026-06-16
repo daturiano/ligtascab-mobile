@@ -24,11 +24,9 @@ export default function ForgotPassword() {
     setIsLoading(true);
     try {
       await resetPassword(email);
-      Alert.alert(
-        'Check your email',
-        'We have sent a password reset link to your email address.',
-        [{ text: 'OK', onPress: () => router.back() }]
-      );
+      Alert.alert('Check your email', 'We have sent a password reset link to your email address.', [
+        { text: 'OK', onPress: () => router.back() },
+      ]);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Failed to send reset link.');
     } finally {
@@ -47,29 +45,29 @@ export default function ForgotPassword() {
         <Box flex={1} gap="l" justifyContent="center">
           <Box gap="s">
             <Text variant="header">Forgot Password?</Text>
-          <Text variant="body" color="muted">
-            Enter your email address and we&apos;ll send you a link to reset your password.
-          </Text>
-        </Box>
+            <Text variant="body" color="muted">
+              Enter your email address and we&apos;ll send you a link to reset your password.
+            </Text>
+          </Box>
 
-        <Input
-          icon={Mail}
-          placeholder="Enter your email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-        />
+          <Input
+            icon={Mail}
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
 
-        <Button
-          variant="primary"
-          onPress={handleResetPassword}
-          isLoading={isLoading}
-          disabled={isLoading || !email}>
-          <Text color="white" variant="bodyBold">
-            Send Reset Link
-          </Text>
-        </Button>
+          <Button
+            variant="primary"
+            onPress={handleResetPassword}
+            isLoading={isLoading}
+            disabled={isLoading || !email}>
+            <Text color="white" variant="bodyBold">
+              Send Reset Link
+            </Text>
+          </Button>
         </Box>
       </KeyboardAwareScrollView>
     </Container>

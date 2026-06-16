@@ -28,7 +28,7 @@ export default function LoginForm() {
     defaultValues: { phoneNumber: '', password: '' },
     mode: 'onTouched',
   });
-  
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
@@ -63,69 +63,73 @@ export default function LoginForm() {
       style={{ width: '100%' }}>
       <Box width="100%" gap="l">
         <Box gap="m">
-        <Controller
-          control={control}
-          name="phoneNumber"
-          render={({ field: { onChange, onBlur, value } }) => (
-             <Box gap="m" flexDirection="row" alignItems="center">
-              <Box
-                paddingHorizontal="l"
-                paddingVertical="l"
-                borderRadius="m"
-                borderColor="muted"
-                borderWidth={1}>
-                <Text variant="bodyBold">🇵🇭 +63</Text>
+          <Controller
+            control={control}
+            name="phoneNumber"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Box gap="m" flexDirection="row" alignItems="center">
+                <Box
+                  paddingHorizontal="l"
+                  paddingVertical="l"
+                  borderRadius="m"
+                  borderColor="muted"
+                  borderWidth={1}>
+                  <Text variant="bodyBold">🇵🇭 +63</Text>
+                </Box>
+                <Box flexGrow={1}>
+                  <Input
+                    placeholder="9xxxxxxxxx"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    keyboardType="number-pad"
+                    autoCapitalize="none"
+                    maxLength={10}
+                    icon={PhoneIcon}
+                    errorMessage={errors.phoneNumber?.message}
+                  />
+                </Box>
               </Box>
-              <Box flexGrow={1}>
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Box gap="xs">
                 <Input
-                  placeholder="9xxxxxxxxx"
+                  placeholder="Password"
                   value={value}
                   onChangeText={onChange}
                   onBlur={onBlur}
-                  keyboardType="number-pad"
+                  secureTextEntry={!isPasswordVisible}
                   autoCapitalize="none"
-                  maxLength={10}
-                  icon={PhoneIcon}
-                  errorMessage={errors.phoneNumber?.message}
+                  icon={LockIcon}
+                  errorMessage={errors.password?.message}
+                  rightIcon={isPasswordVisible ? EyeOff : Eye}
+                  onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
                 />
-              </Box>
-            </Box>
-          )}
-        />
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Box gap="xs">
-                <Input
-                placeholder="Password"
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                secureTextEntry={!isPasswordVisible}
-                autoCapitalize="none"
-                icon={LockIcon}
-                errorMessage={errors.password?.message}
-                rightIcon={isPasswordVisible ? EyeOff : Eye}
-                onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                />
-                <TouchableOpacity onPress={() => router.push('/(authentication)/forgot-password')} style={{ alignSelf: 'flex-end', padding: 4 }}>
-                    <Text variant="details" color="primary" fontWeight={'600'}>Forgot Password?</Text>
+                <TouchableOpacity
+                  onPress={() => router.push('/(authentication)/forgot-password')}
+                  style={{ alignSelf: 'flex-end', padding: 4 }}>
+                  <Text variant="details" color="primary" fontWeight={'600'}>
+                    Forgot Password?
+                  </Text>
                 </TouchableOpacity>
-            </Box>
-          )}
-        />
-        {errors.root?.message && <ErrorMessage message={errors.root.message} />}
-      </Box>
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        isLoading={isSubmitting}
-        disabled={!isValid}
-        variant={!isValid ? 'disabled' : 'primary'}>
-        <Text color="mainBackground" variant="bodyBold">
-          Sign In
-        </Text>
-      </Button>
+              </Box>
+            )}
+          />
+          {errors.root?.message && <ErrorMessage message={errors.root.message} />}
+        </Box>
+        <Button
+          onPress={handleSubmit(onSubmit)}
+          isLoading={isSubmitting}
+          disabled={!isValid}
+          variant={!isValid ? 'disabled' : 'primary'}>
+          <Text color="mainBackground" variant="bodyBold">
+            Sign In
+          </Text>
+        </Button>
       </Box>
     </KeyboardAwareScrollView>
   );

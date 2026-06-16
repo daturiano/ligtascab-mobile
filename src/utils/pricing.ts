@@ -16,7 +16,11 @@ export type FareBreakdown = {
   total: number;
 };
 
-export function calculateFare(distanceKm: number, offerAmount: number = 0, passengerCount: number = 1): FareBreakdown {
+export function calculateFare(
+  distanceKm: number,
+  offerAmount: number = 0,
+  passengerCount: number = 1
+): FareBreakdown {
   const safeDistance = Number.isFinite(distanceKm) && distanceKm > 0 ? distanceKm : 0;
   // The first 3km are covered by the base fare
   const billableDistance = Math.max(0, safeDistance - 3);

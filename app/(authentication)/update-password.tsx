@@ -23,8 +23,8 @@ export default function UpdatePassword() {
     }
 
     if (password.length < 6) {
-        Alert.alert('Error', 'Password must be at least 6 characters.');
-        return;
+      Alert.alert('Error', 'Password must be at least 6 characters.');
+      return;
     }
 
     setIsLoading(true);
@@ -53,7 +53,7 @@ export default function UpdatePassword() {
         </Box>
 
         <Box gap="m">
-            <Input
+          <Input
             icon={LockIcon}
             placeholder="New Password"
             value={password}
@@ -62,16 +62,16 @@ export default function UpdatePassword() {
             secureTextEntry={!isPasswordVisible}
             rightIcon={isPasswordVisible ? EyeOff : Eye}
             onRightIconPress={() => setIsPasswordVisible(!isPasswordVisible)}
-            />
+          />
 
-            <Input
+          <Input
             icon={LockIcon}
             placeholder="Confirm Password"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             autoCapitalize="none"
             secureTextEntry={!isPasswordVisible}
-            />
+          />
         </Box>
 
         <Button

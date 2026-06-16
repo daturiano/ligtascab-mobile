@@ -14,7 +14,11 @@ type DriverDetailsProps = {
   onRatingPress?: () => void;
 };
 
-export default function DriverDetails({ tricycle_details, driver_details, onRatingPress }: DriverDetailsProps) {
+export default function DriverDetails({
+  tricycle_details,
+  driver_details,
+  onRatingPress,
+}: DriverDetailsProps) {
   const { data: rating } = useQuery({
     queryKey: ['driverRating', driver_details.id],
     queryFn: () => fetchDriverRating(driver_details.id),
@@ -34,12 +38,8 @@ export default function DriverDetails({ tricycle_details, driver_details, onRati
         borderBottomWidth={1}
         paddingBottom="l">
         <Box>
-          <Text variant="title">
-            {`${driver_details.first_name} ${driver_details.last_name}`}
-          </Text>
-          <Text variant="bodyBold">
-            {`Plate Number: ${tricycle_details.plate_number}`}
-          </Text>
+          <Text variant="title">{`${driver_details.first_name} ${driver_details.last_name}`}</Text>
+          <Text variant="bodyBold">{`Plate Number: ${tricycle_details.plate_number}`}</Text>
         </Box>
         <Box flexDirection="row" position="relative">
           <Image

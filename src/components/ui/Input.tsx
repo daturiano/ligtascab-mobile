@@ -1,6 +1,13 @@
 import { useTheme } from '@shopify/restyle';
 import { LucideIcon } from 'lucide-react-native';
-import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, TouchableOpacity } from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  TouchableOpacity,
+} from 'react-native';
 import { Theme } from '../../theme/theme';
 import Box from './Box';
 import ErrorMessage from './ErrorMessage';
@@ -62,7 +69,7 @@ export default function Input({
         }}
         style={[styles.input, style]}
         editable={!onPress} // Disable editing if onPress is provided
-        pointerEvents={onPress ? "none" : "auto"} // Pass clicks through if onPress is provided
+        pointerEvents={onPress ? 'none' : 'auto'} // Pass clicks through if onPress is provided
         {...props}
       />
       {RightIcon ? (

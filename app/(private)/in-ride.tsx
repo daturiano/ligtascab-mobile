@@ -14,15 +14,15 @@ import { useActivePickupRequest } from '@/src/hooks/useActivePickupRequest';
 import { commuterFinishPickupRequest } from '@/src/services/pickup';
 import { getDirections } from '@/src/utils/directionsService';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MapView, { PROVIDER_GOOGLE, Region, Marker, Polyline } from 'react-native-maps';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '@/src/theme/theme';
-import { Navigation, MapPin } from 'lucide-react-native';
+import { Navigation, MapPin, Minimize2 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CLEAN_MAP_STYLE } from '@/src/utils/mapStyle';
 import { INITIAL_REGION } from '@/src/utils/constants';
@@ -37,9 +37,10 @@ export default function InRide() {
   const snapPoints = useMemo(() => ['40%', '85%'], []);
   const theme = useTheme<Theme>();
   const insets = useSafeAreaInsets();
-  
+  const queryClient = useQueryClient();
+
   const mapRef = useRef<MapView>(null);
-  const [routeCoords, setRouteCoords] = useState<{latitude: number; longitude: number}[]>([]);
+  const [routeCoords, setRouteCoords] = useState<{ latitude: number; longitude: number }[]>([]);
   const { pickup } = useActivePickupRequest();
 
   const endRideMutation = useMutation({
@@ -54,6 +55,10 @@ export default function InRide() {
       }
     },
     onSuccess: () => {
+      // Invalidate recent rides feeds
+      queryClient.invalidateQueries({ queryKey: ['recent_rides'] });
+      queryClient.invalidateQueries({ queryKey: ['recent_rides_history'] });
+
       setIsFeedbackVisible(true);
     },
     onError: (error) => {
@@ -93,9 +98,16 @@ export default function InRide() {
   // Loading state to prevent flickering
   if (!rideDetails || !location) {
     return (
-      <Box flex={1} justifyContent="center" alignItems="center" backgroundColor="mainBackground" gap="m">
+      <Box
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        backgroundColor="mainBackground"
+        gap="m">
         <ActivityIndicator size="large" color="#1FAB89" />
-        <Text variant="body" color="muted">Loading ride details...</Text>
+        <Text variant="body" color="muted">
+          Loading ride details...
+        </Text>
       </Box>
     );
   }
@@ -122,32 +134,28 @@ export default function InRide() {
         showsUserLocation
         showsMyLocationButton={false}
         followsUserLocation={!pickup}
-        customMapStyle={CLEAN_MAP_STYLE}
-      >
+        customMapStyle={CLEAN_MAP_STYLE}>
         {pickup?.origin && (
-          <Marker 
-            coordinate={{ latitude: pickup.origin.latitude, longitude: pickup.origin.longitude }} 
+          <Marker
+            coordinate={{ latitude: pickup.origin.latitude, longitude: pickup.origin.longitude }}
             title="Pickup"
-            centerOffset={{ x: 0, y: -16 }}
-          >
+            centerOffset={{ x: 0, y: -16 }}>
             <MapPin size={32} color="white" fill={theme.colors.primary} />
           </Marker>
         )}
         {pickup?.destination && (
-          <Marker 
-            coordinate={{ latitude: pickup.destination.latitude, longitude: pickup.destination.longitude }} 
+          <Marker
+            coordinate={{
+              latitude: pickup.destination.latitude,
+              longitude: pickup.destination.longitude,
+            }}
             title="Destination"
-            centerOffset={{ x: 0, y: -16 }}
-          >
+            centerOffset={{ x: 0, y: -16 }}>
             <MapPin size={32} color="white" fill={theme.colors.secondary} />
           </Marker>
         )}
         {routeCoords.length > 0 && (
-          <Polyline 
-            coordinates={routeCoords} 
-            strokeWidth={4} 
-            strokeColor={theme.colors.primary} 
-          />
+          <Polyline coordinates={routeCoords} strokeWidth={4} strokeColor={theme.colors.primary} />
         )}
       </MapView>
 
@@ -175,6 +183,11 @@ export default function InRide() {
               On the way to destination
             </Text>
           </Box>
+          <TouchableOpacity
+            onPress={() => router.push('/(private)/(tabs)/home')}
+            style={{ padding: 8 }}>
+            <Minimize2 size={20} color={theme.colors.muted} />
+          </TouchableOpacity>
         </Box>
       </Box>
 

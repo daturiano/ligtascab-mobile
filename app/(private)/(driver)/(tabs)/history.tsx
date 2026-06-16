@@ -43,11 +43,7 @@ export default function DriverHistory() {
         <SubTabPill label="Jobs" active={tab === 'jobs'} onPress={() => setTab('jobs')} />
       </Box>
 
-      {tab === 'shifts' ? (
-        <ShiftsList driverId={driverId} />
-      ) : (
-        <JobsList driverId={driverId} />
-      )}
+      {tab === 'shifts' ? <ShiftsList driverId={driverId} /> : <JobsList driverId={driverId} />}
     </Container>
   );
 }
@@ -200,7 +196,8 @@ function JobsList({ driverId }: { driverId: string | undefined }) {
       contentContainerStyle={{ padding: 16, gap: 12 }}
       renderItem={({ item }) => {
         const isCancelled = item.status === 'cancelled';
-        const dateIso = item.completed_at ?? item.cancelled_at ?? item.accepted_at ?? item.created_at;
+        const dateIso =
+          item.completed_at ?? item.cancelled_at ?? item.accepted_at ?? item.created_at;
         return (
           <Card gap="s">
             <Box flexDirection="row" justifyContent="space-between" alignItems="flex-start">

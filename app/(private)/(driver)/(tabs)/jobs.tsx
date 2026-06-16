@@ -72,8 +72,8 @@ export default function DriverJobsTab() {
             No shift today
           </Text>
           <Text variant="description" textAlign="center">
-            Your operator hasn’t assigned you a shift for today yet. Once they do,
-            jobs will show up here automatically.
+            Your operator hasn’t assigned you a shift for today yet. Once they do, jobs will show up
+            here automatically.
           </Text>
         </Box>
       ) : isLoading ? (
@@ -82,9 +82,13 @@ export default function DriverJobsTab() {
         </Box>
       ) : jobs.length === 0 ? (
         <ScrollView
-          contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 16 }}
-          refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}
-        >
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+          }}
+          refreshControl={<RefreshControl refreshing={false} onRefresh={refetch} />}>
           <Text variant="bodyBold">No pending requests</Text>
           <Text variant="description" textAlign="center">
             New jobs will appear here automatically. Pull down to refresh.

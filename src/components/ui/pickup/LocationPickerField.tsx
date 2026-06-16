@@ -17,8 +17,7 @@ export default function LocationPickerField({ type, label, value }: LocationPick
   const iconColor = type === 'origin' ? '#1FAB89' : '#EF9651';
 
   return (
-    <Pressable
-      onPress={() => router.push(`/(private)/location-search?type=${type}` as any)}>
+    <Pressable onPress={() => router.push(`/(private)/location-search?type=${type}` as any)}>
       {({ pressed }) => (
         <Box
           backgroundColor="input"
@@ -32,10 +31,7 @@ export default function LocationPickerField({ type, label, value }: LocationPick
           <Icon size={20} color={iconColor} strokeWidth={2.5} />
           <Box flex={1}>
             <Text variant="details">{label}</Text>
-            <Text
-              variant="bodyBold"
-              color={value ? 'mainForeground' : 'muted'}
-              numberOfLines={1}>
+            <Text variant="bodyBold" color={value ? 'mainForeground' : 'muted'} numberOfLines={1}>
               {value ?? `Tap to set ${type === 'origin' ? 'pickup' : 'destination'}`}
             </Text>
           </Box>

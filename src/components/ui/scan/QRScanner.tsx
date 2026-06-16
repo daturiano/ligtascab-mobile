@@ -9,6 +9,7 @@ import Box from '../Box';
 import Card from '../Card';
 import Text from '../Text';
 import OnScanModal from './OnScanModal';
+import * as Haptics from 'expo-haptics';
 
 export default function QRScanner() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -41,6 +42,7 @@ export default function QRScanner() {
     if (tricycle_details) {
       setCameraDisabled(true);
       setVisible(true);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
   }, [tricycle_details]);
 
@@ -76,7 +78,7 @@ export default function QRScanner() {
           }}
         />
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => setScanResult('9d6310e7-9852-4008-9721-7459cde6569c')}>
+          <TouchableOpacity onPress={toggleCameraFacing}>
             <SwitchCamera color={'#ffffff'} size={32} />
           </TouchableOpacity>
         </View>

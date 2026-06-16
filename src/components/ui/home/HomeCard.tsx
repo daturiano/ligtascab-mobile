@@ -1,34 +1,43 @@
 import { Image } from 'expo-image';
 import { ArrowRight, LucideIcon } from 'lucide-react-native';
-import { ImageSourcePropType, Pressable } from 'react-native';
+import { ImageSourcePropType, Pressable, Animated } from 'react-native';
 import Box from '../Box';
 import Text from '../Text';
 import { useRouter } from 'expo-router';
 import Card from '../Card';
 import { useRef } from 'react';
-import { Animated } from 'react-native';
 
 type CardProps = {
   title: string;
   path: 'scan' | 'terminals' | 'pickup';
   icon: LucideIcon;
   source: ImageSourcePropType;
+  disabled?: boolean;
 };
 
-export default function HomeCard({ source, path, icon: Icon, title }: CardProps) {
+export default function HomeCard({ source, path, icon: Icon, title, disabled }: CardProps) {
   const router = useRouter();
   const href = path === 'pickup' ? '/(private)/pickup' : `/(private)/(tabs)/${path}`;
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
+    if (disabled) return;
     Animated.spring(scale, { toValue: 0.96, useNativeDriver: true, speed: 20 }).start();
   };
   const handlePressOut = () => {
+    if (disabled) return;
     Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 20 }).start();
   };
 
   return (
-    <Animated.View style={{ flexGrow: 1, flex: 1, width: '48%', transform: [{ scale }] }}>
+    <Animated.View
+      style={{
+        flexGrow: 1,
+        flex: 1,
+        width: '48%',
+        transform: [{ scale }],
+        opacity: disabled ? 0.55 : 1,
+      }}>
       <Card
         flex={1}
         padding="l"
@@ -36,34 +45,36 @@ export default function HomeCard({ source, path, icon: Icon, title }: CardProps)
         justifyContent="space-between"
         height={160}
         width="100%">
-        <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={() => router.push(href as any)}>
-        <Box
-          flexDirection="row"
-          gap="s"
-          alignItems="center"
-          width={'100%'}
-          style={{ zIndex: 2, marginBottom: 60 }}>
-          <Icon size={20} />
-          <Text variant="bodyBold">
-            {title}
-          </Text>
-        </Box>
-        <Box
-          position="absolute"
-          bottom={-50}
-          left={-50}
-          right={0}
-          alignItems="center"
-          overflow="hidden">
-          <Image
-            source={source}
-            style={{
-              width: '100%',
-              height: 110,
-              resizeMode: 'contain',
-            }}
-          />
-        </Box>
+        <Pressable
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          disabled={disabled}
+          onPress={() => router.push(href as any)}>
+          <Box
+            flexDirection="row"
+            gap="s"
+            alignItems="center"
+            width={'100%'}
+            style={{ zIndex: 2, marginBottom: 60 }}>
+            <Icon size={20} />
+            <Text variant="bodyBold">{title}</Text>
+          </Box>
+          <Box
+            position="absolute"
+            bottom={-50}
+            left={-50}
+            right={0}
+            alignItems="center"
+            overflow="hidden">
+            <Image
+              source={source}
+              style={{
+                width: '100%',
+                height: 110,
+                resizeMode: 'contain',
+              }}
+            />
+          </Box>
           <ArrowRight color={'#737373'} style={{ left: 120, top: 25 }} />
         </Pressable>
       </Card>

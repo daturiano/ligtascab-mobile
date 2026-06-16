@@ -7,7 +7,10 @@ import { Commuter, Driver, UserRole } from '../types';
 import { supabase } from '../utils/supabase';
 
 type AuthContextType = {
-  signInWithPhoneNumber: (phone_number: string, password: string) => Promise<{ success: boolean; role: UserRole | null }>;
+  signInWithPhoneNumber: (
+    phone_number: string,
+    password: string
+  ) => Promise<{ success: boolean; role: UserRole | null }>;
   signOutUser: () => Promise<string | void>;
   session: Session | null;
   /** Commuter profile when role is 'commuter', else null. Existing screens rely on this field. */

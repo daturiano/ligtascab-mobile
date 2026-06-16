@@ -50,8 +50,8 @@ export default function ActiveShiftScreen() {
           <Card>
             <Text variant="bodyBold">No shift today</Text>
             <Text variant="description">
-              Your operator hasn’t assigned you a shift for today yet. Once
-              they do, you’ll be able to accept pickup jobs.
+              Your operator hasn’t assigned you a shift for today yet. Once they do, you’ll be able
+              to accept pickup jobs.
             </Text>
             <Button variant="outline" marginTop="m" onPress={() => router.back()}>
               <Text variant="bodyBold">Back to Dashboard</Text>

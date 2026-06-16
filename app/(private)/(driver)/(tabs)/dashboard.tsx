@@ -5,19 +5,10 @@ import Container from '@/src/components/ui/Container';
 import Text from '@/src/components/ui/Text';
 import { useAuth } from '@/src/context/AuthenticationContext';
 import { useDriverActiveJob } from '@/src/hooks/useDriverActiveJob';
-import {
-  fetchDriverActiveShift,
-  fetchDriverEarningsSummary,
-} from '@/src/services/driver';
+import { fetchDriverActiveShift, fetchDriverEarningsSummary } from '@/src/services/driver';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import {
-  AlertTriangle,
-  Briefcase,
-  CarFront,
-  CircleDot,
-  Coins,
-} from 'lucide-react-native';
+import { AlertTriangle, Briefcase, CarFront, CircleDot, Coins } from 'lucide-react-native';
 import { Pressable, ScrollView } from 'react-native';
 
 const formatPHP = (n: number) =>
@@ -84,8 +75,7 @@ export default function DriverDashboard() {
 
           {/* Active pickup-job banner */}
           {activeJob ? (
-            <Pressable
-              onPress={() => router.push('/(private)/(driver)/active-job')}>
+            <Pressable onPress={() => router.push('/(private)/(driver)/active-job')}>
               {({ pressed }) => (
                 <Card backgroundColor="primaryLighter" opacity={pressed ? 0.8 : 1}>
                   <Box flexDirection="row" alignItems="center" gap="s">
@@ -111,14 +101,8 @@ export default function DriverDashboard() {
           {/* Active shift card */}
           <Card>
             <Box flexDirection="row" alignItems="center" gap="s" marginBottom="m">
-              <CircleDot
-                color={activeShift ? '#1FAB89' : '#737373'}
-                size={18}
-                strokeWidth={2}
-              />
-              <Text variant="bodyBold">
-                {activeShift ? 'On shift today' : 'No shift today'}
-              </Text>
+              <CircleDot color={activeShift ? '#1FAB89' : '#737373'} size={18} strokeWidth={2} />
+              <Text variant="bodyBold">{activeShift ? 'On shift today' : 'No shift today'}</Text>
             </Box>
             {activeShift ? (
               <Box gap="s">

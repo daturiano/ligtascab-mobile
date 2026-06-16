@@ -15,7 +15,12 @@ type DriverReviewsModalProps = {
   driverName: string;
 };
 
-export default function DriverReviewsModal({ isVisible, onClose, driverId, driverName }: DriverReviewsModalProps) {
+export default function DriverReviewsModal({
+  isVisible,
+  onClose,
+  driverId,
+  driverName,
+}: DriverReviewsModalProps) {
   const theme = useTheme<Theme>();
 
   const { data: reviews, isLoading } = useQuery({
@@ -40,13 +45,20 @@ export default function DriverReviewsModal({ isVisible, onClose, driverId, drive
           borderTopLeftRadius="xl"
           borderTopRightRadius="xl"
           height="70%"
-          padding="l"
-        >
+          padding="l">
           {/* Header */}
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center" marginBottom="l">
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            marginBottom="l">
             <Box>
-                <Text variant="subheader" color="mainForeground">Reviews</Text>
-                <Text variant="body" color="muted">for {driverName}</Text>
+              <Text variant="subheader" color="mainForeground">
+                Reviews
+              </Text>
+              <Text variant="body" color="muted">
+                for {driverName}
+              </Text>
             </Box>
             <TouchableOpacity onPress={onClose} style={{ padding: 4 }}>
               <X color={theme.colors.mainForeground} size={24} />
@@ -59,7 +71,9 @@ export default function DriverReviewsModal({ isVisible, onClose, driverId, drive
               <ActivityIndicator size="large" color={theme.colors.primary} />
             </Box>
           ) : (
-            <ScrollView contentContainerStyle={{ paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 40 }}
+              showsVerticalScrollIndicator={false}>
               {reviews && reviews.length > 0 ? (
                 reviews.map((review) => (
                   <Box
@@ -68,11 +82,18 @@ export default function DriverReviewsModal({ isVisible, onClose, driverId, drive
                     borderRadius="l"
                     padding="m"
                     marginBottom="m"
-                    style={styles.card}
-                  >
-                    <Box flexDirection="row" justifyContent="space-between" alignItems="center" marginBottom="s">
-                      <Text variant="bodyBold" color="mainForeground">Anonymous Commuter</Text>
-                      <Text variant="details" color="muted">{formatDate(review.created_at)}</Text>
+                    style={styles.card}>
+                    <Box
+                      flexDirection="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      marginBottom="s">
+                      <Text variant="bodyBold" color="mainForeground">
+                        Anonymous Commuter
+                      </Text>
+                      <Text variant="details" color="muted">
+                        {formatDate(review.created_at)}
+                      </Text>
                     </Box>
                     <Box flexDirection="row" marginBottom="s" gap="xs">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -80,20 +101,28 @@ export default function DriverReviewsModal({ isVisible, onClose, driverId, drive
                           key={star}
                           size={16}
                           fill={review.rating >= star ? theme.colors.secondary : 'transparent'}
-                          color={review.rating >= star ? theme.colors.secondary : theme.colors.mutedLight}
+                          color={
+                            review.rating >= star ? theme.colors.secondary : theme.colors.mutedLight
+                          }
                         />
                       ))}
                     </Box>
                     {review.comment ? (
-                      <Text variant="body" color="mainForeground">{review.comment}</Text>
+                      <Text variant="body" color="mainForeground">
+                        {review.comment}
+                      </Text>
                     ) : (
-                      <Text variant="details" color="muted" fontStyle="italic">No comment provided</Text>
+                      <Text variant="details" color="muted" fontStyle="italic">
+                        No comment provided
+                      </Text>
                     )}
                   </Box>
                 ))
               ) : (
                 <Box marginTop="xl" alignItems="center">
-                    <Text variant="body" color="muted" textAlign="center">No reviews yet for this driver.</Text>
+                  <Text variant="body" color="muted" textAlign="center">
+                    No reviews yet for this driver.
+                  </Text>
                 </Box>
               )}
             </ScrollView>

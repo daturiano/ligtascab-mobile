@@ -7,7 +7,6 @@ import { supabase } from '../utils/supabase';
 // needed (driver-side active job), fetch it separately by commuter_id.
 const PICKUP_WITH_RELATIONS_SELECT = '*, driver:drivers(*), tricycle:tricycles(*)';
 
-
 type CreatePickupRequestInput = {
   commuter_id: string;
   origin: PickupLocation;
@@ -63,9 +62,7 @@ export const fetchActivePickupForCommuter = async (commuterId: string) => {
     .from('pickup_requests')
     .select(PICKUP_WITH_RELATIONS_SELECT)
     .eq('commuter_id', commuterId)
-    .or(
-      'status.in.(pending,accepted,in_progress),and(status.eq.completed,confirmed_at.is.null)'
-    )
+    .or('status.in.(pending,accepted,in_progress),and(status.eq.completed,confirmed_at.is.null)')
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle();

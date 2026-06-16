@@ -34,13 +34,9 @@ export function usePendingPickupJobs(enabled: boolean) {
     if (!enabled) return;
     const channel = supabase
       .channel('pickup-pending')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'pickup_requests' },
-        () => {
-          queryClient.invalidateQueries({ queryKey: ['pending-pickup-jobs'] });
-        }
-      )
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'pickup_requests' }, () => {
+        queryClient.invalidateQueries({ queryKey: ['pending-pickup-jobs'] });
+      })
       .subscribe();
 
     return () => {

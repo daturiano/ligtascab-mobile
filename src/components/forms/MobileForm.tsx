@@ -25,7 +25,7 @@ export default function MobileForm() {
     try {
       // 1. Pre-check availability
       const isTaken = await checkPhoneNumberExists(fullMobileNumber);
-      
+
       if (isTaken) {
         setError('This mobile number is already linked to an account.');
         setIsLoading(false);
@@ -33,9 +33,9 @@ export default function MobileForm() {
       }
 
       const data = await sendOtpMutation.mutateAsync(fullMobileNumber);
-      
+
       if (!data || !data[0] || !data[0].code) {
-         throw new Error('Invalid OTP response received');
+        throw new Error('Invalid OTP response received');
       }
 
       router.replace({

@@ -26,7 +26,10 @@ const NearbyTerminalCard = ({ terminal, onPressTerminal }: NearbyTerminalCardPro
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
-      <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut} onPress={() => onPressTerminal(terminal)}>
+      <Pressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={() => onPressTerminal(terminal)}>
         <Box
           flexDirection="row"
           alignItems="center"

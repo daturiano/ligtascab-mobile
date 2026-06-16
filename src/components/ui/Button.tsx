@@ -9,7 +9,14 @@ import {
   VariantProps,
 } from '@shopify/restyle';
 import React, { useRef } from 'react';
-import { ActivityIndicator, Animated, Pressable, PressableProps, StyleProp, ViewStyle } from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  Pressable,
+  PressableProps,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import * as Haptics from 'expo-haptics';
 
 type ButtonProps = SpacingProps<Theme> &
@@ -54,8 +61,8 @@ const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) =>
 
   return (
     <Animated.View style={[{ transform: [{ scale: scaleAnim }], width: '100%' }]}>
-      <BaseButton 
-        {...rest} 
+      <BaseButton
+        {...rest}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={handlePress}
@@ -67,4 +74,3 @@ const Button = ({ style, children, isLoading = false, ...rest }: ButtonProps) =>
 };
 
 export default Button;
-

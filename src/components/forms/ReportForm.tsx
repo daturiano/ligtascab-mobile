@@ -15,6 +15,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
 import * as z from 'zod';
 import ReportMsg from '../ui/in-ride/ReportMsg';
+import { useQueryClient } from '@tanstack/react-query';
 
 type ReportFormProps = {
   rideDetails: Ride;
@@ -25,6 +26,7 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
   const theme = useTheme<Theme>();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const generateTicketNumber = () => {
     const firstId = rideDetails?.id.slice(0, 5).toUpperCase();
@@ -62,6 +64,8 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
       const report = await submitReport(data);
       if (report) {
         setReportDetails(report);
+        // Invalidate reports list query
+        queryClient.invalidateQueries({ queryKey: ['report_history'] });
       }
       setIsLoading(false);
     } catch (err: any) {
@@ -79,7 +83,7 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
       <Text variant="description">
         Help us improve the service by reporting any issues with your ride.
       </Text>
-      
+
       <Box gap="m" width="100%">
         <Controller
           control={control}
@@ -97,57 +101,67 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
                 </Text>
                 <ChevronDown size={18} color={theme.colors.mainForeground} />
               </TouchableOpacity>
-              
+
               {/* Modal Picker for Violation Options */}
               <Modal
                 visible={showDropdown}
                 transparent={true}
                 animationType="fade"
-                onRequestClose={() => setShowDropdown(false)}
-              >
-                  <TouchableOpacity 
-                    style={styles.modalOverlay} 
-                    activeOpacity={1} 
-                    onPress={() => setShowDropdown(false)}
-                  >
-                    <Box 
-                        backgroundColor="white" 
-                        width="85%" 
-                        maxHeight="60%" 
-                        borderRadius="l" 
-                        padding="m"
-                        style={{ elevation: 5 }}
-                    >
-                        <Text variant="subheader" textAlign="center" marginBottom="m">Select Violation</Text>
-                        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-                             {violationOptions.map((option) => (
-                                <TouchableOpacity
-                                  key={option.id}
-                                  style={{ 
-                                      paddingVertical: 16, 
-                                      paddingHorizontal: 12,
-                                      borderBottomWidth: 1, 
-                                      borderBottomColor: theme.colors.grayLighter,
-                                      flexDirection: 'row',
-                                      justifyContent: 'space-between',
-                                      alignItems: 'center'
-                                  }}
-                                  onPress={() => {
-                                    onChange(option.id);
-                                    setShowDropdown(false);
-                                  }}>
-                                  <Text variant="body" color={value === option.id ? 'primary' : 'mainForeground'}>
-                                    {option.label}
-                                  </Text>
-                                  {value === option.id && <Box width={10} height={10} borderRadius="rounded" backgroundColor="primary" />}
-                                </TouchableOpacity>
-                              ))}
-                        </ScrollView>
-                        <Button variant="ghost" onPress={() => setShowDropdown(false)} marginTop="s">
-                            <Text variant="bodyBold" color="muted">Cancel</Text>
-                        </Button>
-                    </Box>
-                  </TouchableOpacity>
+                onRequestClose={() => setShowDropdown(false)}>
+                <TouchableOpacity
+                  style={styles.modalOverlay}
+                  activeOpacity={1}
+                  onPress={() => setShowDropdown(false)}>
+                  <Box
+                    backgroundColor="white"
+                    width="85%"
+                    maxHeight="60%"
+                    borderRadius="l"
+                    padding="m"
+                    style={{ elevation: 5 }}>
+                    <Text variant="subheader" textAlign="center" marginBottom="m">
+                      Select Violation
+                    </Text>
+                    <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+                      {violationOptions.map((option) => (
+                        <TouchableOpacity
+                          key={option.id}
+                          style={{
+                            paddingVertical: 16,
+                            paddingHorizontal: 12,
+                            borderBottomWidth: 1,
+                            borderBottomColor: theme.colors.grayLighter,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}
+                          onPress={() => {
+                            onChange(option.id);
+                            setShowDropdown(false);
+                          }}>
+                          <Text
+                            variant="body"
+                            color={value === option.id ? 'primary' : 'mainForeground'}>
+                            {option.label}
+                          </Text>
+                          {value === option.id && (
+                            <Box
+                              width={10}
+                              height={10}
+                              borderRadius="rounded"
+                              backgroundColor="primary"
+                            />
+                          )}
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                    <Button variant="ghost" onPress={() => setShowDropdown(false)} marginTop="s">
+                      <Text variant="bodyBold" color="muted">
+                        Cancel
+                      </Text>
+                    </Button>
+                  </Box>
+                </TouchableOpacity>
               </Modal>
             </Box>
           )}
@@ -160,7 +174,10 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
             <Box gap="s">
               <Text variant="bodyBold">Describe the Issue*</Text>
               <TextInput
-                style={[styles.textInputContainer, { borderColor: theme.colors.mutedLighter, color: theme.colors.mainForeground }]}
+                style={[
+                  styles.textInputContainer,
+                  { borderColor: theme.colors.mutedLighter, color: theme.colors.mainForeground },
+                ]}
                 value={value}
                 onChangeText={onChange}
                 placeholder="Please describe what happened..."
@@ -173,7 +190,7 @@ export default function ReportForm({ rideDetails, setReportDetails }: ReportForm
             </Box>
           )}
         />
-        
+
         <ReportMsg />
         {errors.root?.message && <ErrorMessage message={errors.root.message} />}
       </Box>

@@ -1,8 +1,8 @@
 import { createNewRide } from '@/src/services/rides';
 import { useRideStore } from '@/src/store/useRideStore';
-import { Tricycle } from '@/src/types';
+import { Tricycle, Ride } from '@/src/types';
 import { getErrorMessage } from '@/src/utils/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Modal } from 'react-native';
@@ -10,14 +10,15 @@ import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
 import Card from '../Card';
+import { useState } from 'react';
+import ReportModal from '@/src/components/ui/in-ride/ReportModal';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type OnScanModalProps = {
   visible: boolean;
   tricycle_details: Tricycle;
   exitModalHandler: () => void;
 };
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function OnScanModal({
   visible,
@@ -27,6 +28,11 @@ export default function OnScanModal({
   const router = useRouter();
   const { setRideDetails } = useRideStore();
   const insets = useSafeAreaInsets();
+  const queryClient = useQueryClient();
+
+  const [dummyRide, setDummyRide] = useState<Ride | null>(null);
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false);
+  const [isReporting, setIsReporting] = useState(false);
 
   const createRideMutation = useMutation({
     mutationFn: async (data: Tricycle) => createNewRide(tricycle_details),
@@ -36,12 +42,30 @@ export default function OnScanModal({
     try {
       const rideDetails = await createRideMutation.mutateAsync(tricycle_details);
       setRideDetails(rideDetails);
+
+      // Invalidate recent rides lists
+      queryClient.invalidateQueries({ queryKey: ['recent_rides'] });
+      queryClient.invalidateQueries({ queryKey: ['recent_rides_history'] });
+
       exitModalHandler();
       router.push({
         pathname: '/(private)/in-ride',
       });
     } catch (error) {
       console.log(getErrorMessage(error));
+    }
+  };
+
+  const handleReport = async () => {
+    setIsReporting(true);
+    try {
+      const rideData = await createRideMutation.mutateAsync(tricycle_details);
+      setDummyRide(rideData);
+      setIsReportModalVisible(true);
+    } catch (error) {
+      console.log(getErrorMessage(error));
+    } finally {
+      setIsReporting(false);
     }
   };
 
@@ -100,17 +124,42 @@ export default function OnScanModal({
             </Box>
           </Box>
           <Box flexDirection="column" width={'100%'} gap="s">
-            {tricycle_details.status === 'active' && (
+            {tricycle_details.status === 'active' ? (
               <Button onPress={onConfirm}>
-                <Text color="mainBackground" variant="bodyBold">Continue</Text>
+                <Text color="mainBackground" variant="bodyBold">
+                  Continue
+                </Text>
+              </Button>
+            ) : (
+              <Button
+                variant="destructive"
+                onPress={handleReport}
+                isLoading={isReporting}
+                disabled={isReporting}>
+                <Text color="white" variant="bodyBold">
+                  Report Tricycle
+                </Text>
               </Button>
             )}
-            <Button variant="outline" onPress={exitModalHandler}>
+            <Button variant="outline" onPress={exitModalHandler} disabled={isReporting}>
               <Text>Cancel</Text>
             </Button>
           </Box>
         </Card>
       </Box>
+      {dummyRide && (
+        <ReportModal
+          isModalVisible={isReportModalVisible}
+          setIsModalVisible={(visible) => {
+            setIsReportModalVisible(visible);
+            if (!visible) {
+              setDummyRide(null);
+              exitModalHandler();
+            }
+          }}
+          ride={dummyRide}
+        />
+      )}
     </Modal>
   );
 }

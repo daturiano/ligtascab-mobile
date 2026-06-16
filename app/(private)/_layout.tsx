@@ -37,15 +37,7 @@ export default function PrivateLayout() {
       router.replace('/(private)/(tabs)/home');
       return;
     }
-
-    // The persisted-ride redirect is commuter-specific; drivers are exempt.
-    if (role === 'commuter' || role === null) {
-      const inRide = segments.some((s) => s === 'in-ride');
-      if (rideDetails && !inRide) {
-        router.replace('/(private)/in-ride');
-      }
-    }
-  }, [rideDetails, role, router, segments]);
+  }, [role, router, segments]);
 
   return (
     <AuthenticatedViewOnly>

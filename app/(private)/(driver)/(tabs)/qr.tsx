@@ -15,13 +15,7 @@ export default function DriverQR() {
 
   return (
     <Container style={{ paddingHorizontal: 0, paddingBottom: 0 }}>
-      <Box
-        width="100%"
-        flex={1}
-        paddingHorizontal="l"
-        paddingTop="l"
-        gap="l"
-        alignItems="stretch">
+      <Box width="100%" flex={1} paddingHorizontal="l" paddingTop="l" gap="l" alignItems="stretch">
         <Box gap="xs">
           <Text variant="title">My QR Code</Text>
           <Text variant="description">
@@ -43,9 +37,7 @@ export default function DriverQR() {
               <QRCode value={driver.id} size={qrSize} backgroundColor="#ffffff" color="#0a0a0a" />
             </Box>
           ) : (
-            <Text variant="description">
-              QR code unavailable. Please contact your operator.
-            </Text>
+            <Text variant="description">QR code unavailable. Please contact your operator.</Text>
           )}
           <Text variant="details">Driver ID: {driver?.id?.slice(0, 8) ?? '—'}</Text>
         </Card>

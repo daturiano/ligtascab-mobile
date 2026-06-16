@@ -73,8 +73,12 @@ export async function getRouteEstimate(
 ): Promise<RouteEstimate> {
   const apiKey = process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY;
   const haversineKm =
-    getDistanceMeters(origin.latitude, origin.longitude, destination.latitude, destination.longitude) /
-    1000;
+    getDistanceMeters(
+      origin.latitude,
+      origin.longitude,
+      destination.latitude,
+      destination.longitude
+    ) / 1000;
 
   if (apiKey) {
     try {

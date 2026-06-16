@@ -80,11 +80,9 @@ export default function History() {
             );
           })}
         </Box>
-        
+
         {/* Content Area */}
-        <Box flex={1}>
-           {tabs.find((tab) => tab.key === activeTab)!.content}
-        </Box>
+        <Box flex={1}>{tabs.find((tab) => tab.key === activeTab)!.content}</Box>
       </Box>
     </Container>
   );

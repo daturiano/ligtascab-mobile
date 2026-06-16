@@ -23,7 +23,11 @@ export default function RecentRides() {
 
   return (
     <Box flexDirection="column" gap="m">
-      <Box justifyContent="space-between" flexDirection="row" alignItems="center" paddingHorizontal="l">
+      <Box
+        justifyContent="space-between"
+        flexDirection="row"
+        alignItems="center"
+        paddingHorizontal="l">
         <Text variant="bodyBold">Recent Rides</Text>
         <Pressable onPress={() => router.push('/(private)/(tabs)/history')}>
           <Text color="muted" fontWeight={400} variant="body" fontSize={15}>
@@ -60,5 +64,3 @@ export default function RecentRides() {
     </Box>
   );
 }
-
-

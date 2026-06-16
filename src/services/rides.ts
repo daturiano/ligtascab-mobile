@@ -60,10 +60,7 @@ export async function submitReview(reviewDetails: Partial<Review>): Promise<Revi
 }
 
 export async function fetchDriverRating(driver_id: string): Promise<number> {
-  const { data, error } = await supabase
-    .from('review')
-    .select('rating')
-    .eq('driver_id', driver_id);
+  const { data, error } = await supabase.from('review').select('rating').eq('driver_id', driver_id);
 
   if (error) {
     console.error('Error fetching driver rating:', error);

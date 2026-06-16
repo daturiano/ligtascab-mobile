@@ -4,10 +4,13 @@ import { useTheme } from '@shopify/restyle';
 import { Tabs } from 'expo-router';
 import { History, House, MapIcon, ScanQrCode, User } from 'lucide-react-native';
 import { View } from 'react-native';
+import { useRideStore } from '@/src/store/useRideStore';
+import OngoingRideBanner from '@/src/components/ui/home/OngoingRideBanner';
 
 export default function TabsLayout() {
   const theme = useTheme<Theme>();
   const { mainBackground, primary } = theme.colors;
+  const { rideDetails } = useRideStore();
 
   return (
     <View
@@ -75,6 +78,7 @@ export default function TabsLayout() {
           }}
         />
       </Tabs>
+      {rideDetails && <OngoingRideBanner ride={rideDetails} />}
     </View>
   );
 }

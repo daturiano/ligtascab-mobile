@@ -12,7 +12,6 @@ import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet } from 'reac
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Profile() {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   const { user, signOutUser, isEmailVerified } = useAuth();
   const router = useRouter();
 
@@ -46,23 +45,23 @@ export default function Profile() {
   }, [user]);
 
   const handleVerifyEmail = async () => {
-      if (!user?.email) {
-          Alert.alert('Error', 'No email address found.');
-          return;
-      }
-      setIsLoading(true);
-      try {
-          const { error } = await supabase.auth.resend({
-              type: 'signup',
-              email: user.email,
-          });
-          if (error) throw error;
-          Alert.alert('Sent!', 'A verification email has been sent to ' + user.email);
-      } catch (error: any) {
-           Alert.alert('Notice', 'Could not send verification email. ' + error.message);
-      } finally {
-          setIsLoading(false);
-      }
+    if (!user?.email) {
+      Alert.alert('Error', 'No email address found.');
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: user.email,
+      });
+      if (error) throw error;
+      Alert.alert('Sent!', 'A verification email has been sent to ' + user.email);
+    } catch (error: any) {
+      Alert.alert('Notice', 'Could not send verification email. ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSave = async () => {
@@ -88,14 +87,20 @@ export default function Profile() {
       } else {
         // Sync email with Supabase Auth
         if (formData.email && formData.email !== user.email) {
-            const { error: authError } = await supabase.auth.updateUser({ email: formData.email });
-            if (!authError) {
-                 Alert.alert('Success', 'Profile updated. A verification link has also been sent to your new email address.');
-            } else {
-                Alert.alert('Success', 'Profile updated, but failed to sync email to account settings: ' + authError.message);
-            }
+          const { error: authError } = await supabase.auth.updateUser({ email: formData.email });
+          if (!authError) {
+            Alert.alert(
+              'Success',
+              'Profile updated. A verification link has also been sent to your new email address.'
+            );
+          } else {
+            Alert.alert(
+              'Success',
+              'Profile updated, but failed to sync email to account settings: ' + authError.message
+            );
+          }
         } else {
-             Alert.alert('Success', 'Profile updated successfully.');
+          Alert.alert('Success', 'Profile updated successfully.');
         }
 
         setIsEditing(false);
@@ -141,7 +146,12 @@ export default function Profile() {
     <Container style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Header Section */}
-        <Box width="100%" alignItems="center" backgroundColor="primary" paddingBottom="l" paddingTop="xl">
+        <Box
+          width="100%"
+          alignItems="center"
+          backgroundColor="primary"
+          paddingBottom="l"
+          paddingTop="xl">
           <Box
             marginTop="xl"
             width={100}
@@ -186,8 +196,15 @@ export default function Profile() {
 
         <Box flex={1} paddingHorizontal="l" gap="l" paddingBottom="xl">
           {/* Personal Information Card */}
-          <Box backgroundColor="white" borderRadius="l" padding="l" elevation={2} shadowOpacity={0.05}>
-            <Text variant="title" marginBottom="m">Personal Information</Text>
+          <Box
+            backgroundColor="white"
+            borderRadius="l"
+            padding="l"
+            elevation={2}
+            shadowOpacity={0.05}>
+            <Text variant="title" marginBottom="m">
+              Personal Information
+            </Text>
             <Box gap="m">
               {isEditing ? (
                 <>
@@ -214,7 +231,7 @@ export default function Profile() {
                     keyboardType="email-address"
                     autoCapitalize="none"
                   />
-                   <Input
+                  <Input
                     title="Address"
                     icon={MapPin}
                     value={formData.address}
@@ -222,7 +239,7 @@ export default function Profile() {
                     placeholder="Enter address"
                   />
 
-                   <Input
+                  <Input
                     title="Birth Date"
                     icon={Calendar}
                     value={formData.birth_date}
@@ -236,10 +253,13 @@ export default function Profile() {
                       display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                       onChange={(event, selectedDate) => {
                         if (Platform.OS === 'android') {
-                            setShowDatePicker(false);
+                          setShowDatePicker(false);
                         }
                         if (selectedDate) {
-                            setFormData({ ...formData, birth_date: selectedDate.toISOString().split('T')[0] });
+                          setFormData({
+                            ...formData,
+                            birth_date: selectedDate.toISOString().split('T')[0],
+                          });
                         }
                       }}
                     />
@@ -248,30 +268,50 @@ export default function Profile() {
               ) : (
                 <>
                   <Box>
-                     <InfoRow icon={Mail} label="Email" value={formData.email || 'Not set'} />
-                     {!isEmailVerified && formData.email ? (
-                         <Button variant="ghost" onPress={handleVerifyEmail} style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
-                             <Text variant="details" color="warning" fontWeight="bold">Verify Email</Text>
-                         </Button>
-                     ) : (
-                         isEmailVerified && formData.email && (
-                            <Box style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
-                                <Text variant="details" color="primary" fontWeight="bold">Verified</Text>
-                            </Box>
-                         )
-                     )}
+                    <InfoRow icon={Mail} label="Email" value={formData.email || 'Not set'} />
+                    {!isEmailVerified && formData.email ? (
+                      <Button
+                        variant="ghost"
+                        onPress={handleVerifyEmail}
+                        style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
+                        <Text variant="details" color="warning" fontWeight="bold">
+                          Verify Email
+                        </Text>
+                      </Button>
+                    ) : (
+                      isEmailVerified &&
+                      formData.email && (
+                        <Box
+                          style={{ alignSelf: 'flex-start', paddingLeft: 32, paddingVertical: 4 }}>
+                          <Text variant="details" color="primary" fontWeight="bold">
+                            Verified
+                          </Text>
+                        </Box>
+                      )
+                    )}
                   </Box>
                   <InfoRow icon={MapPin} label="Address" value={formData.address || 'Not set'} />
-                  <InfoRow icon={Calendar} label="Birth Date" value={formData.birth_date || 'Not set'} />
+                  <InfoRow
+                    icon={Calendar}
+                    label="Birth Date"
+                    value={formData.birth_date || 'Not set'}
+                  />
                 </>
               )}
             </Box>
           </Box>
 
           {/* Emergency Contact Card */}
-          <Box backgroundColor="white" borderRadius="l" padding="l" elevation={2} shadowOpacity={0.05}>
-             <Text variant="title" marginBottom="m">Emergency Contact</Text>
-             <Box gap="m">
+          <Box
+            backgroundColor="white"
+            borderRadius="l"
+            padding="l"
+            elevation={2}
+            shadowOpacity={0.05}>
+            <Text variant="title" marginBottom="m">
+              Emergency Contact
+            </Text>
+            <Box gap="m">
               {isEditing ? (
                 <>
                   <Input
@@ -281,11 +321,13 @@ export default function Profile() {
                     onChangeText={(text) => setFormData({ ...formData, contact_person: text })}
                     placeholder="Contact name"
                   />
-                   <Input
+                  <Input
                     title="Contact Number"
                     icon={Phone}
                     value={formData.contact_person_number}
-                    onChangeText={(text) => setFormData({ ...formData, contact_person_number: text })}
+                    onChangeText={(text) =>
+                      setFormData({ ...formData, contact_person_number: text })
+                    }
                     placeholder="639XXXXXXXXX"
                     keyboardType="phone-pad"
                   />
@@ -293,16 +335,22 @@ export default function Profile() {
               ) : (
                 <>
                   <InfoRow icon={User} label="Name" value={formData.contact_person || 'Not set'} />
-                  <InfoRow icon={Phone} label="Number" value={formData.contact_person_number || 'Not set'} />
+                  <InfoRow
+                    icon={Phone}
+                    label="Number"
+                    value={formData.contact_person_number || 'Not set'}
+                  />
                 </>
               )}
-             </Box>
+            </Box>
           </Box>
 
           {/* Save Button */}
           {isEditing && (
             <Button onPress={handleSave} isLoading={isLoading}>
-              <Text color="white" variant="bodyBold">Save Changes</Text>
+              <Text color="white" variant="bodyBold">
+                Save Changes
+              </Text>
             </Button>
           )}
 
@@ -312,7 +360,9 @@ export default function Profile() {
             onPress={handleLogout}
             style={{ borderColor: '#ef4444', flexDirection: 'row', gap: 8, marginTop: 8 }}>
             <LogOut size={20} color="#ef4444" />
-            <Text color="warning" variant="bodyBold">Logout</Text>
+            <Text color="warning" variant="bodyBold">
+              Logout
+            </Text>
           </Button>
         </Box>
       </ScrollView>
@@ -320,13 +370,25 @@ export default function Profile() {
   );
 }
 
-const InfoRow = ({ icon: Icon, label, value }: { icon: any, label: string, value: string }) => (
-  <Box flexDirection="row" alignItems="center" gap="m" paddingVertical="s" borderBottomWidth={0.5} borderColor="grayLighter">
-     <Box width={32} alignItems="center"><Icon size={20} color="#737373" /></Box>
-     <Box flex={1}>
-       <Text variant="details" color="muted">{label}</Text>
-       <Text variant="body" color="mainForeground">{value}</Text>
-     </Box>
+const InfoRow = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
+  <Box
+    flexDirection="row"
+    alignItems="center"
+    gap="m"
+    paddingVertical="s"
+    borderBottomWidth={0.5}
+    borderColor="grayLighter">
+    <Box width={32} alignItems="center">
+      <Icon size={20} color="#737373" />
+    </Box>
+    <Box flex={1}>
+      <Text variant="details" color="muted">
+        {label}
+      </Text>
+      <Text variant="body" color="mainForeground">
+        {value}
+      </Text>
+    </Box>
   </Box>
 );
 

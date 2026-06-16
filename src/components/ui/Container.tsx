@@ -19,8 +19,14 @@ export default function Container({ style, children }: ContainerProps) {
       paddingHorizontal="xl"
       backgroundColor="mainBackground"
       style={[
-        { paddingTop: insets.top, paddingBottom: insets.bottom, maxWidth: 600, width: '100%', alignSelf: 'center' },
-        style
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          maxWidth: 600,
+          width: '100%',
+          alignSelf: 'center',
+        },
+        style,
       ]}>
       {children}
     </Box>

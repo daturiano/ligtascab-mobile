@@ -24,7 +24,12 @@ export default function DriverProfile() {
     <Container style={{ paddingHorizontal: 0, paddingBottom: 0 }}>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 32, gap: 16 }}>
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 16,
+          paddingBottom: 32,
+          gap: 16,
+        }}>
         <Text variant="title">My Profile</Text>
 
         {/* Identity card */}

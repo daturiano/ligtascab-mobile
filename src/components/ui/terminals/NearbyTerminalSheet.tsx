@@ -1,4 +1,3 @@
-
 import { Terminal } from '@/src/types';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useMemo, forwardRef } from 'react';
@@ -33,7 +32,7 @@ const NearbyTerminalSheet = forwardRef<BottomSheet, NearbyTerminalSheetProps>(
           backgroundColor: theme.colors.mainBackground,
           borderTopLeftRadius: theme.borderRadii.xl,
           borderTopRightRadius: theme.borderRadii.xl,
-          shadowColor: "#000",
+          shadowColor: '#000',
           shadowOffset: {
             width: 0,
             height: -2,
@@ -52,32 +51,38 @@ const NearbyTerminalSheet = forwardRef<BottomSheet, NearbyTerminalSheetProps>(
               // DETAIL VIEW
               <Box gap="m">
                 <Box flexDirection="row" alignItems="center" marginBottom="s">
-                    <TouchableOpacity onPress={onBack} hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-                        <Box padding="s" marginRight="s">
-                            <ArrowLeft color={theme.colors.mainForeground} size={24} />
-                        </Box>
-                    </TouchableOpacity>
-                    <Text variant="subheader" numberOfLines={1} flex={1}>
-                        {selectedTerminal.direction}
-                    </Text>
+                  <TouchableOpacity
+                    onPress={onBack}
+                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                    <Box padding="s" marginRight="s">
+                      <ArrowLeft color={theme.colors.mainForeground} size={24} />
+                    </Box>
+                  </TouchableOpacity>
+                  <Text variant="subheader" numberOfLines={1} flex={1}>
+                    {selectedTerminal.direction}
+                  </Text>
                 </Box>
-                
+
                 <Box marginBottom="m">
-                    <Text variant="bodyBold" color="primary" marginBottom="s">Landmarks / Routes:</Text>
-                    {selectedTerminal.landmarks.map((landmark, idx) => (
-                        <Box key={idx} flexDirection="row" alignItems="center" marginBottom="xs">
-                            <Box marginRight="s">
-                                <MapPin size={16} color={theme.colors.muted} />
-                            </Box>
-                            <Text variant="body" color="mainForeground">{landmark}</Text>
-                        </Box>
-                    ))}
+                  <Text variant="bodyBold" color="primary" marginBottom="s">
+                    Landmarks / Routes:
+                  </Text>
+                  {selectedTerminal.landmarks.map((landmark, idx) => (
+                    <Box key={idx} flexDirection="row" alignItems="center" marginBottom="xs">
+                      <Box marginRight="s">
+                        <MapPin size={16} color={theme.colors.muted} />
+                      </Box>
+                      <Text variant="body" color="mainForeground">
+                        {landmark}
+                      </Text>
+                    </Box>
+                  ))}
                 </Box>
 
                 <Button onPress={onGetDirections} paddingVertical="m">
-                    <Text variant="bodyBold" color="white" textAlign="center">
-                        Get Directions
-                    </Text>
+                  <Text variant="bodyBold" color="white" textAlign="center">
+                    Get Directions
+                  </Text>
                 </Button>
               </Box>
             ) : (

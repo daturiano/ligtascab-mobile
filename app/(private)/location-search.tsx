@@ -7,7 +7,12 @@ import { ArrowLeft, MapPin, Navigation, Map as MapIcon, X } from 'lucide-react-n
 import Box from '@/src/components/ui/Box';
 import Text from '@/src/components/ui/Text';
 import { useTerminalStore } from '@/src/store/useTerminalStore';
-import { getPlaceAutocomplete, getPlaceDetails, PlacePrediction, reverseGeocode } from '@/src/utils/directionsService';
+import {
+  getPlaceAutocomplete,
+  getPlaceDetails,
+  PlacePrediction,
+  reverseGeocode,
+} from '@/src/utils/directionsService';
 import { getCurrentLocation } from '@/src/utils/locationService';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -17,9 +22,9 @@ export default function LocationSearchScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ type: 'origin' | 'destination' }>();
   const type = params.type || 'origin';
-  
+
   const { setOrigin, setDestination } = useTerminalStore();
-  
+
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<PlacePrediction[]>([]);
   const [loading, setLoading] = useState(false);
@@ -105,29 +110,35 @@ export default function LocationSearchScreen() {
   return (
     <Box flex={1} backgroundColor="mainBackground" style={{ paddingTop: insets.top }}>
       {/* Header */}
-      <Box flexDirection="row" alignItems="center" padding="m" gap="s" borderBottomWidth={1} borderBottomColor="mutedLighter">
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        padding="m"
+        gap="s"
+        borderBottomWidth={1}
+        borderBottomColor="mutedLighter">
         <Pressable onPress={() => router.back()} hitSlop={10}>
           <ArrowLeft size={24} color={theme.colors.mainForeground} />
         </Pressable>
         <Box flex={1}>
-            <TextInput
+          <TextInput
             ref={inputRef}
-            placeholder={type === 'origin' ? "Where are you?" : "Where to?"}
+            placeholder={type === 'origin' ? 'Where are you?' : 'Where to?'}
             placeholderTextColor={theme.colors.muted}
             style={{
-                fontSize: 18,
-                color: theme.colors.mainForeground,
-                fontFamily: 'Nunito_600SemiBold',
-                paddingVertical: 8,
+              fontSize: 18,
+              color: theme.colors.mainForeground,
+              fontFamily: 'Nunito_600SemiBold',
+              paddingVertical: 8,
             }}
             value={query}
             onChangeText={handleSearch}
-            />
+          />
         </Box>
         {query.length > 0 && (
-            <Pressable onPress={() => handleSearch('')}>
-                <X size={20} color={theme.colors.muted} />
-            </Pressable>
+          <Pressable onPress={() => handleSearch('')}>
+            <X size={20} color={theme.colors.muted} />
+          </Pressable>
         )}
       </Box>
 
@@ -153,14 +164,18 @@ export default function LocationSearchScreen() {
                     padding="s"
                     borderRadius="rounded"
                     marginRight="m">
-                    <Navigation size={20} color={theme.colors.primary} fill={theme.colors.primary} />
+                    <Navigation
+                      size={20}
+                      color={theme.colors.primary}
+                      fill={theme.colors.primary}
+                    />
                   </Box>
                   <Text variant="bodyBold" color="mainForeground">
                     Use current location
                   </Text>
                 </Pressable>
               )}
-              
+
               <Pressable
                 onPress={handleChooseOnMap}
                 style={({ pressed }) => ({
@@ -169,11 +184,7 @@ export default function LocationSearchScreen() {
                   padding: theme.spacing.l,
                   opacity: pressed ? 0.7 : 1,
                 })}>
-                <Box
-                  backgroundColor="grayLight"
-                  padding="s"
-                  borderRadius="rounded"
-                  marginRight="m">
+                <Box backgroundColor="grayLight" padding="s" borderRadius="rounded" marginRight="m">
                   <MapIcon size={20} color={theme.colors.mutedDark} />
                 </Box>
                 <Text variant="bodyBold" color="mainForeground">
@@ -210,7 +221,7 @@ export default function LocationSearchScreen() {
       />
       {loading && (
         <Box position="absolute" top={100} left={0} right={0} alignItems="center">
-            <ActivityIndicator size="small" color={theme.colors.primary} />
+          <ActivityIndicator size="small" color={theme.colors.primary} />
         </Box>
       )}
     </Box>

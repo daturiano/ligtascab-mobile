@@ -6,16 +6,17 @@ import RecentRides from '@/src/components/ui/home/RecentRides';
 import SafetyTip from '@/src/components/ui/home/SafetyTip';
 import { Hand, MapIcon, QrCode } from 'lucide-react-native';
 import { ScrollView } from 'react-native';
-
 import { useAuth } from '@/src/context/AuthenticationContext';
+import { useRideStore } from '@/src/store/useRideStore';
 
 export default function Home() {
   const { user } = useAuth();
+  const { rideDetails } = useRideStore();
+  const isRideOngoing = !!rideDetails;
+
   return (
     <Container style={{ paddingHorizontal: 0, paddingTop: 0, paddingBottom: 0 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20
-        
-       }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}>
         <HomeHeader
           title={`Hello, ${user?.first_name || 'Commuter'}! 👋`}
           description="Ready for your next safe ride?"
@@ -34,6 +35,7 @@ export default function Home() {
                 title="Scan QR"
                 icon={QrCode}
                 source={require('@/src/assets/qr.png')}
+                disabled={isRideOngoing}
               />
               <HomeCard
                 path="terminals"
@@ -48,6 +50,7 @@ export default function Home() {
                 title="Pick Me Up"
                 icon={Hand}
                 source={require('@/src/assets/find.png')}
+                disabled={isRideOngoing}
               />
             </Box>
             <RecentRides />

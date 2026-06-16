@@ -72,7 +72,13 @@ export default function PickupScreen() {
     };
   }, [origin, destination, pickup]);
 
-  const fare = useMemo(() => (estimate ? calculateFare(estimate.distanceKm, Number(offerAmount) || 0, passengerCount) : null), [estimate, offerAmount, passengerCount]);
+  const fare = useMemo(
+    () =>
+      estimate
+        ? calculateFare(estimate.distanceKm, Number(offerAmount) || 0, passengerCount)
+        : null,
+    [estimate, offerAmount, passengerCount]
+  );
 
   useEffect(() => {
     if (pickup?.status === 'in_progress') {
@@ -194,7 +200,12 @@ export default function PickupScreen() {
     <Container style={{ paddingHorizontal: 0, paddingBottom: 0 }}>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 32, gap: 16 }}>
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 16,
+          paddingBottom: 32,
+          gap: 16,
+        }}>
         <Box flexDirection="row" alignItems="center" gap="m">
           <TouchableOpacity onPress={() => router.back()}>
             <ArrowLeft color="#0a0a0a" size={24} />
@@ -245,7 +256,9 @@ export default function PickupScreen() {
                   </TouchableOpacity>
                 ))}
               </Box>
-              <Text variant="description" marginTop="s">Base fare adjusts per passenger.</Text>
+              <Text variant="description" marginTop="s">
+                Base fare adjusts per passenger.
+              </Text>
             </Card>
 
             {estimateLoading ? (
@@ -270,7 +283,9 @@ export default function PickupScreen() {
                     value={offerAmount}
                     onChangeText={setOfferAmount}
                   />
-                  <Text variant="description">Adding an offer may help you find a driver faster.</Text>
+                  <Text variant="description">
+                    Adding an offer may help you find a driver faster.
+                  </Text>
                 </Card>
               </Box>
             ) : null}
@@ -321,21 +336,31 @@ export default function PickupScreen() {
                     onChangeText={setEditingOffer}
                   />
                   <Box flexDirection="row" gap="s">
-                    <Button variant="outline" onPress={() => setIsEditingOffer(false)} style={{ flex: 1 }}>
-                      <Text variant="bodyBold" textAlign="center">Cancel</Text>
+                    <Button
+                      variant="outline"
+                      onPress={() => setIsEditingOffer(false)}
+                      style={{ flex: 1 }}>
+                      <Text variant="bodyBold" textAlign="center">
+                        Cancel
+                      </Text>
                     </Button>
-                    <Button 
-                      variant="primary" 
-                      isLoading={updateOfferMutation.isPending} 
-                      onPress={() => updateOfferMutation.mutate()} 
-                      style={{ flex: 1 }}
-                    >
-                      <Text variant="bodyBold" color="white" textAlign="center">Save Offer</Text>
+                    <Button
+                      variant="primary"
+                      isLoading={updateOfferMutation.isPending}
+                      onPress={() => updateOfferMutation.mutate()}
+                      style={{ flex: 1 }}>
+                      <Text variant="bodyBold" color="white" textAlign="center">
+                        Save Offer
+                      </Text>
                     </Button>
                   </Box>
                 </Box>
               ) : (
-                <TouchableOpacity onPress={() => { setEditingOffer((pickup.offer_amount || 0).toString()); setIsEditingOffer(true); }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setEditingOffer((pickup.offer_amount || 0).toString());
+                    setIsEditingOffer(true);
+                  }}>
                   <Box flexDirection="row" justifyContent="space-between" alignItems="center">
                     <Box flexDirection="row" alignItems="center" gap="xs">
                       <Text variant="details">Special Offer</Text>
@@ -402,8 +427,8 @@ export default function PickupScreen() {
               <CheckCircle2 color="#1FAB89" size={48} />
               <Text variant="bodyBold">Trip Completed</Text>
               <Text variant="description" textAlign="center">
-                Your driver marked the trip as complete. Tap below to confirm
-                and close out the ride.
+                Your driver marked the trip as complete. Tap below to confirm and close out the
+                ride.
               </Text>
               <Text variant="title">{formatPHP(Number(pickup.estimated_fare))}</Text>
             </Card>

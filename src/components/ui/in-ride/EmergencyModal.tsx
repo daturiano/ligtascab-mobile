@@ -17,12 +17,12 @@ import SwipeButton from '../SwipeButton';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '@/src/theme/theme';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 type EmergencyModalProps = {
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
 };
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function EmergencyModal({ isModalVisible, setIsModalVisible }: EmergencyModalProps) {
   const insets = useSafeAreaInsets();

@@ -145,12 +145,7 @@ export type DriverEarningsSummary = {
   hasRealData: boolean;
 };
 
-export type PickupStatus =
-  | 'pending'
-  | 'accepted'
-  | 'in_progress'
-  | 'completed'
-  | 'cancelled';
+export type PickupStatus = 'pending' | 'accepted' | 'in_progress' | 'completed' | 'cancelled';
 
 export type PickupLocation = {
   latitude: number;
@@ -186,4 +181,3 @@ export type PickupRequestWithParties = PickupRequest & {
   tricycle?: Tricycle | null;
   commuter?: Commuter | null;
 };
-

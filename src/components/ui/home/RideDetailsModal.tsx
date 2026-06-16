@@ -9,14 +9,14 @@ import Card from '../Card';
 
 import Button from '../Button';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 type RideDetailsModalProps = {
   ride: Ride;
   isModalVisible: boolean;
   setIsModalVisible: (args: boolean) => void;
   onReportPress: () => void;
 };
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function RideDetailsModal({
   ride,
@@ -55,9 +55,7 @@ export default function RideDetailsModal({
           <Box flex={1} flexDirection="column" gap="l">
             <InfoTextBox
               title="Date"
-              content={
-                ride.end_time ? formatDate(ride.end_time.toString()) : 'In Progress'
-              }
+              content={ride.end_time ? formatDate(ride.end_time.toString()) : 'In Progress'}
             />
             <InfoTextBox
               title="Driver"
@@ -71,9 +69,7 @@ export default function RideDetailsModal({
             />
             <InfoTextBox
               title="End Time"
-              content={
-                ride.end_time ? extractTime(ride.end_time.toString()) : 'Ongoing'
-              }
+              content={ride.end_time ? extractTime(ride.end_time.toString()) : 'Ongoing'}
             />
           </Box>
           <Box borderWidth={0.3} borderColor="mutedLighter" />

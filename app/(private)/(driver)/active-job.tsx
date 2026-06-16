@@ -109,9 +109,7 @@ export default function DriverActiveJob() {
                   <UserCircle color="#1FAB89" size={20} />
                 )}
                 <Text variant="bodyBold">
-                  {job.status === 'in_progress'
-                    ? 'Trip in progress'
-                    : 'Heading to pickup'}
+                  {job.status === 'in_progress' ? 'Trip in progress' : 'Heading to pickup'}
                 </Text>
               </Box>
             </Card>

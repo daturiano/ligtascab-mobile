@@ -1,9 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, Keyboard, FlatList, Dimensions, Animated } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  Keyboard,
+  FlatList,
+  Dimensions,
+  Animated,
+  Pressable,
+} from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Image } from 'expo-image';
-import { MapPin, LocateFixed, Check, ChevronDown, ChevronRight, Navigation2, MapIcon } from 'lucide-react-native';
+import {
+  MapPin,
+  LocateFixed,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Navigation2,
+  MapIcon,
+} from 'lucide-react-native';
 import { useTheme } from '@shopify/restyle';
 import { useRouter } from 'expo-router';
 
@@ -13,10 +30,7 @@ import Text from '@/src/components/ui/Text';
 import AlertModal from '@/src/components/ui/AlertModal';
 import { Terminal } from '@/src/types';
 import { NAGA_TERMINALS, INITIAL_REGION } from '@/src/utils/constants';
-import {
-  getDirections,
-  reverseGeocode,
-} from '@/src/utils/directionsService';
+import { getDirections, reverseGeocode } from '@/src/utils/directionsService';
 import {
   findNearbyTerminals,
   getCurrentLocation,
@@ -25,7 +39,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTerminalStore } from '@/src/store/useTerminalStore';
 import { Theme } from '@/src/theme/theme';
-import { Pressable } from 'react-native';
+
 import { CLEAN_MAP_STYLE } from '@/src/utils/mapStyle';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -39,22 +53,23 @@ export default function Terminals() {
   const router = useRouter();
   const flatListRef = useRef<FlatList>(null);
 
-  const { 
-    origin, setOrigin, 
-    destination, setDestination, 
-    isSelectingOnMap, setIsSelectingOnMap 
-  } = useTerminalStore();
+  const { origin, setOrigin, destination, setDestination, isSelectingOnMap, setIsSelectingOnMap } =
+    useTerminalStore();
 
   const [nearbyTerminals, setNearbyTerminals] = useState<Terminal[] | null>(null);
   const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
   const [route, setRoute] = useState<{ latitude: number; longitude: number }[] | null>(null);
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(false);
-  const [alertConfig, setAlertConfig] = useState<{ visible: boolean; title: string; message: string }>({
+  const [alertConfig, setAlertConfig] = useState<{
+    visible: boolean;
+    title: string;
+    message: string;
+  }>({
     visible: false,
     title: '',
     message: '',
   });
-  
+
   // For dragging map selection
   const [mapCenter, setMapCenter] = useState<{ latitude: number; longitude: number } | null>(null);
 
@@ -115,46 +130,50 @@ export default function Terminals() {
   }, [route]);
 
   const handleStartSelecting = async (mode: 'origin' | 'destination') => {
-      const target = mode === 'origin' ? origin : destination;
-      if (target) {
-          mapRef.current?.animateToRegion({
-              latitude: target.latitude,
-              longitude: target.longitude,
-              latitudeDelta: 0.005,
-              longitudeDelta: 0.005,
-          }, 500);
-      }
-      setIsSelectingOnMap(mode);
+    const target = mode === 'origin' ? origin : destination;
+    if (target) {
+      mapRef.current?.animateToRegion(
+        {
+          latitude: target.latitude,
+          longitude: target.longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        },
+        500
+      );
+    }
+    setIsSelectingOnMap(mode);
   };
 
   const handleConfirmLocation = async () => {
-      if (!mapCenter || !isSelectingOnMap) return;
+    if (!mapCenter || !isSelectingOnMap) return;
 
-      const address = await reverseGeocode(mapCenter.latitude, mapCenter.longitude);
-      const locationData = {
-          ...mapCenter,
-          address: address || 'Pinned Location',
-          name: 'Pinned Location',
-      };
+    const address = await reverseGeocode(mapCenter.latitude, mapCenter.longitude);
+    const locationData = {
+      ...mapCenter,
+      address: address || 'Pinned Location',
+      name: 'Pinned Location',
+    };
 
-      if (isSelectingOnMap === 'origin') {
-          setOrigin(locationData);
-      } else {
-          setDestination(locationData);
-      }
-      setIsSelectingOnMap(null);
+    if (isSelectingOnMap === 'origin') {
+      setOrigin(locationData);
+    } else {
+      setDestination(locationData);
+    }
+    setIsSelectingOnMap(null);
   };
 
   const handleFindTricycles = () => {
     Keyboard.dismiss();
     if (!origin) return;
     const nearby = findNearbyTerminals(NAGA_TERMINALS, origin, 500);
-    
+
     if (nearby.length === 0) {
       setAlertConfig({
         visible: true,
         title: 'No Tricycles Found',
-        message: 'There are no tricycles within 500 meters of your location going to your destination.',
+        message:
+          'There are no tricycles within 500 meters of your location going to your destination.',
       });
       setNearbyTerminals(null);
       return;
@@ -173,7 +192,7 @@ export default function Terminals() {
     }).start();
 
     // Fit map to show all terminals
-    const coords = nearby.map(t => t.map);
+    const coords = nearby.map((t) => t.map);
     if (origin) coords.push({ latitude: origin.latitude, longitude: origin.longitude });
     setTimeout(() => {
       mapRef.current?.fitToCoordinates(coords, {
@@ -194,7 +213,7 @@ export default function Terminals() {
 
   const handleGetDirections = async () => {
     if (!origin || !selectedTerminal) return;
-    
+
     const directions = await getDirections(origin, selectedTerminal.map);
     if (directions) setRoute(directions.coords);
   };
@@ -202,13 +221,16 @@ export default function Terminals() {
   const handleSelectTerminal = (terminal: Terminal, index: number) => {
     setSelectedTerminal(terminal);
     setRoute(null);
-    
+
     // Zoom to terminal
-    mapRef.current?.animateToRegion({
+    mapRef.current?.animateToRegion(
+      {
         ...terminal.map,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
-    }, 500);
+      },
+      500
+    );
 
     // Scroll the horizontal list to center this card
     flatListRef.current?.scrollToIndex({
@@ -219,12 +241,14 @@ export default function Terminals() {
   };
 
   if (!origin && !isSelectingOnMap) {
-     return (
-        <View style={styles.centered}>
-            <ActivityIndicator size="large" color="#1FAB89" />
-            <Text style={{ marginTop: 12, color: '#737373', fontFamily: 'Nunito_300Light' }}>Finding your location...</Text>
-        </View>
-     )
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#1FAB89" />
+        <Text style={{ marginTop: 12, color: '#737373', fontFamily: 'Nunito_300Light' }}>
+          Finding your location...
+        </Text>
+      </View>
+    );
   }
 
   // Render a single horizontal terminal card
@@ -265,9 +289,7 @@ export default function Terminals() {
                   numberOfLines={1}>
                   {item.direction}
                 </Text>
-                <Text
-                  variant="details"
-                  color={isSelected ? 'primaryLight' : 'muted'}>
+                <Text variant="details" color={isSelected ? 'primaryLight' : 'muted'}>
                   Tricycle Terminal
                 </Text>
               </Box>
@@ -305,234 +327,274 @@ export default function Terminals() {
       <MapView
         ref={mapRef}
         onRegionChangeComplete={(region) => {
-            if (isSelectingOnMap) {
-                setMapCenter({ latitude: region.latitude, longitude: region.longitude });
-            }
+          if (isSelectingOnMap) {
+            setMapCenter({ latitude: region.latitude, longitude: region.longitude });
+          }
         }}
         style={{ flexGrow: 1 }}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={!isSelectingOnMap}
-        initialRegion={origin ? {
-            latitude: origin.latitude,
-            longitude: origin.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-        } : INITIAL_REGION}
-        customMapStyle={CLEAN_MAP_STYLE}
-        >
-        
+        initialRegion={
+          origin
+            ? {
+                latitude: origin.latitude,
+                longitude: origin.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }
+            : INITIAL_REGION
+        }
+        customMapStyle={CLEAN_MAP_STYLE}>
         {/* Render Markers only if NOT selecting */}
         {!isSelectingOnMap && (
-           <>
-             {destination && <Marker coordinate={destination} />}
-             {route && route.length > 0 && (
-               <Polyline coordinates={route} strokeColor="#1daa88" strokeWidth={5} />
-             )}
-    
-             {/* Show Terminals if Found */}
-             {nearbyTerminals && NAGA_TERMINALS.map((terminal) => {
-               const isActive = selectedTerminal?.direction === terminal.direction;
-               return (
-                <Marker
-                  key={terminal.direction}
-                  coordinate={terminal.map}
-                  tracksViewChanges={isActive}
-                  anchor={{ x: 0.5, y: 0.5 }}
-                  onPress={() => {
-                    const idx = nearbyTerminals.findIndex(t => t.direction === terminal.direction);
-                    if (idx >= 0) handleSelectTerminal(terminal, idx);
-                  }}>
-                  <View style={{ width: 68, height: 68, alignItems: 'center', justifyContent: 'center' }}>
-                    {isActive ? (
-                      <View style={{
-                        backgroundColor: 'rgba(31, 171, 137, 0.15)',
-                        borderRadius: 999,
-                        padding: 6,
-                        borderWidth: 2,
-                        borderColor: theme.colors.primary,
+          <>
+            {destination && <Marker coordinate={destination} />}
+            {route && route.length > 0 && (
+              <Polyline coordinates={route} strokeColor="#1daa88" strokeWidth={5} />
+            )}
+
+            {/* Show Terminals if Found */}
+            {nearbyTerminals &&
+              NAGA_TERMINALS.map((terminal) => {
+                const isActive = selectedTerminal?.direction === terminal.direction;
+                return (
+                  <Marker
+                    key={terminal.direction}
+                    coordinate={terminal.map}
+                    tracksViewChanges={isActive}
+                    anchor={{ x: 0.5, y: 0.5 }}
+                    onPress={() => {
+                      const idx = nearbyTerminals.findIndex(
+                        (t) => t.direction === terminal.direction
+                      );
+                      if (idx >= 0) handleSelectTerminal(terminal, idx);
+                    }}>
+                    <View
+                      style={{
+                        width: 68,
+                        height: 68,
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}>
-                        <Image style={{ width: 44, height: 44 }} source={require('@/src/assets/marker.png')} />
-                      </View>
-                    ) : (
-                      <Image style={{ width: 36, height: 36 }} source={require('@/src/assets/marker.png')} />
-                    )}
-                  </View>
-                </Marker>
-               );
-             })}
-           </>
+                      {isActive ? (
+                        <View
+                          style={{
+                            backgroundColor: 'rgba(31, 171, 137, 0.15)',
+                            borderRadius: 999,
+                            padding: 6,
+                            borderWidth: 2,
+                            borderColor: theme.colors.primary,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}>
+                          <Image
+                            style={{ width: 44, height: 44 }}
+                            source={require('@/src/assets/marker.png')}
+                          />
+                        </View>
+                      ) : (
+                        <Image
+                          style={{ width: 36, height: 36 }}
+                          source={require('@/src/assets/marker.png')}
+                        />
+                      )}
+                    </View>
+                  </Marker>
+                );
+              })}
+          </>
         )}
       </MapView>
 
       {/* Map Selection Center Pin */}
       {isSelectingOnMap && (
-          <Box position="absolute" top={0} left={0} right={0} bottom={0} justifyContent="center" alignItems="center" pointerEvents="none">
-              <Box marginBottom="xxl"> 
-                <Image source={require('@/src/assets/marker.png')} style={{ width: 48, height: 48 }} contentFit="contain" />
-              </Box>
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          justifyContent="center"
+          alignItems="center"
+          pointerEvents="none">
+          <Box marginBottom="xxl">
+            <Image
+              source={require('@/src/assets/marker.png')}
+              style={{ width: 48, height: 48 }}
+              contentFit="contain"
+            />
           </Box>
+        </Box>
       )}
 
       {/* Map Selection UI Overlays */}
       {isSelectingOnMap && (
-          <Box position="absolute" bottom={40} left={20} right={20} gap="m">
-               <Button onPress={handleConfirmLocation}>
-                   <Box flexDirection="row" alignItems="center" gap="s">
-                        <Check color="white" size={20} />
-                        <Text variant="bodyBold" color="white">Confirm Location</Text>
-                   </Box>
-               </Button>
-               <Button variant="secondary" onPress={() => setIsSelectingOnMap(null)}>
-                   <Text variant="bodyBold" color="white">Cancel</Text>
-               </Button>
-          </Box>
+        <Box position="absolute" bottom={40} left={20} right={20} gap="m">
+          <Button onPress={handleConfirmLocation}>
+            <Box flexDirection="row" alignItems="center" gap="s">
+              <Check color="white" size={20} />
+              <Text variant="bodyBold" color="white">
+                Confirm Location
+              </Text>
+            </Box>
+          </Button>
+          <Button variant="secondary" onPress={() => setIsSelectingOnMap(null)}>
+            <Text variant="bodyBold" color="white">
+              Cancel
+            </Text>
+          </Button>
+        </Box>
       )}
 
       {/* Main Terminal UI (Hidden during map selection) */}
       {!isSelectingOnMap && (
         <>
-            {/* ====== COLLAPSED SEARCH SUMMARY ====== */}
-            {isSearchCollapsed ? (
-              <Pressable
-                onPress={handleExpandSearch}
-                style={{
-                  position: 'absolute',
-                  top: insets.top + 12,
-                  left: 16,
-                  right: 16,
-                }}>
-                <Box
-                  backgroundColor="primary"
-                  paddingVertical="m"
-                  paddingHorizontal="l"
-                  borderRadius="xl"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  elevation={5}
-                  shadowColor="shadowColor"
-                  shadowOffset={{ width: 0, height: 2 }}
-                  shadowOpacity={0.25}
-                  shadowRadius={3.84}>
-                  <Box flexDirection="row" alignItems="center" gap="s" flex={1}>
-                    <MapIcon size={18} color="white" />
-                    <Text variant="bodyBold" color="white" fontSize={14} numberOfLines={1} flex={1}>
-                      {nearbyTerminals?.length || 0} terminals near you
-                    </Text>
-                  </Box>
-                  <Box
-                    backgroundColor="primaryDark"
-                    padding="xs"
-                    borderRadius="rounded">
-                    <ChevronDown size={18} color="white" />
-                  </Box>
-                </Box>
-              </Pressable>
-            ) : (
-              /* ====== EXPANDED SEARCH CARD ====== */
-              <Box position="absolute" top={0} marginTop="l" style={{ paddingTop: insets.top }} width="100%" alignItems="center">
-                <Box
-                  bg="primary"
-                  paddingVertical="m"
-                  paddingHorizontal="l"
-                  width="90%"
-                  borderRadius="xl"
-                  gap="m"
-                  elevation={5}
-                  shadowColor="shadowColor"
-                  shadowOffset={{ width: 0, height: 2 }}
-                  shadowOpacity={0.25}
-                  shadowRadius={3.84}>
-
-                    {/* FROM Input */}
-                    <Pressable onPress={() => router.push('/location-search?type=origin')}>
-                        <Box
-                          flexDirection="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          backgroundColor="mainBackground"
-                          padding="m"
-                          borderRadius="l">
-                          <Box flexDirection="row" gap="m" alignItems="center" flex={1}>
-                            <Box
-                              backgroundColor="primaryLight"
-                              padding="s"
-                              borderRadius="rounded"
-                              alignItems="center"
-                              justifyContent="center">
-                              <LocateFixed size={20} color={theme.colors.primary} />
-                            </Box>
-                            <Box flexDirection="column" flex={1}>
-                              <Text variant="details" color="muted">From:</Text>
-                              <Text variant="bodyBold" numberOfLines={1}>{origin?.address || 'Where are you?'}</Text>
-                            </Box>
-                          </Box>
-                          <ChevronRight size={20} color={theme.colors.muted} />
-                        </Box>
-                    </Pressable>
-
-                    {/* TO Input */}
-                    <Pressable onPress={() => router.push('/location-search?type=destination')}>
-                        <Box
-                          flexDirection="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          backgroundColor="mainBackground"
-                          padding="m"
-                          borderRadius="l">
-                          <Box flexDirection="row" gap="m" alignItems="center" flex={1}>
-                            <Box
-                              backgroundColor="secondaryLighter"
-                              padding="s"
-                              borderRadius="rounded"
-                              alignItems="center"
-                              justifyContent="center">
-                              <MapPin size={20} color={theme.colors.secondary} />
-                            </Box>
-                            <Box flexDirection="column" flex={1}>
-                              <Text variant="details" color="muted">To:</Text>
-                              <Text variant="bodyBold" numberOfLines={1}>{destination?.address || 'Where to?'}</Text>
-                            </Box>
-                          </Box>
-                          <ChevronRight size={20} color={theme.colors.muted} />
-                        </Box>
-                    </Pressable>
-
-                    <Button
-                        style={{ backgroundColor: '#fff' }}
-                        paddingVertical="m"
-                        onPress={handleFindTricycles}>
-                        <Text variant="bodyBold" color="primary">
-                        Find Tricycles
-                        </Text>
-                    </Button>
-                </Box>
-              </Box>
-            )}
-
-            {/* ====== HORIZONTAL TERMINAL CARD STRIP ====== */}
-            {nearbyTerminals && nearbyTerminals.length > 0 && (
+          {/* ====== COLLAPSED SEARCH SUMMARY ====== */}
+          {isSearchCollapsed ? (
+            <Pressable
+              onPress={handleExpandSearch}
+              style={{
+                position: 'absolute',
+                top: insets.top + 12,
+                left: 16,
+                right: 16,
+              }}>
               <Box
-                position="absolute"
-                bottom={16}
-                left={0}
-                right={0}>
-                <FlatList
-                  ref={flatListRef}
-                  data={nearbyTerminals}
-                  renderItem={renderTerminalCard}
-                  keyExtractor={(item) => item.direction}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  snapToInterval={CARD_WIDTH + CARD_SPACING}
-                  decelerationRate="fast"
-                  contentContainerStyle={{ paddingRight: 16 }}
-                  onScrollToIndexFailed={() => {}}
-                />
+                backgroundColor="primary"
+                paddingVertical="m"
+                paddingHorizontal="l"
+                borderRadius="xl"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                elevation={5}
+                shadowColor="shadowColor"
+                shadowOffset={{ width: 0, height: 2 }}
+                shadowOpacity={0.25}
+                shadowRadius={3.84}>
+                <Box flexDirection="row" alignItems="center" gap="s" flex={1}>
+                  <MapIcon size={18} color="white" />
+                  <Text variant="bodyBold" color="white" fontSize={14} numberOfLines={1} flex={1}>
+                    {nearbyTerminals?.length || 0} terminals near you
+                  </Text>
+                </Box>
+                <Box backgroundColor="primaryDark" padding="xs" borderRadius="rounded">
+                  <ChevronDown size={18} color="white" />
+                </Box>
               </Box>
-            )}
+            </Pressable>
+          ) : (
+            /* ====== EXPANDED SEARCH CARD ====== */
+            <Box
+              position="absolute"
+              top={0}
+              marginTop="l"
+              style={{ paddingTop: insets.top }}
+              width="100%"
+              alignItems="center">
+              <Box
+                bg="primary"
+                paddingVertical="m"
+                paddingHorizontal="l"
+                width="90%"
+                borderRadius="xl"
+                gap="m"
+                elevation={5}
+                shadowColor="shadowColor"
+                shadowOffset={{ width: 0, height: 2 }}
+                shadowOpacity={0.25}
+                shadowRadius={3.84}>
+                {/* FROM Input */}
+                <Pressable onPress={() => router.push('/location-search?type=origin')}>
+                  <Box
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    backgroundColor="mainBackground"
+                    padding="m"
+                    borderRadius="l">
+                    <Box flexDirection="row" gap="m" alignItems="center" flex={1}>
+                      <Box
+                        backgroundColor="primaryLight"
+                        padding="s"
+                        borderRadius="rounded"
+                        alignItems="center"
+                        justifyContent="center">
+                        <LocateFixed size={20} color={theme.colors.primary} />
+                      </Box>
+                      <Box flexDirection="column" flex={1}>
+                        <Text variant="details" color="muted">
+                          From:
+                        </Text>
+                        <Text variant="bodyBold" numberOfLines={1}>
+                          {origin?.address || 'Where are you?'}
+                        </Text>
+                      </Box>
+                    </Box>
+                    <ChevronRight size={20} color={theme.colors.muted} />
+                  </Box>
+                </Pressable>
+
+                {/* TO Input */}
+                <Pressable onPress={() => router.push('/location-search?type=destination')}>
+                  <Box
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    backgroundColor="mainBackground"
+                    padding="m"
+                    borderRadius="l">
+                    <Box flexDirection="row" gap="m" alignItems="center" flex={1}>
+                      <Box
+                        backgroundColor="secondaryLighter"
+                        padding="s"
+                        borderRadius="rounded"
+                        alignItems="center"
+                        justifyContent="center">
+                        <MapPin size={20} color={theme.colors.secondary} />
+                      </Box>
+                      <Box flexDirection="column" flex={1}>
+                        <Text variant="details" color="muted">
+                          To:
+                        </Text>
+                        <Text variant="bodyBold" numberOfLines={1}>
+                          {destination?.address || 'Where to?'}
+                        </Text>
+                      </Box>
+                    </Box>
+                    <ChevronRight size={20} color={theme.colors.muted} />
+                  </Box>
+                </Pressable>
+
+                <Button
+                  style={{ backgroundColor: '#fff' }}
+                  paddingVertical="m"
+                  onPress={handleFindTricycles}>
+                  <Text variant="bodyBold" color="primary">
+                    Find Tricycles
+                  </Text>
+                </Button>
+              </Box>
+            </Box>
+          )}
+
+          {/* ====== HORIZONTAL TERMINAL CARD STRIP ====== */}
+          {nearbyTerminals && nearbyTerminals.length > 0 && (
+            <Box position="absolute" bottom={16} left={0} right={0}>
+              <FlatList
+                ref={flatListRef}
+                data={nearbyTerminals}
+                renderItem={renderTerminalCard}
+                keyExtractor={(item) => item.direction}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={CARD_WIDTH + CARD_SPACING}
+                decelerationRate="fast"
+                contentContainerStyle={{ paddingRight: 16 }}
+                onScrollToIndexFailed={() => {}}
+              />
+            </Box>
+          )}
         </>
       )}
 

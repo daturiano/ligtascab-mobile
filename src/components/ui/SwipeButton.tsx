@@ -22,7 +22,12 @@ const BUTTON_HEIGHT = 50;
 const BUTTON_PADDING = 4;
 const THUMB_SIZE = BUTTON_HEIGHT - BUTTON_PADDING * 2;
 
-export default function SwipeButton({ onComplete, title, icon, height = BUTTON_HEIGHT }: SwipeButtonProps) {
+export default function SwipeButton({
+  onComplete,
+  title,
+  icon,
+  height = BUTTON_HEIGHT,
+}: SwipeButtonProps) {
   const [completed, setCompleted] = useState(false);
   const [containerWidth, setContainerWidth] = useState(0);
   const theme = useTheme<Theme>();
@@ -36,8 +41,8 @@ export default function SwipeButton({ onComplete, title, icon, height = BUTTON_H
     onComplete();
     // Auto reset after 2 seconds
     setTimeout(() => {
-        setCompleted(false);
-        translateX.value = withSpring(0);
+      setCompleted(false);
+      translateX.value = withSpring(0);
     }, 2000);
   };
 
@@ -84,15 +89,34 @@ export default function SwipeButton({ onComplete, title, icon, height = BUTTON_H
   };
 
   return (
-    <View 
+    <View
       onLayout={handleLayout}
-      style={[styles.container, { height, backgroundColor: theme.colors.warningLight, borderRadius: height / 2 }]}>
-      <Animated.View style={[styles.track, { height, backgroundColor: theme.colors.warning, borderRadius: height / 2 }, trackStyle]} />
-      <Text style={styles.title} color={completed ? "white" : "warning"} variant="bodyBold">
-        {completed ? "Alerting..." : title}
+      style={[
+        styles.container,
+        { height, backgroundColor: theme.colors.warningLight, borderRadius: height / 2 },
+      ]}>
+      <Animated.View
+        style={[
+          styles.track,
+          { height, backgroundColor: theme.colors.warning, borderRadius: height / 2 },
+          trackStyle,
+        ]}
+      />
+      <Text style={styles.title} color={completed ? 'white' : 'warning'} variant="bodyBold">
+        {completed ? 'Alerting...' : title}
       </Text>
       <GestureDetector gesture={pan}>
-        <Animated.View style={[styles.thumb, { height: THUMB_SIZE, width: THUMB_SIZE, borderRadius: THUMB_SIZE / 2, backgroundColor: theme.colors.mainBackground }, animatedStyles]}>
+        <Animated.View
+          style={[
+            styles.thumb,
+            {
+              height: THUMB_SIZE,
+              width: THUMB_SIZE,
+              borderRadius: THUMB_SIZE / 2,
+              backgroundColor: theme.colors.mainBackground,
+            },
+            animatedStyles,
+          ]}>
           {icon}
         </Animated.View>
       </GestureDetector>

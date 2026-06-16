@@ -43,9 +43,7 @@ export default function FareEstimateCard({ fare, durationMin, isPrecise }: FareE
         <Text variant="body">{formatPHP(fare.baseFare)}</Text>
       </Box>
       <Box flexDirection="row" justifyContent="space-between">
-        <Text variant="details">
-          Distance · {formatPHP(fare.ratePerKm)}/km
-        </Text>
+        <Text variant="details">Distance · {formatPHP(fare.ratePerKm)}/km</Text>
         <Text variant="body">{formatPHP(fare.distanceCost)}</Text>
       </Box>
 
